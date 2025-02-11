@@ -26,9 +26,20 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.Row="0" Grid.ColumnSpan="3" />
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="3">
+            <Menu />
+            <TextBox Text="{Binding DirectoryAreaViewModel.SelectedItem.FullPath}" />
 
-        <ListBox Grid.Row="1" Grid.Column="0" />
+        </StackPanel>
+
+        <!--  ディレクトリエリア  -->
+        <ListBox
+            Grid.Row="1"
+            Grid.Column="0"
+            ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}" />
 
         <GridSplitter
             Grid.Row="1"
