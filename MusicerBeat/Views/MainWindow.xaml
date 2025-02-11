@@ -45,6 +45,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundStorage}">
                     <StackPanel Orientation="Horizontal">
+                        <StackPanel.InputBindings>
+                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
+                        </StackPanel.InputBindings>
                         <TextBlock Text="{Binding Name}" />
                     </StackPanel>
                 </DataTemplate>

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
@@ -24,6 +26,11 @@ namespace MusicerBeat.Models
         {
             get => Path.GetFileName(FullPath);
             private set => SetProperty(ref name, value);
+        }
+
+        public IEnumerable<SoundStorage> GetChildren()
+        {
+            return Directory.GetDirectories(FullPath).Select(d => new SoundStorage() { FullPath = d, });
         }
     }
 }
