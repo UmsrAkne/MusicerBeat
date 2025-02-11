@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using MusicerBeat.Models;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -49,6 +50,30 @@ namespace MusicerBeat.ViewModels
 
             CurrentStorage = new SoundStorage() { FullPath = SelectedItem.FullPath, };
             var items = SelectedItem.GetChildren();
+            originalSoundStorages.Clear();
+            originalSoundStorages.AddRange(items);
+        });
+
+        /// <summary>
+        /// 一段上の SoundStorage に移動します。
+        /// </summary>
+        public DelegateCommand DirectoryUpCommand => new DelegateCommand(() =>
+        {
+            if (CurrentStorage == null)
+            {
+                return;
+            }
+
+            var parent = Directory.GetParent(CurrentStorage.FullPath);
+            var parentPath = parent != null ? parent.FullName : string.Empty;
+            if (string.IsNullOrWhiteSpace(parentPath))
+            {
+                return;
+            }
+
+            var currently = new SoundStorage() { FullPath = parentPath, };
+            CurrentStorage = currently;
+            var items = currently.GetChildren();
             originalSoundStorages.Clear();
             originalSoundStorages.AddRange(items);
         });
