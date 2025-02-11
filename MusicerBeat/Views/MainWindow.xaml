@@ -32,7 +32,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="3">
             <Menu />
-            <TextBox Text="{Binding DirectoryAreaViewModel.SelectedItem.FullPath}" />
+            <TextBox Text="{Binding DirectoryAreaViewModel.CurrentStorage.FullPath}" />
 
         </StackPanel>
 

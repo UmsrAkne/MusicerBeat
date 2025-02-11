@@ -11,9 +11,11 @@ namespace MusicerBeat.ViewModels
         private SoundStorage selectedItem;
         private ReadOnlyObservableCollection<SoundStorage> soundStorages;
         private ObservableCollection<SoundStorage> originalSoundStorages;
+        private SoundStorage currentStorage;
 
-        public DirectoryAreaViewModel()
+        public DirectoryAreaViewModel(string rootPath)
         {
+            CurrentStorage = new SoundStorage() { FullPath = rootPath, };
             originalSoundStorages = new ObservableCollection<SoundStorage>();
             SoundStorages = new ReadOnlyObservableCollection<SoundStorage>(originalSoundStorages);
         }
@@ -27,6 +29,15 @@ namespace MusicerBeat.ViewModels
         public SoundStorage SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
 
         /// <summary>
+        /// 現在作業中の Storage です。ファイルシステムでのカレントディレクトリに当たります。
+        /// </summary>
+        public SoundStorage CurrentStorage
+        {
+            get => currentStorage;
+            set => SetProperty(ref currentStorage, value);
+        }
+
+        /// <summary>
         /// SelectedItem に基づいて、カレントディレクトリを変更するコマンドを実行します。
         /// </summary>
         public DelegateCommand OpenDirectoryCommand => new DelegateCommand(() =>
@@ -36,6 +47,7 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
+            CurrentStorage = new SoundStorage() { FullPath = SelectedItem.FullPath, };
             var items = SelectedItem.GetChildren();
             originalSoundStorages.Clear();
             originalSoundStorages.AddRange(items);

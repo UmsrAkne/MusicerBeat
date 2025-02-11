@@ -7,10 +7,11 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowViewModel : BindableBase
     {
-        private DirectoryAreaViewModel directoryAreaViewModel = new ();
+        private DirectoryAreaViewModel directoryAreaViewModel;
 
         public MainWindowViewModel()
         {
+            directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
             SetDummies();
         }
 
