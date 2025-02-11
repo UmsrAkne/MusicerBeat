@@ -48,10 +48,7 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
-            CurrentStorage = new SoundStorage() { FullPath = SelectedItem.FullPath, };
-            var items = SelectedItem.GetChildren();
-            originalSoundStorages.Clear();
-            originalSoundStorages.AddRange(items);
+            OpenDirectory(SelectedItem.FullPath);
         });
 
         /// <summary>
@@ -71,16 +68,25 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
-            var currently = new SoundStorage() { FullPath = parentPath, };
-            CurrentStorage = currently;
-            var items = currently.GetChildren();
-            originalSoundStorages.Clear();
-            originalSoundStorages.AddRange(items);
+            OpenDirectory(parentPath);
         });
 
         public void AddSoundStorage(SoundStorage item)
         {
             originalSoundStorages.Add(item);
+        }
+
+        /// <summary>
+        /// 引数で指定されたディレクトリをカレントディレクトリに設定し、originalSoundStorages の中身をアップデートします。
+        /// </summary>
+        /// <param name="path">移動先のストレージのフルパスを入力します。</param>
+        private void OpenDirectory(string path)
+        {
+            var currently = new SoundStorage() { FullPath = path, };
+            CurrentStorage = currently;
+            var items = currently.GetChildren();
+            originalSoundStorages.Clear();
+            originalSoundStorages.AddRange(items);
         }
     }
 }
