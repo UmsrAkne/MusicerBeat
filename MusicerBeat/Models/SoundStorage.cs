@@ -1,7 +1,29 @@
+using System.IO;
+using Prism.Mvvm;
+
 namespace MusicerBeat.Models
 {
-    public class SoundStorage
+    public class SoundStorage : BindableBase
     {
-        public string FullPath { get; set; }
+        private string fullPath;
+        private string name;
+
+        public string FullPath
+        {
+            get => fullPath;
+            set
+            {
+                if (SetProperty(ref fullPath, value))
+                {
+                    RaisePropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        public string Name
+        {
+            get => Path.GetFileName(FullPath);
+            private set => SetProperty(ref name, value);
+        }
     }
 }
