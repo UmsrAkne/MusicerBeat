@@ -24,5 +24,10 @@ namespace MusicerBeat.ViewModels
         }
 
         public SoundStorage SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
+
+        public void AddSoundStorage(SoundStorage item)
+        {
+            originalSoundStorages.Add(item);
+        }
     }
 }
