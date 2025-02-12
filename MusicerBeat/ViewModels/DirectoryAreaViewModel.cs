@@ -11,9 +11,9 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DirectoryAreaViewModel : BindableBase, ISoundCollectionSource
     {
+        private readonly ObservableCollection<SoundStorage> originalSoundStorages;
         private SoundStorage selectedItem;
         private ReadOnlyObservableCollection<SoundStorage> soundStorages;
-        private ObservableCollection<SoundStorage> originalSoundStorages;
         private SoundStorage currentStorage;
 
         public DirectoryAreaViewModel(string rootPath)
@@ -39,7 +39,7 @@ namespace MusicerBeat.ViewModels
         public SoundStorage CurrentStorage
         {
             get => currentStorage;
-            set
+            private set
             {
                 if (SetProperty(ref currentStorage, value))
                 {

@@ -8,7 +8,7 @@ namespace MusicerBeat.ViewModels
     public class SoundListViewModel : BindableBase
     {
         private readonly ISoundCollectionSource soundCollectionSource;
-        private ObservableCollection<SoundFile> originalSounds = new ObservableCollection<SoundFile>();
+        private readonly ObservableCollection<SoundFile> originalSounds = new ();
         private SoundFile selectedItem;
 
         public SoundListViewModel(ISoundCollectionSource soundCollectionSource)
