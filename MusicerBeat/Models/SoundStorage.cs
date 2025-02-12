@@ -32,5 +32,14 @@ namespace MusicerBeat.Models
         {
             return Directory.GetDirectories(FullPath).Select(d => new SoundStorage() { FullPath = d, });
         }
+
+        public IEnumerable<SoundFile> GetFiles()
+        {
+            var targetExtensions = new[] { ".ogg", ".wav", ".mp3", };
+            return Directory.GetFiles(FullPath)
+                .Where(f => targetExtensions.Contains(Path.GetExtension(f).ToLower()))
+                .Select(d => new SoundFile(d))
+                .OrderBy(f => f.Name);
+        }
     }
 }
