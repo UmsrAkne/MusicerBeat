@@ -26,5 +26,10 @@ namespace MusicerBeat.ViewModels
         public ReadOnlyObservableCollection<SoundFile> Sounds { get; set; }
 
         public SoundFile SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
+
+        public void AddSoundFile(SoundFile item)
+        {
+            originalSounds.Add(item);
+        }
     }
 }

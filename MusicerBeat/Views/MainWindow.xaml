@@ -70,7 +70,30 @@
             Grid.Row="1"
             Grid.Column="2"
             ItemsSource="{Binding SoundListViewModel.Sounds}"
-            SelectedItem="{Binding SoundListViewModel.SelectedItem}" />
+            SelectedItem="{Binding SoundListViewModel.SelectedItem}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:SoundFile}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            Grid.Column="0"
+                            BorderBrush="Gray"
+                            BorderThickness="0,0,1,0">
+                            <TextBlock Width="15" Text="{Binding ListenCount}" />
+                        </Border>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="5,0"
+                            Text="{Binding Name}" />
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <Border
             Grid.Row="2"

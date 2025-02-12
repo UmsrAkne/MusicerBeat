@@ -40,6 +40,7 @@ namespace MusicerBeat.ViewModels
             for (var i = 0; i < 30; i++)
             {
                 DirectoryAreaViewModel.AddSoundStorage(new SoundStorage() { FullPath = $@"C:\test\testDirectory{i + 1}", });
+                SoundListViewModel.AddSoundFile(new SoundFile(@$"C:\test\soundFile{i + 1}.mp3"));
             }
 
             DirectoryAreaViewModel.SelectedItem = firstStorage;
