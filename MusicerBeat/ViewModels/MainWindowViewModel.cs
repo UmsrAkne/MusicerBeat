@@ -8,10 +8,12 @@ namespace MusicerBeat.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private DirectoryAreaViewModel directoryAreaViewModel;
+        private SoundListViewModel soundListViewModel;
 
         public MainWindowViewModel()
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
+            soundListViewModel = new SoundListViewModel();
             SetDummies();
         }
 
@@ -21,6 +23,12 @@ namespace MusicerBeat.ViewModels
         {
             get => directoryAreaViewModel;
             set => SetProperty(ref directoryAreaViewModel, value);
+        }
+
+        public SoundListViewModel SoundListViewModel
+        {
+            get => soundListViewModel;
+            set => SetProperty(ref soundListViewModel, value);
         }
 
         [Conditional("DEBUG")]
