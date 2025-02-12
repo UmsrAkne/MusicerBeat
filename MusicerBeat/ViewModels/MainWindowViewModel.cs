@@ -13,7 +13,7 @@ namespace MusicerBeat.ViewModels
         public MainWindowViewModel()
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
-            soundListViewModel = new SoundListViewModel();
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
             SetDummies();
         }
 
