@@ -16,12 +16,12 @@ namespace MusicerBeat.Models
             AddDebugMark();
         }
 
-        private string Title
+        public string Title
         {
             get => string.IsNullOrWhiteSpace(Version)
                 ? title
                 : title + " version : " + Version;
-            set => SetProperty(ref title, value);
+            private set => SetProperty(ref title, value);
         }
 
         private string Version { get => version; set => SetProperty(ref version, value); }
@@ -29,7 +29,13 @@ namespace MusicerBeat.Models
         [Conditional("RELEASE")]
         private void SetVersion()
         {
-            Version = "20250211" + "a";
+            const int major = 0;
+            const int minor = 1;
+            const int patch = 0;
+            const string date = "20250211";
+            const string suffixId = "a";
+
+            Version = $"{major}.{minor}.{patch} ({date}{suffixId})";
         }
 
         [Conditional("DEBUG")]
