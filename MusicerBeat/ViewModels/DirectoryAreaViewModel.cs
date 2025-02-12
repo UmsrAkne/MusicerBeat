@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using MusicerBeat.Models;
@@ -7,11 +9,11 @@ using Prism.Mvvm;
 namespace MusicerBeat.ViewModels
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class DirectoryAreaViewModel : BindableBase
+    public class DirectoryAreaViewModel : BindableBase, ISoundCollectionSource
     {
+        private readonly ObservableCollection<SoundStorage> originalSoundStorages;
         private SoundStorage selectedItem;
         private ReadOnlyObservableCollection<SoundStorage> soundStorages;
-        private ObservableCollection<SoundStorage> originalSoundStorages;
         private SoundStorage currentStorage;
 
         public DirectoryAreaViewModel(string rootPath)
@@ -20,6 +22,8 @@ namespace MusicerBeat.ViewModels
             originalSoundStorages = new ObservableCollection<SoundStorage>();
             SoundStorages = new ReadOnlyObservableCollection<SoundStorage>(originalSoundStorages);
         }
+
+        public event EventHandler SoundsSourceUpdated;
 
         public ReadOnlyObservableCollection<SoundStorage> SoundStorages
         {
@@ -35,7 +39,13 @@ namespace MusicerBeat.ViewModels
         public SoundStorage CurrentStorage
         {
             get => currentStorage;
-            set => SetProperty(ref currentStorage, value);
+            private set
+            {
+                if (SetProperty(ref currentStorage, value))
+                {
+                    SoundsSourceUpdated?.Invoke(this, EventArgs.Empty);
+                }
+            }
         }
 
         /// <summary>
@@ -74,6 +84,11 @@ namespace MusicerBeat.ViewModels
         public void AddSoundStorage(SoundStorage item)
         {
             originalSoundStorages.Add(item);
+        }
+
+        public IEnumerable<SoundFile> GetSounds()
+        {
+            return CurrentStorage.GetFiles();
         }
 
         /// <summary>

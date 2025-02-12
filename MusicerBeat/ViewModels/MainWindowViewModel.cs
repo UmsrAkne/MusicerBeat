@@ -8,10 +8,12 @@ namespace MusicerBeat.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private DirectoryAreaViewModel directoryAreaViewModel;
+        private SoundListViewModel soundListViewModel;
 
         public MainWindowViewModel()
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
             SetDummies();
         }
 
@@ -23,6 +25,12 @@ namespace MusicerBeat.ViewModels
             set => SetProperty(ref directoryAreaViewModel, value);
         }
 
+        public SoundListViewModel SoundListViewModel
+        {
+            get => soundListViewModel;
+            set => SetProperty(ref soundListViewModel, value);
+        }
+
         [Conditional("DEBUG")]
         private void SetDummies()
         {
@@ -32,6 +40,7 @@ namespace MusicerBeat.ViewModels
             for (var i = 0; i < 30; i++)
             {
                 DirectoryAreaViewModel.AddSoundStorage(new SoundStorage() { FullPath = $@"C:\test\testDirectory{i + 1}", });
+                SoundListViewModel.AddSoundFile(new SoundFile(@$"C:\test\soundFile{i + 1}.mp3"));
             }
 
             DirectoryAreaViewModel.SelectedItem = firstStorage;
