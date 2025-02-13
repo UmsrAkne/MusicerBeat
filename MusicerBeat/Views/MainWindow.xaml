@@ -95,10 +95,17 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Border
+        <StackPanel
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Height="50" />
+            Height="50">
+            <Button
+                Width="100"
+                Margin="15"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="▷" />
+        </StackPanel>
     </Grid>
 </Window>
