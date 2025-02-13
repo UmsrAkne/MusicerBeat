@@ -16,15 +16,14 @@ namespace MusicerBeat.Models
 
         public SoundFile(string filePath)
         {
-            var extension = Path.GetExtension(filePath).ToLower();
-            if (!new[] { ".wav", ".mp3", ".ogg", }.Contains(extension))
+            if (IsSoundFile(filePath))
             {
                 throw new ArgumentException("入力されたファイルがサウンドファイルではありません");
             }
 
             FullName = filePath;
             Name = Path.GetFileName(filePath);
-            Extension = extension;
+            Extension = Path.GetExtension(filePath).ToLower();
         }
 
         public string FullName { get => fullName; set => SetProperty(ref fullName, value); }
@@ -40,5 +39,11 @@ namespace MusicerBeat.Models
         public bool IsSkip { get => isSkip; set => SetProperty(ref isSkip, value); }
 
         public bool Playing { get => playing; set => SetProperty(ref playing, value); }
+
+        public static bool IsSoundFile(string filePath)
+        {
+            var extension = Path.GetExtension(filePath).ToLower();
+            return !new[] { ".wav", ".mp3", ".ogg", }.Contains(extension);
+        }
     }
 }

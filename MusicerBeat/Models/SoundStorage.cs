@@ -35,9 +35,8 @@ namespace MusicerBeat.Models
 
         public IEnumerable<SoundFile> GetFiles()
         {
-            var targetExtensions = new[] { ".ogg", ".wav", ".mp3", };
             return Directory.GetFiles(FullPath)
-                .Where(f => targetExtensions.Contains(Path.GetExtension(f).ToLower()))
+                .Where(SoundFile.IsSoundFile)
                 .Select(d => new SoundFile(d))
                 .OrderBy(f => f.Name);
         }
