@@ -21,9 +21,12 @@ namespace MusicerBeat.ViewModels
             };
 
             Sounds = new ReadOnlyObservableCollection<SoundFile>(originalSounds);
+            SequentialSelector = new SequentialSelector(Sounds);
         }
 
         public ReadOnlyObservableCollection<SoundFile> Sounds { get; set; }
+
+        public SequentialSelector SequentialSelector { get; set; }
 
         public SoundFile SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
 
