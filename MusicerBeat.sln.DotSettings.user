@@ -1,0 +1,9 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bbaed360_002D6c44_002D4a4d_002Da17e_002D231db1df3aa5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Test&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Test(["C://t/file1.mp3", "C://t/file2.mp3"],["file1", "file2", null])&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Test(["C://t/file1.mp3"],["file1", "file1", "file1"])&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Test([],[null, null, null])&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -28,8 +28,13 @@ namespace MusicerBeat.Models
                 return SoundFiles.First();
             }
 
+            if (Index > SoundFiles.Count - 1)
+            {
+                return null;
+            }
+
             Index = Math.Min(Index, SoundFiles.Count - 1);
-            return SoundFiles[Index];
+            return SoundFiles[Index++];
         }
     }
 }
