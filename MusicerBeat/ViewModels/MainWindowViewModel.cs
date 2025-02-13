@@ -9,11 +9,13 @@ namespace MusicerBeat.ViewModels
     {
         private DirectoryAreaViewModel directoryAreaViewModel;
         private SoundListViewModel soundListViewModel;
+        private PlaybackControlViewmodel playbackControlViewmodel;
 
         public MainWindowViewModel()
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
             soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
+            PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel);
             SetDummies();
         }
 
@@ -29,6 +31,12 @@ namespace MusicerBeat.ViewModels
         {
             get => soundListViewModel;
             set => SetProperty(ref soundListViewModel, value);
+        }
+
+        public PlaybackControlViewmodel PlaybackControlViewmodel
+        {
+            get => playbackControlViewmodel;
+            set => SetProperty(ref playbackControlViewmodel, value);
         }
 
         [Conditional("DEBUG")]
