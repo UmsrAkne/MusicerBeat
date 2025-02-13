@@ -105,6 +105,7 @@
                 Margin="15"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
+                Command="{Binding PlaybackControlViewmodel.PlayCommand}"
                 Content="▷" />
         </StackPanel>
     </Grid>
