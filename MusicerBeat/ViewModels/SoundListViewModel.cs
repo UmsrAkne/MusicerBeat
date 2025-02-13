@@ -5,7 +5,7 @@ using Prism.Mvvm;
 namespace MusicerBeat.ViewModels
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class SoundListViewModel : BindableBase
+    public class SoundListViewModel : BindableBase, IPlaylist
     {
         private readonly ISoundCollectionSource soundCollectionSource;
         private readonly ObservableCollection<SoundFile> originalSounds = new ();
@@ -21,9 +21,12 @@ namespace MusicerBeat.ViewModels
             };
 
             Sounds = new ReadOnlyObservableCollection<SoundFile>(originalSounds);
+            SequentialSelector = new SequentialSelector(Sounds);
         }
 
         public ReadOnlyObservableCollection<SoundFile> Sounds { get; set; }
+
+        public SequentialSelector SequentialSelector { get; set; }
 
         public SoundFile SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
 
