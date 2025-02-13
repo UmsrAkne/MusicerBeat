@@ -5,7 +5,7 @@ using Prism.Mvvm;
 namespace MusicerBeat.ViewModels
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class SoundListViewModel : BindableBase
+    public class SoundListViewModel : BindableBase, IPlaylist
     {
         private readonly ISoundCollectionSource soundCollectionSource;
         private readonly ObservableCollection<SoundFile> originalSounds = new ();
