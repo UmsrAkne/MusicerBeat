@@ -7,5 +7,6 @@
     &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Test(["C://t/file1.mp3"],["file1", "file1", "file1"])&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Test([],[null, null, null])&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SelectSoundFile_Loop_Test&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.SetIndexBySoundFile_Test&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

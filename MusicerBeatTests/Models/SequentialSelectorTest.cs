@@ -47,5 +47,35 @@ namespace MusicerBeatTests.Models
 
             CollectionAssert.AreEqual(expected, results);
         }
+
+        [Test]
+        public void SetIndexBySoundFile_Test()
+        {
+            var list = new ObservableCollection<SoundFile>()
+            {
+                new SoundFile("C://t/file1.mp3"),
+                new SoundFile("C://t/file2.mp3"),
+                new SoundFile("C://t/file3.mp3"),
+            };
+
+            var f2 = list[1];
+
+            var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list))
+            {
+                IsLoop = false,
+            };
+
+            s.SetIndexBySoundFile(f2);
+
+            var results = new []
+            {
+                s.SelectSoundFile()?.Name,
+                s.SelectSoundFile()?.Name,
+                s.SelectSoundFile()?.Name,
+            };
+
+            // 最後に file2 を取得したのと同じ状態になるわけだから、次の取得は file3 で、ループなしならばその次は null。
+            CollectionAssert.AreEqual(new []{"file3.mp3", null, null, }, results);
+        }
     }
 }

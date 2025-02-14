@@ -41,6 +41,7 @@ namespace MusicerBeat.ViewModels
             }
 
             soundPlayer.PlaySound(soundFile);
+            PlayListSource.SequentialSelector.SetIndexBySoundFile(soundFile);
         }
 
         private void Stop()
