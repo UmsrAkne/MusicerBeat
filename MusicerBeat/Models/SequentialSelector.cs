@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace MusicerBeat.Models
 {
@@ -21,11 +20,6 @@ namespace MusicerBeat.Models
             if (SoundFiles.Count == 0)
             {
                 return null;
-            }
-
-            if (SoundFiles.Count == 1)
-            {
-                return SoundFiles.First();
             }
 
             if (Index > SoundFiles.Count - 1)

@@ -8,7 +8,7 @@ namespace MusicerBeatTests.Models
     {
         [Test]
         [TestCase(new[] { "C://t/file1.mp3", "C://t/file2.mp3",}, new [] { "file1.mp3", "file2.mp3", null, })]
-        [TestCase(new[] { "C://t/file1.mp3", }, new [] { "file1.mp3", "file1.mp3", "file1.mp3", })]
+        [TestCase(new[] { "C://t/file1.mp3", }, new [] { "file1.mp3", null, null, })]
         [TestCase(new string [] {}, new string?[] { null, null, null, })]
         public void SelectSoundFile_Test(string[] paths, string[] expected)
         {
