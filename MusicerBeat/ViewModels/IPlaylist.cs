@@ -9,5 +9,7 @@ namespace MusicerBeat.ViewModels
     public interface IPlaylist
     {
         public ReadOnlyObservableCollection<SoundFile> Sounds { get; set; }
+
+        public SequentialSelector SequentialSelector { get; }
     }
 }

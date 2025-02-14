@@ -16,7 +16,7 @@ namespace MusicerBeat.Models
 
         public SoundFile(string filePath)
         {
-            if (IsSoundFile(filePath))
+            if (!IsSoundFile(filePath))
             {
                 throw new ArgumentException("入力されたファイルがサウンドファイルではありません");
             }
@@ -43,7 +43,7 @@ namespace MusicerBeat.Models
         public static bool IsSoundFile(string filePath)
         {
             var extension = Path.GetExtension(filePath).ToLower();
-            return !new[] { ".wav", ".mp3", ".ogg", }.Contains(extension);
+            return new[] { ".wav", ".mp3", ".ogg", }.Contains(extension);
         }
     }
 }

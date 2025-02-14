@@ -74,6 +74,13 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundFile}">
                     <Grid>
+                        <Grid.InputBindings>
+                            <MouseBinding
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.PlaybackControlViewmodel.PlayCommand}"
+                                CommandParameter="{Binding}"
+                                Gesture="LeftDoubleClick" />
+                        </Grid.InputBindings>
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
