@@ -31,13 +31,15 @@ namespace MusicerBeat.Models
             waveOutEvent.Init(waveStream);
             waveOutEvent.Play();
 
-            waveOutEvent.PlaybackStopped += (_, _) =>
-            {
-                if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
-                {
-                    SoundEnded?.Invoke(this, EventArgs.Empty);
-                }
-            };
+            waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
+        }
+
+        public void Stop()
+        {
+            waveOutEvent.Stop();
+            waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
+            waveOutEvent.Volume = 1.0f;
+            waveStream = null;
         }
 
         public void Dispose()
@@ -49,6 +51,14 @@ namespace MusicerBeat.Models
         {
             waveOutEvent.Dispose();
             waveStream.Dispose();
+        }
+
+        private void WaveOutEventOnPlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
+            {
+                SoundEnded?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }
