@@ -8,10 +8,11 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class PlaybackControlViewmodel : BindableBase, IDisposable
     {
-        private SoundPlayer soundPlayer = new ();
+        private ISoundPlayer soundPlayer;
 
-        public PlaybackControlViewmodel(IPlaylist playlist)
+        public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayer soundPlayer)
         {
+            this.soundPlayer = soundPlayer;
             PlayListSource = playlist;
         }
 
@@ -29,7 +30,8 @@ namespace MusicerBeat.ViewModels
 
         protected virtual void Dispose(bool disposing)
         {
-            soundPlayer.Dispose();
+            var disposable = soundPlayer as IDisposable;
+            disposable?.Dispose();
         }
 
         private void Play(SoundFile soundFile)

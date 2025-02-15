@@ -15,7 +15,7 @@ namespace MusicerBeat.ViewModels
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
             soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
-            PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel);
+            PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayer());
             SetDummies();
         }
 

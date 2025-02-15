@@ -4,7 +4,7 @@ using NAudio.Wave;
 namespace MusicerBeat.Models
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class SoundPlayer : IDisposable
+    public class SoundPlayer : IDisposable, ISoundPlayer
     {
         private WaveOutEvent waveOutEvent;
         private WaveStream waveStream;
