@@ -25,8 +25,13 @@ namespace MusicerBeat.Models
 
         public void PlaySound(SoundFile soundFile)
         {
+            if (waveOutEvent != null)
+            {
+                Stop();
+            }
+
             waveStream = new Mp3FileReader(soundFile.FullName);
-            waveOutEvent ??= new WaveOutEvent();
+            waveOutEvent = new WaveOutEvent();
             waveOutEvent.Volume = 1.0f;
             waveOutEvent.Init(waveStream);
             waveOutEvent.Play();
@@ -38,7 +43,7 @@ namespace MusicerBeat.Models
         {
             waveOutEvent.Stop();
             waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
-            waveOutEvent.Volume = 1.0f;
+            waveOutEvent = null;
             waveStream = null;
         }
 
