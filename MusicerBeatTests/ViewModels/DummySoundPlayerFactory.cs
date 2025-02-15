@@ -6,7 +6,11 @@ namespace MusicerBeatTests.ViewModels
     {
         public ISoundPlayer CreateSoundPlayer()
         {
-            return new MockSoundPlayer();
+            var s = new MockSoundPlayer();
+            CreatedPlayers.Add(s);
+            return s;
         }
+
+        public List<MockSoundPlayer> CreatedPlayers { get; } = new ();
     }
 }
