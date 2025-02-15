@@ -9,6 +9,8 @@ namespace MusicerBeat.Models
         private WaveOutEvent waveOutEvent;
         private WaveStream waveStream;
 
+        public event EventHandler SoundEnded;
+
         public float Volume
         {
             get => waveOutEvent?.Volume ?? 1.0f;
@@ -28,6 +30,14 @@ namespace MusicerBeat.Models
             waveOutEvent.Volume = 1.0f;
             waveOutEvent.Init(waveStream);
             waveOutEvent.Play();
+
+            waveOutEvent.PlaybackStopped += (_, _) =>
+            {
+                if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
+                {
+                    SoundEnded?.Invoke(this, EventArgs.Empty);
+                }
+            };
         }
 
         public void Dispose()
