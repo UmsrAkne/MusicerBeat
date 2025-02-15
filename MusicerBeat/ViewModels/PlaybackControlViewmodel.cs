@@ -14,6 +14,11 @@ namespace MusicerBeat.ViewModels
         {
             this.soundPlayer = soundPlayer;
             PlayListSource = playlist;
+
+            this.soundPlayer.SoundEnded += (_, _) =>
+            {
+                Play(null);
+            };
         }
 
         public bool IsPlaying { get; set; }
