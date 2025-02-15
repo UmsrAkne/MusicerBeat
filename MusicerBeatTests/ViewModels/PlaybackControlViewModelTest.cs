@@ -34,12 +34,8 @@ namespace MusicerBeatTests.ViewModels
 
             vm.PlayCommand.Execute(null);
 
-            // プレイリストにサウンドファイルが入っていない場合は、最後に再生した曲名は入っておらず、 PlaySound も実行されない。
-            Assert.Multiple(() =>
-            {
-                Assert.That(soundPlayerFactory.CreatedPlayers.First().LastPlayedSoundFile?.Name, Is.EqualTo(null));
-                Assert.That(soundPlayerFactory.CreatedPlayers.First().IsPlaying, Is.False);
-            });
+            // プレイリストにサウンドファイルが入っていない場合は、サウンドプレイヤーは生成されない。
+            Assert.That(soundPlayerFactory.CreatedPlayers, Is.Empty);
         }
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using MusicerBeat.Models;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -8,17 +10,13 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class PlaybackControlViewmodel : BindableBase, IDisposable
     {
-        private ISoundPlayer soundPlayer;
+        private readonly ISoundPlayerFactory soundPlayerFactory;
+        private readonly Queue<ISoundPlayer> soundPlayers = new ();
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
-            soundPlayer = soundPlayerFactory.CreateSoundPlayer();
+            this.soundPlayerFactory = soundPlayerFactory;
             PlayListSource = playlist;
-
-            soundPlayer.SoundEnded += (_, _) =>
-            {
-                Play(null);
-            };
         }
 
         public bool IsPlaying { get; set; }
@@ -35,20 +33,44 @@ namespace MusicerBeat.ViewModels
 
         protected virtual void Dispose(bool disposing)
         {
-            var disposable = soundPlayer as IDisposable;
-            disposable?.Dispose();
+            foreach (var d in soundPlayers.Select(p => p as IDisposable))
+            {
+                d?.Dispose();
+            }
         }
 
         private void Play(SoundFile soundFile)
         {
+            if (soundFile != null)
+            {
+                // 再生する曲が直接選択されて指定されたケース
+                // 全てのプレイヤーを停止する。
+                foreach (var p in soundPlayers)
+                {
+                    p.Stop();
+                    var d = p as IDisposable;
+                    d?.Dispose();
+                }
+
+                soundPlayers.Clear();
+                PlayListSource.SequentialSelector.SetIndexBySoundFile(soundFile);
+            }
+
             soundFile ??= PlayListSource.SequentialSelector.SelectSoundFile();
             if (soundFile == null)
             {
                 return;
             }
 
-            soundPlayer.PlaySound(soundFile);
-            PlayListSource.SequentialSelector.SetIndexBySoundFile(soundFile);
+            var newPlayer = soundPlayerFactory.CreateSoundPlayer();
+            newPlayer.SoundEnded += (_, _) =>
+            {
+                soundPlayers.Dequeue();
+                Play(null);
+            };
+
+            soundPlayers.Enqueue(newPlayer);
+            newPlayer.PlaySound(soundFile);
         }
 
         private void Stop()
