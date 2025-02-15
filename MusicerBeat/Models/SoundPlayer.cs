@@ -4,10 +4,12 @@ using NAudio.Wave;
 namespace MusicerBeat.Models
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class SoundPlayer : IDisposable
+    public class SoundPlayer : IDisposable, ISoundPlayer
     {
         private WaveOutEvent waveOutEvent;
         private WaveStream waveStream;
+
+        public event EventHandler SoundEnded;
 
         public float Volume
         {
@@ -23,11 +25,26 @@ namespace MusicerBeat.Models
 
         public void PlaySound(SoundFile soundFile)
         {
+            if (waveOutEvent != null)
+            {
+                Stop();
+            }
+
             waveStream = new Mp3FileReader(soundFile.FullName);
-            waveOutEvent ??= new WaveOutEvent();
+            waveOutEvent = new WaveOutEvent();
             waveOutEvent.Volume = 1.0f;
             waveOutEvent.Init(waveStream);
             waveOutEvent.Play();
+
+            waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
+        }
+
+        public void Stop()
+        {
+            waveOutEvent.Stop();
+            waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
+            waveOutEvent = null;
+            waveStream = null;
         }
 
         public void Dispose()
@@ -39,6 +56,14 @@ namespace MusicerBeat.Models
         {
             waveOutEvent.Dispose();
             waveStream.Dispose();
+        }
+
+        private void WaveOutEventOnPlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
+            {
+                SoundEnded?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }

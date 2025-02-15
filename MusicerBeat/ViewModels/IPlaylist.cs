@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using MusicerBeat.Models;
 
 namespace MusicerBeat.ViewModels
@@ -8,8 +7,6 @@ namespace MusicerBeat.ViewModels
     /// </summary>
     public interface IPlaylist
     {
-        public ReadOnlyObservableCollection<SoundFile> Sounds { get; set; }
-
         public SequentialSelector SequentialSelector { get; }
     }
 }
