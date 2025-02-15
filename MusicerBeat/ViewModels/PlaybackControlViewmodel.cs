@@ -10,12 +10,12 @@ namespace MusicerBeat.ViewModels
     {
         private ISoundPlayer soundPlayer;
 
-        public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayer soundPlayer)
+        public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
-            this.soundPlayer = soundPlayer;
+            soundPlayer = soundPlayerFactory.CreateSoundPlayer();
             PlayListSource = playlist;
 
-            this.soundPlayer.SoundEnded += (_, _) =>
+            soundPlayer.SoundEnded += (_, _) =>
             {
                 Play(null);
             };

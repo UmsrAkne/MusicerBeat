@@ -13,7 +13,7 @@ namespace MusicerBeatTests.ViewModels
             playList.OriginalList.Add(new SoundFile("C://test/a.mp3"));
 
             var soundPlayer = new MockSoundPlayer();
-            var vm = new PlaybackControlViewmodel(playList, soundPlayer);
+            var vm = new PlaybackControlViewmodel(playList, new DummySoundPlayerFactory());
 
             vm.PlayCommand.Execute(null);
 
@@ -30,7 +30,7 @@ namespace MusicerBeatTests.ViewModels
             var playList = new MockPlaylist();
 
             var soundPlayer = new MockSoundPlayer();
-            var vm = new PlaybackControlViewmodel(playList, soundPlayer);
+            var vm = new PlaybackControlViewmodel(playList, new DummySoundPlayerFactory());
 
             vm.PlayCommand.Execute(null);
 
