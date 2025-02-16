@@ -90,6 +90,14 @@ namespace MusicerBeat.Models
             }
         }
 
+        /// <summary>
+        /// このクラスが保持する ISoundPlayer オブジェクトのリストをクリアします。
+        /// </summary>
+        public void Clear()
+        {
+            SoundPlayers.Clear();
+        }
+
         private bool IsVolumeFadeCompleted()
         {
             if (SoundPlayers.Count != 2)
