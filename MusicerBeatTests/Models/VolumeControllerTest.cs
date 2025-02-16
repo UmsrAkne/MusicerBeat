@@ -82,5 +82,36 @@ namespace MusicerBeatTests.Models
                 Assert.That(p3.Volume, Is.EqualTo(1f));
             });
         }
+
+
+        // 内部のリストが空の状態で ChangeVolumes を実行しても例外がスローされたりしないか確認する。
+        [Test]
+        public void ChangeVolumeTest_Empty()
+        {
+            var vc = new VolumeController() { VolumeFadeStep = 0.4f, };
+
+            vc.ChangeVolumes();
+            vc.ChangeVolumes();
+            vc.ChangeVolumes();
+        }
+
+        [Test]
+        public void ChangeVolumeTest_OneElement()
+        {
+            var p1 = new MockSoundPlayer(){ Volume = 1, };
+            var vc = new VolumeController() { VolumeFadeStep = 0.4f, };
+            vc.Add(p1);
+
+            Assert.That(p1.Volume, Is.EqualTo(1));
+
+            vc.ChangeVolumes();
+
+            Assert.That(p1.Volume, Is.EqualTo(1.0f).Within(0.0001f));
+
+            vc.ChangeVolumes();
+            vc.ChangeVolumes();
+
+            Assert.That(p1.Volume, Is.EqualTo(1.0f).Within(0.0001f));
+        }
     }
 }
