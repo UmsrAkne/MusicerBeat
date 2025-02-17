@@ -41,7 +41,6 @@ namespace MusicerBeat.Models
             if (SoundPlayers.Count >= 2)
             {
                 SoundPlayers.RemoveAt(0);
-                SoundPlayers.Add(player);
             }
 
             SoundPlayers.Add(player);
@@ -88,6 +87,14 @@ namespace MusicerBeat.Models
             {
                 SoundPlayers.RemoveAt(0);
             }
+        }
+
+        /// <summary>
+        /// このクラスが保持する ISoundPlayer オブジェクトのリストをクリアします。
+        /// </summary>
+        public void Clear()
+        {
+            SoundPlayers.Clear();
         }
 
         private bool IsVolumeFadeCompleted()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Threading;
 using MusicerBeat.Models;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -13,10 +14,15 @@ namespace MusicerBeat.ViewModels
         private readonly ISoundPlayerFactory soundPlayerFactory;
         private readonly Queue<ISoundPlayer> soundPlayers = new ();
 
+        private readonly DispatcherTimer timer;
+        private VolumeController volumeController = new ();
+
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
             this.soundPlayerFactory = soundPlayerFactory;
             PlayListSource = playlist;
+            timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
+            timer.Tick += Timer_Tick;
         }
 
         public bool IsPlaying { get; set; }
@@ -82,6 +88,10 @@ namespace MusicerBeat.ViewModels
         }
 
         private void Previous()
+        {
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
         {
         }
     }

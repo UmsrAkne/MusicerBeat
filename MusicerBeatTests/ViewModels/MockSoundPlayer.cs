@@ -12,6 +12,8 @@ namespace MusicerBeatTests.ViewModels
 
         public float Volume { get; set; }
 
+        public TimeSpan CurrentTime { get; } = TimeSpan.Zero;
+
         public void PlaySound(SoundFile soundFile)
         {
             LastPlayedSoundFile = soundFile;
