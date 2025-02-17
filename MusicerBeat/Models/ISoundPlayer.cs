@@ -8,6 +8,8 @@ namespace MusicerBeat.Models
 
         float Volume { get; set; }
 
+        TimeSpan CurrentTime { get; }
+
         void PlaySound(SoundFile soundFile);
 
         void Stop();
