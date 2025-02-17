@@ -41,7 +41,6 @@ namespace MusicerBeat.Models
             if (SoundPlayers.Count >= 2)
             {
                 SoundPlayers.RemoveAt(0);
-                SoundPlayers.Add(player);
             }
 
             SoundPlayers.Add(player);
