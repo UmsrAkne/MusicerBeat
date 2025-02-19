@@ -7,6 +7,15 @@ namespace MusicerBeat.Models
     {
         private float volumeFadeStep = 0.1f;
 
+        public VolumeController()
+        {
+        }
+
+        public VolumeController(List<ISoundPlayer> players)
+        {
+            SoundPlayers = players;
+        }
+
         public float CurrentVolume { get; set; } = 1.0f;
 
         /// <summary>
