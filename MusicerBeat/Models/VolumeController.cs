@@ -91,11 +91,6 @@ namespace MusicerBeat.Models
                 newPlayer.Volume += VolumeFadeStep;
                 newPlayer.Volume = Math.Min(CurrentVolume, newPlayer.Volume);
             }
-
-            if (IsVolumeFadeCompleted())
-            {
-                SoundPlayers.RemoveAt(0);
-            }
         }
 
         /// <summary>
@@ -104,19 +99,6 @@ namespace MusicerBeat.Models
         public void Clear()
         {
             SoundPlayers.Clear();
-        }
-
-        private bool IsVolumeFadeCompleted()
-        {
-            if (SoundPlayers.Count != 2)
-            {
-                return false;
-            }
-
-            var oldPlayer = SoundPlayers[0];
-            var newPlayer = SoundPlayers[1];
-
-            return oldPlayer.Volume == 0 && Math.Abs(newPlayer.Volume - CurrentVolume) < 0.001;
         }
     }
 }
