@@ -4,6 +4,8 @@ namespace MusicerBeatTests.ViewModels
 {
     public class MockSoundPlayer : ISoundPlayer
     {
+        private TimeSpan currentTime = TimeSpan.Zero;
+
         public event EventHandler? SoundEnded;
 
         public SoundFile? LastPlayedSoundFile { get; private set; }
@@ -12,9 +14,27 @@ namespace MusicerBeatTests.ViewModels
 
         public float Volume { get; set; }
 
-        public TimeSpan CurrentTime { get; } = TimeSpan.Zero;
+        public TimeSpan CurrentTime
+        {
+            get => currentTime;
+            set
+            {
+                if (!IsPlaying)
+                {
+                    return;
+                }
 
-        public TimeSpan Duration { get; set; } = TimeSpan.Zero;
+                currentTime = value;
+
+                if (currentTime >= Duration)
+                {
+                    SoundEnded?.Invoke(this, EventArgs.Empty);
+                    IsPlaying = false;
+                }
+            }
+        }
+
+        public TimeSpan Duration { get; set; }
 
         public void PlaySound(SoundFile soundFile)
         {
