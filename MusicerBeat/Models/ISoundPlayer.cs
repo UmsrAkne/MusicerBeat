@@ -10,6 +10,8 @@ namespace MusicerBeat.Models
 
         TimeSpan CurrentTime { get; }
 
+        TimeSpan Duration { get; }
+
         void PlaySound(SoundFile soundFile);
 
         void Stop();
