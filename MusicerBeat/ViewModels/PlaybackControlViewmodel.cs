@@ -69,18 +69,19 @@ namespace MusicerBeat.ViewModels
             }
 
             var newPlayer = soundPlayerFactory.CreateSoundPlayer();
-            newPlayer.SoundEnded += (sender, _) =>
-            {
-                if (sender is ISoundPlayer p)
-                {
-                    soundPlayers.Remove(p);
-                }
-
-                Play(null);
-            };
-
+            newPlayer.SoundEnded += RemoveAndPlay;
             soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
+        }
+
+        private void RemoveAndPlay(object sender, EventArgs e)
+        {
+            if (sender is ISoundPlayer p)
+            {
+                soundPlayers.Remove(p);
+            }
+
+            Play(null);
         }
 
         private void Stop()
