@@ -64,29 +64,22 @@ namespace MusicerBeatTests.ViewModels
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
             vm.PlayCommand.Execute(null);
 
-            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing)); // p1
-            soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += TimeSpan.FromMilliseconds(1000));
-            vm.Timer_Tick(null, null);
+            var expectedTransitions = new List<(TimeSpan, PlayingStatus)>
+            {
+                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p1
+                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading),  // p1, p2
+                (TimeSpan.FromMilliseconds(500),  PlayingStatus.Playing), // p2 + 500ms
+                (TimeSpan.FromMilliseconds(500),  PlayingStatus.Playing), // p2 end, p3 + 500ms
+                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p3 end, p4 + 1000ms
+                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p4 end,
+            };
 
-            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Fading)); // p1, p2
-            soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += TimeSpan.FromMilliseconds(1000));
-            vm.Timer_Tick(null, null);
-
-            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing)); // p2 + 500ms
-            soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += TimeSpan.FromMilliseconds(500));
-            vm.Timer_Tick(null, null);
-
-            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing)); // p2 end, p3 + 500ms
-            soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += TimeSpan.FromMilliseconds(500));
-            vm.Timer_Tick(null, null);
-
-            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing)); // p3 end, p4 + 1000ms
-            soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += TimeSpan.FromMilliseconds(1000));
-            vm.Timer_Tick(null, null);
-
-            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing)); // p4 end,
-            soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += TimeSpan.FromMilliseconds(1000));
-            vm.Timer_Tick(null, null);
+            foreach (var (time, expectedStatus) in expectedTransitions)
+            {
+                Assert.That(vm.GetStatus(), Is.EqualTo(expectedStatus));
+                soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += time);
+                vm.Timer_Tick(null, null);
+            }
 
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
         }

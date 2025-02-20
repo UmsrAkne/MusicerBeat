@@ -18,5 +18,6 @@
     &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.VolumeControllerTest.ChangeVolumeTest_OneElement&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.Models.SequentialSelectorTest.NextIsLongSound_Test&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.ViewModels.PlaybackControlViewModelTest.PlayCommand_VolumeTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::630800E9-EB19-4C98-8AF2-4F0C02DDDCA7::net6.0-windows::MusicerBeatTests.ViewModels.PlaybackControlViewModelTest.PlayCommand_StateTransitionTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
