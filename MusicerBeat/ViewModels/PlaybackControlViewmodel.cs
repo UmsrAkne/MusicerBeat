@@ -55,14 +55,7 @@ namespace MusicerBeat.ViewModels
             {
                 // 再生する曲が直接選択されて指定されたケース
                 // 全てのプレイヤーを停止する。
-                foreach (var p in soundPlayers)
-                {
-                    p.Stop();
-                    var d = p as IDisposable;
-                    d?.Dispose();
-                }
-
-                soundPlayers.Clear();
+                Stop();
                 PlayListSource.SequentialSelector.SetIndexBySoundFile(soundFile);
             }
 
@@ -90,6 +83,16 @@ namespace MusicerBeat.ViewModels
 
         private void Stop()
         {
+            foreach (var p in soundPlayers)
+            {
+                p.Stop();
+                if (p is IDisposable d)
+                {
+                    d.Dispose();
+                }
+            }
+
+            soundPlayers.Clear();
         }
 
         private void Next()
