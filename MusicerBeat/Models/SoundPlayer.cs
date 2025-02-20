@@ -27,6 +27,8 @@ namespace MusicerBeat.Models
 
         public TimeSpan Duration { get; } = TimeSpan.Zero;
 
+        public bool IsPlaying { get; private set; }
+
         public void PlaySound(SoundFile soundFile)
         {
             if (waveOutEvent != null)

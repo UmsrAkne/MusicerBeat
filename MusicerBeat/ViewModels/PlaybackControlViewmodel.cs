@@ -35,6 +35,41 @@ namespace MusicerBeat.ViewModels
 
         private IPlaylist PlayListSource { get; init; }
 
+        public PlayingStatus GetStatus()
+        {
+            if (soundPlayers.Count == 0)
+            {
+                return PlayingStatus.Stopped;
+            }
+
+            if (soundPlayers.Count == 1)
+            {
+                if (!soundPlayers.First().IsPlaying)
+                {
+                    throw new InvalidOperationException("Invalid Status");
+                }
+
+                return PlayingStatus.Playing;
+            }
+
+            if (soundPlayers.Count == 2)
+            {
+                if (soundPlayers.All(p => p.IsPlaying))
+                {
+                    // リストの中のプレイヤーが両方動いている。
+                    return PlayingStatus.Fading;
+                }
+
+                if (soundPlayers.First().IsPlaying && !soundPlayers.Last().IsPlaying)
+                {
+                    // 最初のプレイヤーが再生中・新しい方のプレイヤーが停止（待機状態）
+                    return PlayingStatus.PlayingAndWaiting;
+                }
+            }
+
+            throw new InvalidOperationException("Invalid Status");
+        }
+
         public void Dispose()
         {
             Dispose(true);
