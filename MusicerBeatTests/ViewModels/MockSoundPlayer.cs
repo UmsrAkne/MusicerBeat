@@ -36,8 +36,15 @@ namespace MusicerBeatTests.ViewModels
 
         public TimeSpan Duration { get; set; }
 
+        public string Name { get; set; } = string.Empty;
+
         public void PlaySound(SoundFile soundFile)
         {
+            if (soundFile.Duration > 0)
+            {
+                Duration = TimeSpan.FromSeconds(soundFile.Duration);
+            }
+
             LastPlayedSoundFile = soundFile;
             IsPlaying = true;
         }

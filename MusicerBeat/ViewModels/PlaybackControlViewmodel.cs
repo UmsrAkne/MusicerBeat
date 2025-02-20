@@ -22,7 +22,7 @@ namespace MusicerBeat.ViewModels
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
-            VolumeController = new VolumeController();
+            VolumeController = new VolumeController(soundPlayers);
         }
 
         public bool IsPlaying { get; set; }
@@ -113,7 +113,10 @@ namespace MusicerBeat.ViewModels
                 soundPlayers.Remove(p);
             }
 
-            Play(null);
+            if (GetStatus() == PlayingStatus.Stopped)
+            {
+                Play(null);
+            }
         }
 
         private void Stop()
@@ -138,8 +141,24 @@ namespace MusicerBeat.ViewModels
         {
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        public void Timer_Tick(object sender, EventArgs e)
         {
+            var status = GetStatus();
+            if (status == PlayingStatus.Playing)
+            {
+                var p = soundPlayers.First();
+                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2);
+                var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
+                if (p.CurrentTime >= p.Duration - CrossFadeDuration && nextIsLongSound && currentlyIsLongSound)
+                {
+                    Play(null);
+                }
+            }
+
+            if (status == PlayingStatus.Fading)
+            {
+                VolumeController.ChangeVolumes();
+            }
         }
     }
 }
