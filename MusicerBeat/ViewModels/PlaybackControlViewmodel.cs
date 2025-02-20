@@ -12,7 +12,7 @@ namespace MusicerBeat.ViewModels
     public class PlaybackControlViewmodel : BindableBase, IDisposable
     {
         private readonly ISoundPlayerFactory soundPlayerFactory;
-        private readonly Queue<ISoundPlayer> soundPlayers = new ();
+        private readonly List<ISoundPlayer> soundPlayers = new ();
 
         private readonly DispatcherTimer timer;
         private VolumeController volumeController = new ();
@@ -69,13 +69,17 @@ namespace MusicerBeat.ViewModels
             }
 
             var newPlayer = soundPlayerFactory.CreateSoundPlayer();
-            newPlayer.SoundEnded += (_, _) =>
+            newPlayer.SoundEnded += (sender, _) =>
             {
-                soundPlayers.Dequeue();
+                if (sender is ISoundPlayer p)
+                {
+                    soundPlayers.Remove(p);
+                }
+
                 Play(null);
             };
 
-            soundPlayers.Enqueue(newPlayer);
+            soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
         }
 
