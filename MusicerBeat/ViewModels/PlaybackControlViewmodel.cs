@@ -12,10 +12,9 @@ namespace MusicerBeat.ViewModels
     public class PlaybackControlViewmodel : BindableBase, IDisposable
     {
         private readonly ISoundPlayerFactory soundPlayerFactory;
-        private readonly Queue<ISoundPlayer> soundPlayers = new ();
+        private readonly List<ISoundPlayer> soundPlayers = new ();
 
         private readonly DispatcherTimer timer;
-        private VolumeController volumeController = new ();
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -23,11 +22,16 @@ namespace MusicerBeat.ViewModels
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
+            VolumeController = new VolumeController();
         }
 
         public bool IsPlaying { get; set; }
 
+        public VolumeController VolumeController { get; set; }
+
         public DelegateCommand<SoundFile> PlayCommand => new (Play);
+
+        public TimeSpan CrossFadeDuration { get; set; } = TimeSpan.FromSeconds(10);
 
         private IPlaylist PlayListSource { get; init; }
 
@@ -69,14 +73,19 @@ namespace MusicerBeat.ViewModels
             }
 
             var newPlayer = soundPlayerFactory.CreateSoundPlayer();
-            newPlayer.SoundEnded += (_, _) =>
-            {
-                soundPlayers.Dequeue();
-                Play(null);
-            };
-
-            soundPlayers.Enqueue(newPlayer);
+            newPlayer.SoundEnded += RemoveAndPlay;
+            soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
+        }
+
+        private void RemoveAndPlay(object sender, EventArgs e)
+        {
+            if (sender is ISoundPlayer p)
+            {
+                soundPlayers.Remove(p);
+            }
+
+            Play(null);
         }
 
         private void Stop()
