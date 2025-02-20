@@ -54,5 +54,22 @@ namespace MusicerBeat.Models
                 Index = idx + 1;
             }
         }
+
+        /// <summary>
+        /// 次に選択されるサウンドの長さが、引数に与えられた値以上の長さのサウンドかを判定します。<br/>
+        /// このメソッドによって内部のインデックスが変化することはありません。
+        /// </summary>
+        /// <param name="threshold">長いサウンドかを判定するための基準となる TimeSpan を入力します。</param>
+        /// <returns>次に選択されるサウンドの長さが引数に入力された TimeSpan よりも長いかどうか。<br/>
+        /// ただし、次に選択されるサウンドが null の場合は false を返します。
+        /// </returns>
+        public bool NextIsLongSound(TimeSpan threshold)
+        {
+            var originalIndex = Index;
+            var sound = SelectSoundFile();
+            Index = originalIndex;
+
+            return sound != null && TimeSpan.FromSeconds(sound.Duration) >= threshold;
+        }
     }
 }
