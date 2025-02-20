@@ -15,7 +15,6 @@ namespace MusicerBeat.ViewModels
         private readonly List<ISoundPlayer> soundPlayers = new ();
 
         private readonly DispatcherTimer timer;
-        private VolumeController volumeController = new ();
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -23,11 +22,16 @@ namespace MusicerBeat.ViewModels
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
+            VolumeController = new VolumeController();
         }
 
         public bool IsPlaying { get; set; }
 
+        public VolumeController VolumeController { get; set; }
+
         public DelegateCommand<SoundFile> PlayCommand => new (Play);
+
+        public TimeSpan CrossFadeDuration { get; set; } = TimeSpan.FromSeconds(10);
 
         private IPlaylist PlayListSource { get; init; }
 
