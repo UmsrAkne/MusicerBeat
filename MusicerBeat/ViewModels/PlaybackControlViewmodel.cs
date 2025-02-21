@@ -76,6 +76,21 @@ namespace MusicerBeat.ViewModels
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// 再生中のプレイヤーの音量を取得します。
+        /// </summary>
+        /// <returns>プレイヤーの音量を取得します。再生中のプレイヤーが一つ、または存在しない場合は、該当の箇所に null が入ります。</returns>
+        public (double? OldPlayerVol, double? NewPlayerVol) GetVolumes()
+        {
+            return GetStatus() switch
+            {
+                PlayingStatus.Stopped => (null, null),
+                PlayingStatus.Playing => (soundPlayers.First().Volume, null),
+                PlayingStatus.Fading => (soundPlayers.First().Volume, soundPlayers.Last().Volume),
+                _ => (0, 0),
+            };
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             foreach (var d in soundPlayers.Select(p => p as IDisposable))
