@@ -22,7 +22,9 @@ namespace MusicerBeat.ViewModels
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
-            VolumeController = new VolumeController();
+            VolumeController = new VolumeController(soundPlayers);
+            VolumeController.VolumeFadeStep = 0.02f;
+            timer.Start();
         }
 
         public bool IsPlaying { get; set; }
@@ -35,10 +37,60 @@ namespace MusicerBeat.ViewModels
 
         private IPlaylist PlayListSource { get; init; }
 
+        public PlayingStatus GetStatus()
+        {
+            if (soundPlayers.Count == 0)
+            {
+                return PlayingStatus.Stopped;
+            }
+
+            if (soundPlayers.Count == 1)
+            {
+                if (!soundPlayers.First().IsPlaying)
+                {
+                    throw new InvalidOperationException("Invalid Status");
+                }
+
+                return PlayingStatus.Playing;
+            }
+
+            if (soundPlayers.Count == 2)
+            {
+                if (soundPlayers.All(p => p.IsPlaying))
+                {
+                    // リストの中のプレイヤーが両方動いている。
+                    return PlayingStatus.Fading;
+                }
+
+                if (soundPlayers.First().IsPlaying && !soundPlayers.Last().IsPlaying)
+                {
+                    // 最初のプレイヤーが再生中・新しい方のプレイヤーが停止（待機状態）
+                    return PlayingStatus.PlayingAndWaiting;
+                }
+            }
+
+            throw new InvalidOperationException("Invalid Status");
+        }
+
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// 再生中のプレイヤーの音量を取得します。
+        /// </summary>
+        /// <returns>プレイヤーの音量を取得します。再生中のプレイヤーが一つ、または存在しない場合は、該当の箇所に null が入ります。</returns>
+        public (double? OldPlayerVol, double? NewPlayerVol) GetVolumes()
+        {
+            return GetStatus() switch
+            {
+                PlayingStatus.Stopped => (null, null),
+                PlayingStatus.Playing => (soundPlayers.First().Volume, null),
+                PlayingStatus.Fading => (soundPlayers.First().Volume, soundPlayers.Last().Volume),
+                _ => (0, 0),
+            };
         }
 
         protected virtual void Dispose(bool disposing)
@@ -55,14 +107,7 @@ namespace MusicerBeat.ViewModels
             {
                 // 再生する曲が直接選択されて指定されたケース
                 // 全てのプレイヤーを停止する。
-                foreach (var p in soundPlayers)
-                {
-                    p.Stop();
-                    var d = p as IDisposable;
-                    d?.Dispose();
-                }
-
-                soundPlayers.Clear();
+                Stop();
                 PlayListSource.SequentialSelector.SetIndexBySoundFile(soundFile);
             }
 
@@ -76,6 +121,13 @@ namespace MusicerBeat.ViewModels
             newPlayer.SoundEnded += RemoveAndPlay;
             soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
+
+            newPlayer.Volume = GetStatus() switch
+            {
+                PlayingStatus.Playing => 1.0f,
+                PlayingStatus.Fading => 0f,
+                _ => newPlayer.Volume,
+            };
         }
 
         private void RemoveAndPlay(object sender, EventArgs e)
@@ -85,11 +137,24 @@ namespace MusicerBeat.ViewModels
                 soundPlayers.Remove(p);
             }
 
-            Play(null);
+            if (GetStatus() == PlayingStatus.Stopped)
+            {
+                Play(null);
+            }
         }
 
         private void Stop()
         {
+            foreach (var p in soundPlayers)
+            {
+                p.Stop();
+                if (p is IDisposable d)
+                {
+                    d.Dispose();
+                }
+            }
+
+            soundPlayers.Clear();
         }
 
         private void Next()
@@ -100,8 +165,23 @@ namespace MusicerBeat.ViewModels
         {
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        public void Timer_Tick(object sender, EventArgs e)
         {
+            if (GetStatus() == PlayingStatus.Playing)
+            {
+                var p = soundPlayers.First();
+                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2);
+                var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
+                if (p.CurrentTime >= p.Duration - CrossFadeDuration && nextIsLongSound && currentlyIsLongSound)
+                {
+                    Play(null);
+                }
+            }
+
+            if (GetStatus() == PlayingStatus.Fading)
+            {
+                VolumeController.ChangeVolumes();
+            }
         }
     }
 }

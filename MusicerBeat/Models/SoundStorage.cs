@@ -37,7 +37,12 @@ namespace MusicerBeat.Models
         {
             return Directory.GetFiles(FullPath)
                 .Where(SoundFile.IsSoundFile)
-                .Select(d => new SoundFile(d))
+                .Select(d =>
+                {
+                    var sf = new SoundFile(d);
+                    sf.LoadDuration();
+                    return sf;
+                })
                 .OrderBy(f => f.Name);
         }
     }

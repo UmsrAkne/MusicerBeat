@@ -23,9 +23,11 @@ namespace MusicerBeat.Models
             }
         }
 
-        public TimeSpan CurrentTime { get; } = TimeSpan.Zero;
+        public TimeSpan CurrentTime => waveStream?.CurrentTime ?? TimeSpan.Zero;
 
-        public TimeSpan Duration { get; } = TimeSpan.Zero;
+        public TimeSpan Duration => waveStream?.TotalTime ?? TimeSpan.Zero;
+
+        public bool IsPlaying { get; private set; }
 
         public void PlaySound(SoundFile soundFile)
         {
@@ -39,6 +41,7 @@ namespace MusicerBeat.Models
             waveOutEvent.Volume = 1.0f;
             waveOutEvent.Init(waveStream);
             waveOutEvent.Play();
+            IsPlaying = true;
 
             waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
         }
@@ -49,6 +52,7 @@ namespace MusicerBeat.Models
             waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
             waveOutEvent = null;
             waveStream = null;
+            IsPlaying = false;
         }
 
         public void Dispose()
@@ -66,6 +70,7 @@ namespace MusicerBeat.Models
         {
             if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
             {
+                IsPlaying = false;
                 SoundEnded?.Invoke(this, EventArgs.Empty);
             }
         }

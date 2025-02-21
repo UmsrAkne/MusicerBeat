@@ -77,5 +77,34 @@ namespace MusicerBeatTests.Models
             // 最後に file2 を取得したのと同じ状態になるわけだから、次の取得は file3 で、ループなしならばその次は null。
             CollectionAssert.AreEqual(new []{"file3.mp3", null, null, }, results);
         }
+
+        [Test]
+        public void NextIsLongSound_Test()
+        {
+            var list = new ObservableCollection<SoundFile>()
+            {
+                new SoundFile("C://t/file1.mp3") { Duration = 20, },
+                new SoundFile("C://t/file2.mp3") { Duration = 10, },
+                new SoundFile("C://t/file3.mp3") { Duration = 5, },
+            };
+
+            var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list))
+            {
+                IsLoop = false,
+            };
+
+            Assert.Multiple(() =>
+            {
+                // 長いサウンドか判定した後に、インデックスが動いていないことを確認するため、`SelectSoundFile()`を実行する。
+                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10)), Is.True);
+                Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file1.mp3"));
+
+                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10)), Is.True);
+                Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file2.mp3"));
+
+                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10)), Is.False);
+                Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file3.mp3"));
+            });
+        }
     }
 }
