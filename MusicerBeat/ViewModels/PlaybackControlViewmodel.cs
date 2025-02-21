@@ -158,8 +158,7 @@ namespace MusicerBeat.ViewModels
 
         public void Timer_Tick(object sender, EventArgs e)
         {
-            var status = GetStatus();
-            if (status == PlayingStatus.Playing)
+            if (GetStatus() == PlayingStatus.Playing)
             {
                 var p = soundPlayers.First();
                 var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2);
@@ -170,7 +169,7 @@ namespace MusicerBeat.ViewModels
                 }
             }
 
-            if (status == PlayingStatus.Fading)
+            if (GetStatus() == PlayingStatus.Fading)
             {
                 VolumeController.ChangeVolumes();
             }
