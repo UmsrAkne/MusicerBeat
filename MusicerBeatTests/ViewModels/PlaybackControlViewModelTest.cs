@@ -115,12 +115,11 @@ namespace MusicerBeatTests.ViewModels
             var expectedTransitions = new List<(TimeSpan, double?, double?, string)>
             {
                 (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
-                (TimeSpan.FromMilliseconds(1000), 1.0, 1.0 , "p1, p2"),
 
-                (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1)"),
+                (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
                 (TimeSpan.FromMilliseconds(250), 0.5,  0.5 , "p1, p2 (2)"),
                 (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
-                (TimeSpan.FromMilliseconds(250), 0,    1.0 , "p1, p2 (4)"),
+                (TimeSpan.FromMilliseconds(250), 0,    1.0 , "p1, p2 (4) クロスフェード完了"),
 
                 (TimeSpan.FromMilliseconds(500),  1.0, null, "p2 + 500ms"),
                 (TimeSpan.FromMilliseconds(500),  1.0, null, "p2 end, p3 + 500ms"),
@@ -137,8 +136,23 @@ namespace MusicerBeatTests.ViewModels
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(ov, Is.EqualTo(expectedVolOld).Within(0.0001));
-                    Assert.That(nv, Is.EqualTo(expectedVolNew).Within(0.0001));
+                    if (expectedVolOld is null)
+                    {
+                        Assert.That(ov, Is.Null);
+                    }
+                    else
+                    {
+                        Assert.That(ov, Is.EqualTo(expectedVolOld).Within(0.0001));
+                    }
+
+                    if (expectedVolNew is null)
+                    {
+                        Assert.That(nv, Is.Null);
+                    }
+                    else
+                    {
+                        Assert.That(nv, Is.EqualTo(expectedVolNew).Within(0.0001));
+                    }
                 });
 
                 soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += time);

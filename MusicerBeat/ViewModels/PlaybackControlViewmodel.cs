@@ -119,6 +119,13 @@ namespace MusicerBeat.ViewModels
             newPlayer.SoundEnded += RemoveAndPlay;
             soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
+
+            newPlayer.Volume = GetStatus() switch
+            {
+                PlayingStatus.Playing => 1.0f,
+                PlayingStatus.Fading => 0f,
+                _ => newPlayer.Volume,
+            };
         }
 
         private void RemoveAndPlay(object sender, EventArgs e)
