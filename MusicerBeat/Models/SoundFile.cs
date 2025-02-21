@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using NAudio.Wave;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
@@ -39,6 +40,12 @@ namespace MusicerBeat.Models
         public bool IsSkip { get => isSkip; set => SetProperty(ref isSkip, value); }
 
         public bool Playing { get => playing; set => SetProperty(ref playing, value); }
+
+        public void LoadDuration()
+        {
+            var time = (int)new Mp3FileReader(FullName).TotalTime.TotalSeconds;
+            Duration = time;
+        }
 
         public static bool IsSoundFile(string filePath)
         {
