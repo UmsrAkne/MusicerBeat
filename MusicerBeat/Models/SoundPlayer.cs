@@ -23,9 +23,9 @@ namespace MusicerBeat.Models
             }
         }
 
-        public TimeSpan CurrentTime { get; } = TimeSpan.Zero;
+        public TimeSpan CurrentTime => waveStream?.CurrentTime ?? TimeSpan.Zero;
 
-        public TimeSpan Duration { get; } = TimeSpan.Zero;
+        public TimeSpan Duration => waveStream?.TotalTime ?? TimeSpan.Zero;
 
         public bool IsPlaying { get; private set; }
 
