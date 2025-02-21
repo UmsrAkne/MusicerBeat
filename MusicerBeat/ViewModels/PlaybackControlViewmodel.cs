@@ -23,6 +23,8 @@ namespace MusicerBeat.ViewModels
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
             VolumeController = new VolumeController(soundPlayers);
+            VolumeController.VolumeFadeStep = 0.02f;
+            timer.Start();
         }
 
         public bool IsPlaying { get; set; }
