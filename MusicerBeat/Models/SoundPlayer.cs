@@ -41,6 +41,7 @@ namespace MusicerBeat.Models
             waveOutEvent.Volume = 1.0f;
             waveOutEvent.Init(waveStream);
             waveOutEvent.Play();
+            IsPlaying = true;
 
             waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
         }
@@ -51,6 +52,7 @@ namespace MusicerBeat.Models
             waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
             waveOutEvent = null;
             waveStream = null;
+            IsPlaying = false;
         }
 
         public void Dispose()
@@ -68,6 +70,7 @@ namespace MusicerBeat.Models
         {
             if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
             {
+                IsPlaying = false;
                 SoundEnded?.Invoke(this, EventArgs.Empty);
             }
         }
