@@ -15,6 +15,7 @@ namespace MusicerBeat.ViewModels
         private readonly List<ISoundPlayer> soundPlayers = new ();
 
         private readonly DispatcherTimer timer;
+        private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -23,7 +24,7 @@ namespace MusicerBeat.ViewModels
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
             VolumeController = new VolumeController(soundPlayers);
-            VolumeController.VolumeFadeStep = 0.02f;
+            CrossFadeDuration = TimeSpan.FromSeconds(10);
             timer.Start();
         }
 
@@ -33,7 +34,20 @@ namespace MusicerBeat.ViewModels
 
         public DelegateCommand<SoundFile> PlayCommand => new (Play);
 
-        public TimeSpan CrossFadeDuration { get; set; } = TimeSpan.FromSeconds(10);
+        /// <summary>
+        /// クロスフェード時、音量の変化が完了するまでの時間を設定します。<br/>
+        /// このプロパティに値をセットすると、時間あたりの音量の変更量が変化するため、`VolumeController.VolumeFadeStep`も自動で変更されます。
+        /// </summary>
+        public TimeSpan CrossFadeDuration
+        {
+            get => crossFadeDuration;
+            set
+            {
+                SetProperty(ref crossFadeDuration, value);
+                var dur = 1.0 / (TimeSpan.FromSeconds(1).TotalMilliseconds / timer.Interval.TotalMilliseconds * crossFadeDuration.TotalSeconds);
+                VolumeController.VolumeFadeStep = (float)dur;
+            }
+        }
 
         private IPlaylist PlayListSource { get; init; }
 
