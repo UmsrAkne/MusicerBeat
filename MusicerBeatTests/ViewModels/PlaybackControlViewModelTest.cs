@@ -78,7 +78,7 @@ namespace MusicerBeatTests.ViewModels
             {
                 Assert.That(vm.GetStatus(), Is.EqualTo(expectedStatus));
                 soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += time);
-                vm.Timer_Tick(null, null);
+                vm.UpdatePlaybackState();
             }
 
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
@@ -129,7 +129,7 @@ namespace MusicerBeatTests.ViewModels
 
             foreach (var (time, expectedVolOld, expectedVolNew,description) in expectedTransitions)
             {
-                vm.Timer_Tick(null, null);
+                vm.UpdatePlaybackState();
 
                 var ov = vm.GetVolumes().OldPlayerVol;
                 var nv = vm.GetVolumes().NewPlayerVol;

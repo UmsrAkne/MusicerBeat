@@ -107,6 +107,25 @@ namespace MusicerBeat.ViewModels
             };
         }
 
+        public void UpdatePlaybackState()
+        {
+            if (GetStatus() == PlayingStatus.Playing)
+            {
+                var p = soundPlayers.First();
+                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2);
+                var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
+                if (p.CurrentTime >= p.Duration - CrossFadeDuration && nextIsLongSound && currentlyIsLongSound)
+                {
+                    Play(null);
+                }
+            }
+
+            if (GetStatus() == PlayingStatus.Fading)
+            {
+                VolumeController.ChangeVolumes();
+            }
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             foreach (var d in soundPlayers.Select(p => p as IDisposable))
@@ -179,23 +198,9 @@ namespace MusicerBeat.ViewModels
         {
         }
 
-        public void Timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            if (GetStatus() == PlayingStatus.Playing)
-            {
-                var p = soundPlayers.First();
-                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2);
-                var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
-                if (p.CurrentTime >= p.Duration - CrossFadeDuration && nextIsLongSound && currentlyIsLongSound)
-                {
-                    Play(null);
-                }
-            }
-
-            if (GetStatus() == PlayingStatus.Fading)
-            {
-                VolumeController.ChangeVolumes();
-            }
+            UpdatePlaybackState();
         }
     }
 }

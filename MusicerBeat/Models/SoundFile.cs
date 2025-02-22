@@ -41,16 +41,16 @@ namespace MusicerBeat.Models
 
         public bool Playing { get => playing; set => SetProperty(ref playing, value); }
 
-        public void LoadDuration()
-        {
-            var time = (int)new Mp3FileReader(FullName).TotalTime.TotalSeconds;
-            Duration = time;
-        }
-
         public static bool IsSoundFile(string filePath)
         {
             var extension = Path.GetExtension(filePath).ToLower();
             return new[] { ".wav", ".mp3", ".ogg", }.Contains(extension);
+        }
+
+        public void LoadDuration()
+        {
+            var time = (int)new Mp3FileReader(FullName).TotalTime.TotalSeconds;
+            Duration = time;
         }
     }
 }
