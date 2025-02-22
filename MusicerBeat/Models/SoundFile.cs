@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using NAudio.Wave;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
@@ -44,6 +45,12 @@ namespace MusicerBeat.Models
         {
             var extension = Path.GetExtension(filePath).ToLower();
             return new[] { ".wav", ".mp3", ".ogg", }.Contains(extension);
+        }
+
+        public void LoadDuration()
+        {
+            var time = (int)new Mp3FileReader(FullName).TotalTime.TotalSeconds;
+            Duration = time;
         }
     }
 }
