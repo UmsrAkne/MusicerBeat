@@ -7,25 +7,25 @@ namespace MusicerBeat.Models
     public class SoundPlayer : IDisposable, ISoundPlayer
     {
         private WaveOutEvent waveOutEvent;
-        private WaveStream waveStream;
+        private AudioFileReader audioFileReader;
 
         public event EventHandler SoundEnded;
 
         public float Volume
         {
-            get => waveOutEvent?.Volume ?? 1.0f;
+            get => audioFileReader?.Volume ?? 1.0f;
             set
             {
-                if (waveOutEvent != null)
+                if (audioFileReader != null)
                 {
-                    waveOutEvent.Volume = Math.Min(Math.Max(value, 0), 1.0f);
+                    audioFileReader.Volume = Math.Min(Math.Max(value, 0), 1.0f);
                 }
             }
         }
 
-        public TimeSpan CurrentTime => waveStream?.CurrentTime ?? TimeSpan.Zero;
+        public TimeSpan CurrentTime => audioFileReader?.CurrentTime ?? TimeSpan.Zero;
 
-        public TimeSpan Duration => waveStream?.TotalTime ?? TimeSpan.Zero;
+        public TimeSpan Duration => audioFileReader?.TotalTime ?? TimeSpan.Zero;
 
         public bool IsPlaying { get; private set; }
 
@@ -36,11 +36,15 @@ namespace MusicerBeat.Models
                 Stop();
             }
 
-            waveStream = new Mp3FileReader(soundFile.FullName);
+            audioFileReader = new AudioFileReader(soundFile.FullName);
+            audioFileReader.Volume = 1.0f;
+
             waveOutEvent = new WaveOutEvent();
             waveOutEvent.Volume = 1.0f;
-            waveOutEvent.Init(waveStream);
+
+            waveOutEvent.Init(audioFileReader);
             waveOutEvent.Play();
+
             IsPlaying = true;
 
             waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
@@ -51,7 +55,7 @@ namespace MusicerBeat.Models
             waveOutEvent.Stop();
             waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
             waveOutEvent = null;
-            waveStream = null;
+            audioFileReader = null;
             IsPlaying = false;
         }
 
@@ -63,7 +67,7 @@ namespace MusicerBeat.Models
         protected virtual void Dispose(bool disposing)
         {
             waveOutEvent.Dispose();
-            waveStream.Dispose();
+            audioFileReader.Dispose();
         }
 
         private void WaveOutEventOnPlaybackStopped(object sender, StoppedEventArgs e)
