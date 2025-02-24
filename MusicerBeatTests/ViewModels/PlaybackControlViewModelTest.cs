@@ -84,22 +84,82 @@ namespace MusicerBeatTests.ViewModels
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
         }
 
-        [Test]
-        public void PlayCommand_VolumeTransitionTest()
+        private static IEnumerable<(
+            List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
+            List<(TimeSpan, double?, double?, string)> expectedTransitions)>
+        VolumeTransitionTestCases()
+        {
+            yield return (
+                new List<(string, int, string)>
+                {
+                    (@"C:\test\a.mp3", 2, "p1"),
+                    (@"C:\test\b.mp3", 2, "p2"),
+                    (@"C:\test\c.mp3", 2, "p3"),
+                    (@"C:\test\d.mp3", 2, "p4"),
+                },
+                new List<(TimeSpan, double?, double?, string)>
+                {
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
+
+                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
+
+                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p2 p3 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p2 p3 (2)"),
+                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p2 p3 (3)"),
+                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p2 p3 クロスフェード終了"),
+
+                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p3 p4 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p3 p4 (2)"),
+                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p3 p4 (3)"),
+                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p3 p4 クロスフェード終了"),
+
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
+                }
+            );
+
+            yield return (
+                new List<(string, int, string)>
+                {
+                    (@"C:\test\a.mp3", 2, "p1"),
+                    (@"C:\test\b.mp3", 2, "p2"),
+                    (@"C:\test\c.mp3", 1, "p3"),
+                    (@"C:\test\d.mp3", 2, "p4"),
+                },
+                new List<(TimeSpan, double?, double?, string)>
+                {
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
+
+                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
+
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 + 500ms"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 end, p3 + 500ms"),
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p3 end, p4 + 1000ms"),
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
+                }
+            );
+        }
+
+        [TestCaseSource(nameof(VolumeTransitionTestCases))]
+        public void PlayCommand_VolumeTransitionTests(
+            (
+            List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
+            List<(TimeSpan, double?, double?, string)> transitions) args
+            )
         {
             var playList = new MockPlaylist();
-            playList.OriginalList.Add(new SoundFile("C://test/a.mp3") { Duration = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/b.mp3") { Duration = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/c.mp3") { Duration = 1, });
-            playList.OriginalList.Add(new SoundFile("C://test/d.mp3") { Duration = 2, });
-
-            var ps = new List<MockSoundPlayer>
+            foreach (var data in args.soundAndPlayers)
             {
-                new () { Name = "p1", },
-                new () { Name = "p2", },
-                new () { Name = "p3", },
-                new () { Name = "p4", },
-            };
+                playList.OriginalList.Add(new SoundFile(data.soundFilePath) { Duration = data.duration, });
+            }
+
+            var ps =
+                args.soundAndPlayers.Select(d => new MockSoundPlayer() { Name = d.playerName, }).ToList();
 
             var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = ps, };
 
@@ -112,22 +172,7 @@ namespace MusicerBeatTests.ViewModels
 
             vm.PlayCommand.Execute(null);
 
-            var expectedTransitions = new List<(TimeSpan, double?, double?, string)>
-            {
-                (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
-
-                (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
-                (TimeSpan.FromMilliseconds(250), 0.5,  0.5 , "p1, p2 (2)"),
-                (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
-                (TimeSpan.FromMilliseconds(250), 0,    1.0 , "p1, p2 (4) クロスフェード完了"),
-
-                (TimeSpan.FromMilliseconds(500),  1.0, null, "p2 + 500ms"),
-                (TimeSpan.FromMilliseconds(500),  1.0, null, "p2 end, p3 + 500ms"),
-                (TimeSpan.FromMilliseconds(1000), 1.0, null, "p3 end, p4 + 1000ms"),
-                (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
-            };
-
-            foreach (var (time, expectedVolOld, expectedVolNew,description) in expectedTransitions)
+            foreach (var (time, expectedVolOld, expectedVolNew,description) in args.transitions)
             {
                 vm.UpdatePlaybackState();
 

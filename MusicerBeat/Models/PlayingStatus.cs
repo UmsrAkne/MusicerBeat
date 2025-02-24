@@ -13,11 +13,6 @@ namespace MusicerBeat.Models
         Playing,
 
         /// <summary>
-        /// サウンドを再生中で、次に鳴らすサウンドが待機している状態です。
-        /// </summary>
-        PlayingAndWaiting,
-
-        /// <summary>
         /// サウンドの再生を停止している状態です。
         /// </summary>
         Stopped,
