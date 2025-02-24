@@ -75,12 +75,6 @@ namespace MusicerBeat.ViewModels
                     // リストの中のプレイヤーが両方動いている。
                     return PlayingStatus.Fading;
                 }
-
-                if (soundPlayers.First().IsPlaying && !soundPlayers.Last().IsPlaying)
-                {
-                    // 最初のプレイヤーが再生中・新しい方のプレイヤーが停止（待機状態）
-                    return PlayingStatus.PlayingAndWaiting;
-                }
             }
 
             throw new InvalidOperationException("Invalid Status");
