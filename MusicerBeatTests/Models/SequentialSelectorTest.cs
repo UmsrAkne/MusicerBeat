@@ -49,6 +49,33 @@ namespace MusicerBeatTests.Models
         }
 
         [Test]
+        public void SelectSoundFile_Contains_SkipFile()
+        {
+            var list = new ObservableCollection<SoundFile>()
+            {
+                new ("C://t/a.mp3"),
+                new ("C://t/b.mp3"),
+                new ("C://t/c.mp3") {IsSkip = true, },
+            };
+
+            var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list))
+            {
+                IsLoop = false,
+            };
+
+            var expected = new[] { "a.mp3", "b.mp3", null, };
+
+            var results = new []
+            {
+                s.SelectSoundFile()?.Name,
+                s.SelectSoundFile()?.Name,
+                s.SelectSoundFile()?.Name,
+            };
+
+            CollectionAssert.AreEqual(expected, results);
+        }
+
+        [Test]
         public void SetIndexBySoundFile_Test()
         {
             var list = new ObservableCollection<SoundFile>()
