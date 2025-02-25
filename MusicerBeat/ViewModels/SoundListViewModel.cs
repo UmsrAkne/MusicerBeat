@@ -18,6 +18,11 @@ namespace MusicerBeat.ViewModels
             {
                 originalSounds.Clear();
                 originalSounds.AddRange(soundCollectionSource.GetSounds());
+
+                for (var i = 0; i < originalSounds.Count; i++)
+                {
+                    originalSounds[i].Index = i + 1;
+                }
             };
 
             Sounds = new ReadOnlyObservableCollection<SoundFile>(originalSounds);

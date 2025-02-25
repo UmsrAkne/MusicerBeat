@@ -82,20 +82,29 @@
                         </Grid.InputBindings>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="30" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
+
                         <Border
                             Grid.Column="0"
                             BorderBrush="Gray"
                             BorderThickness="0,0,1,0">
-                            <TextBlock Width="15" Text="{Binding ListenCount}" />
+                            <TextBlock Text="{Binding Index, StringFormat={}{0:D3}}" />
+                        </Border>
+
+                        <Border
+                            Grid.Column="1"
+                            BorderBrush="Gray"
+                            BorderThickness="0,0,1,0">
+                            <TextBlock Padding="3,0" Text="{Binding ListenCount}" />
                         </Border>
 
                         <TextBlock
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="5,0"
-                            Text="{Binding Name}" />
+                            Text="{Binding NameWithoutExtension}" />
 
                     </Grid>
                 </DataTemplate>

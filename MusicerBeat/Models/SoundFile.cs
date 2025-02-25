@@ -14,6 +14,8 @@ namespace MusicerBeat.Models
         private int listenCount;
         private bool isSkip;
         private bool playing;
+        private string nameWithoutExtension;
+        private int index;
 
         public SoundFile(string filePath)
         {
@@ -24,12 +26,19 @@ namespace MusicerBeat.Models
 
             FullName = filePath;
             Name = Path.GetFileName(filePath);
+            NameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
             Extension = Path.GetExtension(filePath).ToLower();
         }
 
         public string FullName { get => fullName; set => SetProperty(ref fullName, value); }
 
         public string Name { get => name; set => SetProperty(ref name, value); }
+
+        public string NameWithoutExtension
+        {
+            get => nameWithoutExtension;
+            set => SetProperty(ref nameWithoutExtension, value);
+        }
 
         public string Extension { get; set; }
 
@@ -40,6 +49,8 @@ namespace MusicerBeat.Models
         public bool IsSkip { get => isSkip; set => SetProperty(ref isSkip, value); }
 
         public bool Playing { get => playing; set => SetProperty(ref playing, value); }
+
+        public int Index { get => index; set => SetProperty(ref index, value); }
 
         public static bool IsSoundFile(string filePath)
         {

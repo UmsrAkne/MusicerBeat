@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MusicerBeat.Models
 {
@@ -21,7 +22,12 @@ namespace MusicerBeat.Models
         #nullable enable
         public SoundFile? SelectSoundFile()
         {
-            if (SoundFiles.Count == 0)
+            if (SoundFiles.Count == 0 && SoundFiles.All(s => s.IsSkip))
+            {
+                return null;
+            }
+
+            if (!IsLoop && SoundFiles.Skip(Index).All(s => s.IsSkip))
             {
                 return null;
             }
@@ -34,11 +40,16 @@ namespace MusicerBeat.Models
                 }
 
                 Index = 0;
-                return SoundFiles[Index++];
             }
 
-            Index = Math.Min(Index, SoundFiles.Count - 1);
-            return SoundFiles[Index++];
+            var idx = SoundFiles.ToList().FindIndex(Index, s => !s.IsSkip);
+            if (idx == -1)
+            {
+                idx = SoundFiles.ToList().FindIndex(s => !s.IsSkip);
+            }
+
+            Index = idx + 1;
+            return SoundFiles[idx];
         }
 
         /// <summary>

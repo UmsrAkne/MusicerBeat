@@ -138,9 +138,28 @@ namespace MusicerBeatTests.ViewModels
                     (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 + 500ms"),
-                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 end, p3 + 500ms"),
-                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p3 end, p4 + 1000ms"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 end"),
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p3 end"),
+                    (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 + 1000ms"),
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
+                }
+            );
+
+            yield return (
+                new List<(string, int, string)>
+                {
+                    (@"C:\test\a.mp3", 1, "p1"),
+                    (@"C:\test\b.mp3", 1, "p2"),
+                    (@"C:\test\c.mp3", 1, "p3"),
+                },
+                new List<(TimeSpan, double?, double?, string)>
+                {
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p1-1"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p1-2"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p2-1"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p2-2"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p3-1"),
+                    (TimeSpan.FromMilliseconds(500), 1.0, null, "p3-2"),
                 }
             );
         }
@@ -200,7 +219,8 @@ namespace MusicerBeatTests.ViewModels
                     }
                 });
 
-                soundPlayerFactory.PlayerSource.ForEach(p => p.CurrentTime += time);
+                var r = Enumerable.Reverse(soundPlayerFactory.PlayerSource).ToList();
+                r.ForEach(p => p.CurrentTime += time);
             }
 
             // 全ての再生が終了したはずなので、プレイヤーが停止状態かを確認する。
