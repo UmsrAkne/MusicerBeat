@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,6 +45,16 @@ namespace MusicerBeat.Models
                     return sf;
                 })
                 .OrderBy(f => f.Name);
+        }
+
+        public List<SoundFile> ParseM3U(string text)
+        {
+            string[] newLineStrings = { "\r\n", "\n", "\r", };
+
+            return text.Split(newLineStrings, StringSplitOptions.RemoveEmptyEntries)
+                .Where(l => !l.TrimStart().StartsWith("#"))
+                .Select(l => new SoundFile(l))
+                .ToList();
         }
     }
 }
