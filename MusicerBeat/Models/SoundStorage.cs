@@ -30,7 +30,7 @@ namespace MusicerBeat.Models
             private set => SetProperty(ref name, value);
         }
 
-        public bool IsM3U { get; set; }
+        private bool IsM3U { get; set; }
 
         public IEnumerable<SoundStorage> GetChildren()
         {
