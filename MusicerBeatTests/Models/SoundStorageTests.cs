@@ -22,8 +22,9 @@ namespace MusicerBeatTests.Models
 
             yield return new TestCaseData(
                 @" # C:\\music\song1.mp3" + "\r\n" +
-                @"C:\\music\song2.mp3",
-                new[] { @"C:\\music\song2.mp3", }
+                @"C:\\music\song2.mp3 # comment" + "\r\n" +
+                @"C:\\music\song3.mp3",
+                new[] { @"C:\\music\song2.mp3", @"C:\\music\song3.mp3", }
             ).SetName("コメントアウトを含むM3U");
 
             yield return new TestCaseData(
