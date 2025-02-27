@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Windows.Forms.VisualStyles;
 using MusicerBeat.Models;
 using Prism.Mvvm;
 
@@ -50,6 +51,9 @@ namespace MusicerBeat.ViewModels
                 DirectoryAreaViewModel.AddSoundStorage(new SoundStorage() { FullPath = $@"C:\test\testDirectory{i + 1}", });
                 SoundListViewModel.AddSoundFile(new SoundFile(@$"C:\test\soundFile{i + 1}.mp3"));
             }
+
+            SoundListViewModel.Sounds[1].Playing = true;
+            SoundListViewModel.Sounds[2].Playing = true;
 
             DirectoryAreaViewModel.SelectedItem = firstStorage;
         }
