@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using NAudio.Wave;
+using NVorbis;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
@@ -60,7 +61,14 @@ namespace MusicerBeat.Models
 
         public void LoadDuration()
         {
-            var time = (int)new Mp3FileReader(FullName).TotalTime.TotalSeconds;
+            if (Extension == ".ogg")
+            {
+                var vr = new VorbisReader(FullName);
+                Duration = (int)vr.TotalTime.TotalSeconds;
+                return;
+            }
+
+            var time = (int)new AudioFileReader(FullName).TotalTime.TotalSeconds;
             Duration = time;
         }
     }

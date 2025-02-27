@@ -1,5 +1,7 @@
 using System;
+using NAudio.Vorbis;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace MusicerBeat.Models
 {
@@ -7,25 +9,27 @@ namespace MusicerBeat.Models
     public class SoundPlayer : IDisposable, ISoundPlayer
     {
         private WaveOutEvent waveOutEvent;
-        private AudioFileReader audioFileReader;
+        private AudioFileReader audioReader;
+        private VorbisWaveReader vorbisReader;
+        private VolumeSampleProvider volumeSampleProvider;
 
         public event EventHandler SoundEnded;
 
         public float Volume
         {
-            get => audioFileReader?.Volume ?? 1.0f;
+            get => volumeSampleProvider?.Volume ?? 1.0f;
             set
             {
-                if (audioFileReader != null)
+                if (volumeSampleProvider != null)
                 {
-                    audioFileReader.Volume = Math.Min(Math.Max(value, 0), 1.0f);
+                    volumeSampleProvider.Volume = Math.Min(Math.Max(value, 0), 1.0f);
                 }
             }
         }
 
-        public TimeSpan CurrentTime => audioFileReader?.CurrentTime ?? TimeSpan.Zero;
+        public TimeSpan CurrentTime => audioReader?.CurrentTime ?? vorbisReader?.CurrentTime ?? TimeSpan.Zero;
 
-        public TimeSpan Duration => audioFileReader?.TotalTime ?? TimeSpan.Zero;
+        public TimeSpan Duration => audioReader?.TotalTime ?? vorbisReader?.TotalTime ?? TimeSpan.Zero;
 
         public bool IsPlaying { get; private set; }
 
@@ -36,13 +40,24 @@ namespace MusicerBeat.Models
                 Stop();
             }
 
-            audioFileReader = new AudioFileReader(soundFile.FullName);
-            audioFileReader.Volume = 1.0f;
+            if (audioReader == null && vorbisReader == null)
+            {
+                if (soundFile.Extension == ".ogg")
+                {
+                    vorbisReader = new VorbisWaveReader(soundFile.FullName);
+                    volumeSampleProvider = new VolumeSampleProvider(vorbisReader) { Volume = 1.0f, };
+                }
+                else
+                {
+                    audioReader = new AudioFileReader(soundFile.FullName);
+                    volumeSampleProvider = new VolumeSampleProvider(audioReader) { Volume = 1.0f, };
+                }
+            }
 
             waveOutEvent = new WaveOutEvent();
             waveOutEvent.Volume = 1.0f;
 
-            waveOutEvent.Init(audioFileReader);
+            waveOutEvent.Init(volumeSampleProvider);
             waveOutEvent.Play();
 
             IsPlaying = true;
@@ -54,8 +69,11 @@ namespace MusicerBeat.Models
         {
             waveOutEvent.Stop();
             waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
+
             waveOutEvent = null;
-            audioFileReader = null;
+            audioReader = null;
+            vorbisReader = null;
+
             IsPlaying = false;
         }
 
@@ -67,7 +85,8 @@ namespace MusicerBeat.Models
         protected virtual void Dispose(bool disposing)
         {
             waveOutEvent.Dispose();
-            audioFileReader.Dispose();
+            audioReader.Dispose();
+            vorbisReader.Dispose();
         }
 
         private void WaveOutEventOnPlaybackStopped(object sender, StoppedEventArgs e)
