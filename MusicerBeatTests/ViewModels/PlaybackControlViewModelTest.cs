@@ -42,10 +42,10 @@ namespace MusicerBeatTests.ViewModels
         public void PlayCommand_StateTransitionTest()
         {
             var playList = new MockPlaylist();
-            playList.OriginalList.Add(new SoundFile("C://test/a.mp3") { Duration = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/b.mp3") { Duration = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/c.mp3") { Duration = 1, });
-            playList.OriginalList.Add(new SoundFile("C://test/d.mp3") { Duration = 2, });
+            playList.OriginalList.Add(new SoundFile("C://test/a.mp3") { TotalSeconds = 2, });
+            playList.OriginalList.Add(new SoundFile("C://test/b.mp3") { TotalSeconds = 2, });
+            playList.OriginalList.Add(new SoundFile("C://test/c.mp3") { TotalSeconds = 1, });
+            playList.OriginalList.Add(new SoundFile("C://test/d.mp3") { TotalSeconds = 2, });
 
             var ps = new List<MockSoundPlayer>
             {
@@ -174,7 +174,7 @@ namespace MusicerBeatTests.ViewModels
             var playList = new MockPlaylist();
             foreach (var data in args.soundAndPlayers)
             {
-                playList.OriginalList.Add(new SoundFile(data.soundFilePath) { Duration = data.duration, });
+                playList.OriginalList.Add(new SoundFile(data.soundFilePath) { TotalSeconds = data.duration, });
             }
 
             var ps =

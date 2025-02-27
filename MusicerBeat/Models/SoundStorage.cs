@@ -73,7 +73,7 @@ namespace MusicerBeat.Models
 
             return text.Split(newLineStrings, StringSplitOptions.RemoveEmptyEntries)
                 .Where(l => !l.TrimStart().StartsWith("#"))
-                .Select(l => new SoundFile(l))
+                .Select(l => new SoundFile(l.Split('#').First().Trim()))
                 .ToList();
         }
     }

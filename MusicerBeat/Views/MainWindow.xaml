@@ -45,7 +45,9 @@
 
             <ListBox.InputBindings>
                 <KeyBinding Key="Back" Command="{Binding DirectoryAreaViewModel.DirectoryUpCommand}" />
+                <KeyBinding Key="Return" Command="{Binding DirectoryAreaViewModel.OpenDirectoryCommand}" />
             </ListBox.InputBindings>
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundStorage}">
                     <StackPanel Orientation="Horizontal">
@@ -82,17 +84,30 @@
                         </Grid.InputBindings>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Border
-                            Grid.Column="0"
-                            BorderBrush="Gray"
-                            BorderThickness="0,0,1,0">
-                            <TextBlock Text="{Binding Index, StringFormat={}{0:D3}}" />
-                        </Border>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <Border Width="5" CornerRadius="3">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Playing}" Value="True">
+                                                <Setter Property="Background" Value="MediumSeaGreen" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+
+                            <Border Margin="4,0" BorderThickness="0,0,1,0">
+                                <TextBlock Text="{Binding Index, StringFormat={}{0:D3}}" />
+                            </Border>
+
+                            <Border Width="1" Background="Gray" />
+                        </StackPanel>
 
                         <Border
                             Grid.Column="1"

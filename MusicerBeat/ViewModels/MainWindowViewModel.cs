@@ -51,6 +51,9 @@ namespace MusicerBeat.ViewModels
                 SoundListViewModel.AddSoundFile(new SoundFile(@$"C:\test\soundFile{i + 1}.mp3"));
             }
 
+            SoundListViewModel.Sounds[1].Playing = true;
+            SoundListViewModel.Sounds[2].Playing = true;
+
             DirectoryAreaViewModel.SelectedItem = firstStorage;
         }
     }

@@ -40,9 +40,9 @@ namespace MusicerBeatTests.ViewModels
 
         public void PlaySound(SoundFile soundFile)
         {
-            if (soundFile.Duration > 0)
+            if (soundFile.TotalSeconds > 0)
             {
-                Duration = TimeSpan.FromSeconds(soundFile.Duration);
+                Duration = TimeSpan.FromSeconds(soundFile.TotalSeconds);
             }
 
             LastPlayedSoundFile = soundFile;
