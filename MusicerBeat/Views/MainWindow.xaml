@@ -45,7 +45,9 @@
 
             <ListBox.InputBindings>
                 <KeyBinding Key="Back" Command="{Binding DirectoryAreaViewModel.DirectoryUpCommand}" />
+                <KeyBinding Key="Return" Command="{Binding DirectoryAreaViewModel.OpenDirectoryCommand}" />
             </ListBox.InputBindings>
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundStorage}">
                     <StackPanel Orientation="Horizontal">
