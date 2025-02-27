@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Windows.Forms.VisualStyles;
 using MusicerBeat.Models;
 using Prism.Mvvm;
 

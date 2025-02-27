@@ -12,7 +12,7 @@ namespace MusicerBeat.Models
         private AudioFileReader audioReader;
         private VorbisWaveReader vorbisReader;
         private VolumeSampleProvider volumeSampleProvider;
-        private SoundFile soundFile;
+        private SoundFile sound;
 
         public event EventHandler SoundEnded;
 
@@ -62,7 +62,7 @@ namespace MusicerBeat.Models
             waveOutEvent.Play();
 
             IsPlaying = true;
-            this.soundFile = soundFile;
+            sound = soundFile;
             soundFile.Playing = true;
 
             waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
@@ -74,9 +74,9 @@ namespace MusicerBeat.Models
             waveOutEvent.Stop();
 
             IsPlaying = false;
-            if (soundFile != null)
+            if (sound != null)
             {
-                soundFile.Playing = false;
+                sound.Playing = false;
             }
         }
 
@@ -101,9 +101,9 @@ namespace MusicerBeat.Models
             if (waveOutEvent.PlaybackState == PlaybackState.Stopped)
             {
                 IsPlaying = false;
-                if (soundFile != null)
+                if (sound != null)
                 {
-                    soundFile.Playing = false;
+                    sound.Playing = false;
                 }
 
                 SoundEnded?.Invoke(this, EventArgs.Empty);
