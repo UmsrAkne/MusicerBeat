@@ -70,12 +70,8 @@ namespace MusicerBeat.Models
 
         public void Stop()
         {
-            waveOutEvent.Stop();
             waveOutEvent.PlaybackStopped -= WaveOutEventOnPlaybackStopped;
-
-            waveOutEvent = null;
-            audioReader = null;
-            vorbisReader = null;
+            waveOutEvent.Stop();
 
             IsPlaying = false;
             if (soundFile != null)
@@ -91,9 +87,13 @@ namespace MusicerBeat.Models
 
         protected virtual void Dispose(bool disposing)
         {
-            waveOutEvent.Dispose();
-            audioReader.Dispose();
-            vorbisReader.Dispose();
+            waveOutEvent?.Dispose();
+            audioReader?.Dispose();
+            vorbisReader?.Dispose();
+
+            waveOutEvent = null;
+            audioReader = null;
+            vorbisReader = null;
         }
 
         private void WaveOutEventOnPlaybackStopped(object sender, StoppedEventArgs e)
