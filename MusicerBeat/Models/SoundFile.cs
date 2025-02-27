@@ -63,12 +63,13 @@ namespace MusicerBeat.Models
         {
             if (Extension == ".ogg")
             {
-                var vr = new VorbisReader(FullName);
+                using var vr = new VorbisReader(FullName);
                 Duration = (int)vr.TotalTime.TotalSeconds;
                 return;
             }
 
-            var time = (int)new AudioFileReader(FullName).TotalTime.TotalSeconds;
+            using var afr = new AudioFileReader(FullName);
+            var time = (int)afr.TotalTime.TotalSeconds;
             Duration = time;
         }
     }
