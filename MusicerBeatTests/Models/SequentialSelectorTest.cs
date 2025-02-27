@@ -201,9 +201,9 @@ namespace MusicerBeatTests.Models
         {
             var list = new ObservableCollection<SoundFile>()
             {
-                new SoundFile("C://t/file1.mp3") { Duration = 20, },
-                new SoundFile("C://t/file2.mp3") { Duration = 10, },
-                new SoundFile("C://t/file3.mp3") { Duration = 5, },
+                new SoundFile("C://t/file1.mp3") { TotalSeconds = 20, },
+                new SoundFile("C://t/file2.mp3") { TotalSeconds = 10, },
+                new SoundFile("C://t/file3.mp3") { TotalSeconds = 5, },
             };
 
             var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list))
