@@ -14,6 +14,10 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
+    <Window.Resources>
+        <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -88,7 +92,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition />
-                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="60" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -126,7 +130,7 @@
                         <TextBlock
                             Grid.Column="3"
                             Margin="5,0"
-                            Text="{Binding TotalSeconds}" />
+                            Text="{Binding TotalSeconds, Converter={StaticResource IntToTimeSpanConverter}}" />
 
                     </Grid>
                 </DataTemplate>
