@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,9 +34,25 @@ namespace MusicerBeat.Models.Databases
             await soundFileRepository.AddRangeAsync(filtered);
         }
 
-        public Task AddListenHistoryAsync(ListenHistory listenHistory)
+        /// <summary>
+        /// サウンドの視聴履歴をデータベースに記録します。
+        /// </summary>
+        /// <remarks>
+        /// 内部でサウンドファイルの視聴回数のインクリメントして記録。<br/>
+        /// 同時に新しい `ListenHistory` を現在の時刻とともに記録します。
+        /// </remarks>
+        /// <param name="soundFile">記録に使用するサウンドファイルを入力します。</param>
+        /// <returns>非同期処理を表すタスク</returns>
+        public Task AddListenHistoryAsync(SoundFile soundFile)
         {
-            return listenHistoryRepository.AddAsync(listenHistory);
+            soundFile.ListenCount++;
+            soundFileRepository.UpdateAsync(soundFile);
+
+            return listenHistoryRepository.AddAsync(new ListenHistory()
+            {
+                SoundFileId = soundFile.Id,
+                DateTime = DateTime.Now,
+            });
         }
     }
 }

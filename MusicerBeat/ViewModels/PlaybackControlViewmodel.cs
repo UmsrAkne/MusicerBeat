@@ -158,7 +158,7 @@ namespace MusicerBeat.ViewModels
             soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
 
-            soundFileService?.AddListenHistoryAsync(new ListenHistory() { DateTime = DateTime.Now, });
+            soundFileService?.AddListenHistoryAsync(soundFile);
 
             newPlayer.Volume = GetStatus() switch
             {
