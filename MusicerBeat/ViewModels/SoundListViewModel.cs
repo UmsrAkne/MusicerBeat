@@ -1,5 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using MusicerBeat.Models;
+using MusicerBeat.Models.Databases;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace MusicerBeat.ViewModels
@@ -9,21 +15,19 @@ namespace MusicerBeat.ViewModels
     {
         private readonly ISoundCollectionSource soundCollectionSource;
         private readonly ObservableCollection<SoundFile> originalSounds = new ();
+        private readonly SoundFileService soundFileService;
+        private CancellationTokenSource cancellationTokenSource;
         private SoundFile selectedItem;
 
-        public SoundListViewModel(ISoundCollectionSource soundCollectionSource)
+        public SoundListViewModel(ISoundCollectionSource soundCollectionSource, IContainerProvider containerProvider)
         {
-            this.soundCollectionSource = soundCollectionSource;
-            this.soundCollectionSource.SoundsSourceUpdated += (_, _) =>
+            if (containerProvider != null)
             {
-                originalSounds.Clear();
-                originalSounds.AddRange(soundCollectionSource.GetSounds());
+                soundFileService = containerProvider.Resolve<SoundFileService>();
+            }
 
-                for (var i = 0; i < originalSounds.Count; i++)
-                {
-                    originalSounds[i].Index = i + 1;
-                }
-            };
+            this.soundCollectionSource = soundCollectionSource;
+            this.soundCollectionSource.SoundsSourceUpdated += async (_, _) => await UpdateSoundsAsync();
 
             Sounds = new ReadOnlyObservableCollection<SoundFile>(originalSounds);
             SequentialSelector = new SequentialSelector(Sounds);
@@ -38,6 +42,44 @@ namespace MusicerBeat.ViewModels
         public void AddSoundFile(SoundFile item)
         {
             originalSounds.Add(item);
+        }
+
+        private async Task UpdateSoundsAsync()
+        {
+            // 古い処理があればキャンセル
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
+            var token = cancellationTokenSource.Token;
+
+            originalSounds.Clear();
+            originalSounds.AddRange(soundCollectionSource.GetSounds());
+
+            for (var i = 0; i < originalSounds.Count; i++)
+            {
+                originalSounds[i].Index = i + 1;
+            }
+
+            try
+            {
+                await LoadAdditionalDataAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+                // キャンセルされた場合は無視
+            }
+        }
+
+        private async Task LoadAdditionalDataAsync(CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            var listenCounts = await soundFileService.LoadListenCount(originalSounds);
+            token.ThrowIfCancellationRequested();
+
+            // キャンセルされていなければデータを更新
+            for (var i = 0; i < listenCounts.Count; i++)
+            {
+                originalSounds[i].ListenCount = listenCounts[i];
+            }
         }
     }
 }

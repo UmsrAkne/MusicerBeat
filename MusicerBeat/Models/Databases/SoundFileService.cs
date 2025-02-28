@@ -63,5 +63,20 @@ namespace MusicerBeat.Models.Databases
                 DateTime = DateTime.Now,
             });
         }
+
+        public async Task<List<int>> LoadListenCount(IEnumerable<SoundFile> soundFiles)
+        {
+            var all = await GetSoundFilesAsync();
+            var dic = all.ToDictionary(s => s.FullName, s => s);
+
+            var results = new List<int>();
+
+            foreach (var soundFile in soundFiles)
+            {
+                results.Add(dic.TryGetValue(soundFile.FullName, out var value) ? value.ListenCount : 0);
+            }
+
+            return results;
+        }
     }
 }
