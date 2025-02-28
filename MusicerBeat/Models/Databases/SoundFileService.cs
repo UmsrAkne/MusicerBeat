@@ -43,12 +43,21 @@ namespace MusicerBeat.Models.Databases
         /// </remarks>
         /// <param name="soundFile">記録に使用するサウンドファイルを入力します。</param>
         /// <returns>非同期処理を表すタスク</returns>
-        public Task AddListenHistoryAsync(SoundFile soundFile)
+        public async Task AddListenHistoryAsync(SoundFile soundFile)
         {
-            soundFile.ListenCount++;
-            soundFileRepository.UpdateAsync(soundFile);
+            var record = soundFile;
 
-            return listenHistoryRepository.AddAsync(new ListenHistory()
+            if (soundFile.Id == 0)
+            {
+                var all = await soundFileRepository.GetAllAsync();
+                var ss = all.FirstOrDefault(s => s.FullName == soundFile.FullName);
+                record = ss ?? record;
+            }
+
+            record.ListenCount++;
+            await soundFileRepository.UpdateAsync(record);
+
+            await listenHistoryRepository.AddAsync(new ListenHistory()
             {
                 SoundFileId = soundFile.Id,
                 DateTime = DateTime.Now,
