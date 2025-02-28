@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using MusicerBeat.Models;
-using Prism.Commands;
+using MusicerBeat.Models.Databases;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace MusicerBeat.ViewModels
@@ -12,15 +15,24 @@ namespace MusicerBeat.ViewModels
     public class DirectoryAreaViewModel : BindableBase, ISoundCollectionSource
     {
         private readonly ObservableCollection<SoundStorage> originalSoundStorages;
+        private readonly SoundFileService soundFileService;
+        private readonly ConcurrentQueue<IEnumerable<SoundFile>> databaseRequestQueue = new();
         private SoundStorage selectedItem;
         private ReadOnlyObservableCollection<SoundStorage> soundStorages;
         private SoundStorage currentStorage;
+        private bool isProcessing;
 
         public DirectoryAreaViewModel(string rootPath)
         {
             CurrentStorage = new SoundStorage() { FullPath = rootPath, };
             originalSoundStorages = new ObservableCollection<SoundStorage>();
             SoundStorages = new ReadOnlyObservableCollection<SoundStorage>(originalSoundStorages);
+        }
+
+        public DirectoryAreaViewModel(string rootPath, IContainerProvider containerProvider)
+            : this(rootPath)
+        {
+            soundFileService = containerProvider.Resolve<SoundFileService>();
         }
 
         public event EventHandler SoundsSourceUpdated;
@@ -51,7 +63,7 @@ namespace MusicerBeat.ViewModels
         /// <summary>
         /// SelectedItem に基づいて、カレントディレクトリを変更するコマンドを実行します。
         /// </summary>
-        public DelegateCommand OpenDirectoryCommand => new DelegateCommand(() =>
+        public AsyncDelegateCommand OpenDirectoryCommand => new (async () =>
         {
             if (SelectedItem == null)
             {
@@ -59,12 +71,13 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(SelectedItem.FullPath);
+            await EnqueueRequest(GetSounds());
         });
 
         /// <summary>
         /// 一段上の SoundStorage に移動します。
         /// </summary>
-        public DelegateCommand DirectoryUpCommand => new DelegateCommand(() =>
+        public AsyncDelegateCommand DirectoryUpCommand => new (async () =>
         {
             if (CurrentStorage == null)
             {
@@ -79,6 +92,7 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(parentPath);
+            await EnqueueRequest(GetSounds());
         });
 
         public void AddSoundStorage(SoundStorage item)
@@ -102,6 +116,34 @@ namespace MusicerBeat.ViewModels
             var items = currently.GetChildren();
             originalSoundStorages.Clear();
             originalSoundStorages.AddRange(items);
+        }
+
+        private async Task EnqueueRequest(IEnumerable<SoundFile> sounds)
+        {
+            if (soundFileService == null)
+            {
+                return;
+            }
+
+            databaseRequestQueue.Enqueue(sounds);
+            await ProcessQueue();
+        }
+
+        private async Task ProcessQueue()
+        {
+            if (isProcessing)
+            {
+                return;
+            }
+
+            isProcessing = true;
+
+            while (databaseRequestQueue.TryDequeue(out var sounds))
+            {
+                await soundFileService.AddSoundFileCollectionAsync(sounds);
+            }
+
+            isProcessing = false;
         }
     }
 }

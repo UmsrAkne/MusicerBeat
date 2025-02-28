@@ -61,7 +61,6 @@ namespace MusicerBeat.Models
                 .Select(d =>
                 {
                     var sf = new SoundFile(d);
-                    sf.LoadDuration();
                     return sf;
                 })
                 .OrderBy(f => f.Name);

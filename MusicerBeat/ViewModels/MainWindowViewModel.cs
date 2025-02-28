@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using MusicerBeat.Models;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace MusicerBeat.ViewModels
@@ -14,8 +15,17 @@ namespace MusicerBeat.ViewModels
         public MainWindowViewModel()
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
-            soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel, null);
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory());
+            SetDummies();
+        }
+
+        public MainWindowViewModel(IContainerProvider containerProvider)
+        {
+            directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test", containerProvider);
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel, containerProvider);
+
+            PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
             SetDummies();
         }
 

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Threading;
 using MusicerBeat.Models;
+using MusicerBeat.Models.Databases;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace MusicerBeat.ViewModels
@@ -13,6 +15,7 @@ namespace MusicerBeat.ViewModels
     {
         private readonly ISoundPlayerFactory soundPlayerFactory;
         private readonly List<ISoundPlayer> soundPlayers = new ();
+        private readonly SoundFileService soundFileService;
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
@@ -26,6 +29,12 @@ namespace MusicerBeat.ViewModels
             VolumeController = new VolumeController(soundPlayers);
             CrossFadeDuration = TimeSpan.FromSeconds(10);
             timer.Start();
+        }
+
+        public PlaybackControlViewmodel(SoundListViewModel soundListViewModel, SoundPlayerFactory soundPlayerFactory, IContainerProvider containerProvider)
+        : this(soundListViewModel, soundPlayerFactory)
+        {
+            soundFileService = containerProvider.Resolve<SoundFileService>();
         }
 
         public bool IsPlaying { get; set; }
@@ -148,6 +157,8 @@ namespace MusicerBeat.ViewModels
             newPlayer.SoundEnded += RemoveAndPlay;
             soundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
+
+            soundFileService?.AddListenHistoryAsync(soundFile);
 
             newPlayer.Volume = GetStatus() switch
             {
