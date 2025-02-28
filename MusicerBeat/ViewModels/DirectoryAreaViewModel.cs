@@ -13,6 +13,7 @@ namespace MusicerBeat.ViewModels
     public class DirectoryAreaViewModel : BindableBase, ISoundCollectionSource
     {
         private readonly ObservableCollection<SoundStorage> originalSoundStorages;
+        private readonly SoundFileService soundFileService;
         private SoundStorage selectedItem;
         private ReadOnlyObservableCollection<SoundStorage> soundStorages;
         private SoundStorage currentStorage;
@@ -55,8 +56,6 @@ namespace MusicerBeat.ViewModels
             }
         }
 
-        private readonly SoundFileService soundFileService;
-
         /// <summary>
         /// SelectedItem に基づいて、カレントディレクトリを変更するコマンドを実行します。
         /// </summary>
@@ -68,7 +67,10 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(SelectedItem.FullPath);
-            await soundFileService.AddSoundFileCollectionAsync(GetSounds());
+            if (soundFileService != null)
+            {
+                await soundFileService.AddSoundFileCollectionAsync(GetSounds());
+            }
         });
 
         /// <summary>
@@ -89,7 +91,10 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(parentPath);
-            await soundFileService.AddSoundFileCollectionAsync(GetSounds());
+            if (soundFileService != null)
+            {
+                await soundFileService.AddSoundFileCollectionAsync(GetSounds());
+            }
         });
 
         public void AddSoundStorage(SoundStorage item)
