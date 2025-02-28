@@ -11,7 +11,8 @@ using Prism.Mvvm;
 namespace MusicerBeat.ViewModels
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class SoundListViewModel : BindableBase, IPlaylist
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+    public class SoundListViewModel : BindableBase, IPlaylist, IDisposable
     {
         private readonly ISoundCollectionSource soundCollectionSource;
         private readonly ObservableCollection<SoundFile> originalSounds = new ();
@@ -42,6 +43,16 @@ namespace MusicerBeat.ViewModels
         public void AddSoundFile(SoundFile item)
         {
             originalSounds.Add(item);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            cancellationTokenSource?.Dispose();
         }
 
         private async Task UpdateSoundsAsync()
