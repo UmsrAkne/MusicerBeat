@@ -89,7 +89,8 @@ namespace MusicerBeat.ViewModels
             // キャンセルされていなければデータを更新
             for (var i = 0; i < listenCounts.Count; i++)
             {
-                originalSounds[i].ListenCount = listenCounts[i];
+                originalSounds[i].ListenCount = listenCounts[i].ListenCount;
+                originalSounds[i].TotalSeconds = listenCounts[i].TotalSec;
             }
         }
     }
