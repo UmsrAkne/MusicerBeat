@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Databases;
 using Prism.Ioc;
@@ -14,9 +16,11 @@ namespace MusicerBeat.ViewModels
     {
         private readonly ObservableCollection<SoundStorage> originalSoundStorages;
         private readonly SoundFileService soundFileService;
+        private readonly ConcurrentQueue<IEnumerable<SoundFile>> databaseRequestQueue = new();
         private SoundStorage selectedItem;
         private ReadOnlyObservableCollection<SoundStorage> soundStorages;
         private SoundStorage currentStorage;
+        private bool isProcessing;
 
         public DirectoryAreaViewModel(string rootPath)
         {
@@ -67,10 +71,7 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(SelectedItem.FullPath);
-            if (soundFileService != null)
-            {
-                await soundFileService.AddSoundFileCollectionAsync(GetSounds());
-            }
+            await EnqueueRequest(GetSounds());
         });
 
         /// <summary>
@@ -91,10 +92,7 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(parentPath);
-            if (soundFileService != null)
-            {
-                await soundFileService.AddSoundFileCollectionAsync(GetSounds());
-            }
+            await EnqueueRequest(GetSounds());
         });
 
         public void AddSoundStorage(SoundStorage item)
@@ -118,6 +116,34 @@ namespace MusicerBeat.ViewModels
             var items = currently.GetChildren();
             originalSoundStorages.Clear();
             originalSoundStorages.AddRange(items);
+        }
+
+        private async Task EnqueueRequest(IEnumerable<SoundFile> sounds)
+        {
+            if (soundFileService == null)
+            {
+                return;
+            }
+
+            databaseRequestQueue.Enqueue(sounds);
+            await ProcessQueue();
+        }
+
+        private async Task ProcessQueue()
+        {
+            if (isProcessing)
+            {
+                return;
+            }
+
+            isProcessing = true;
+
+            while (databaseRequestQueue.TryDequeue(out var sounds))
+            {
+                await soundFileService.AddSoundFileCollectionAsync(sounds);
+            }
+
+            isProcessing = false;
         }
     }
 }
