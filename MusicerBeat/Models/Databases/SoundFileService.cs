@@ -31,7 +31,14 @@ namespace MusicerBeat.Models.Databases
             var all = await GetSoundFilesAsync();
             var dic = all.ToDictionary(s => s.FullName, s => s);
             var filtered = soundFiles.Where(s => !dic.ContainsKey(s.FullName));
-            await soundFileRepository.AddRangeAsync(filtered);
+
+            var enumerable = filtered as SoundFile[] ?? filtered.ToArray();
+            foreach (var s in enumerable)
+            {
+                s.LoadDuration();
+            }
+
+            await soundFileRepository.AddRangeAsync(enumerable);
         }
 
         /// <summary>
