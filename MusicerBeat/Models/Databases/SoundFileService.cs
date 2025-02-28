@@ -55,6 +55,7 @@ namespace MusicerBeat.Models.Databases
             }
 
             record.ListenCount++;
+            soundFile.ListenCount = record.ListenCount;
             await soundFileRepository.UpdateAsync(record);
 
             await listenHistoryRepository.AddAsync(new ListenHistory()
