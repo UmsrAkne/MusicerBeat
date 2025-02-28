@@ -1,13 +1,15 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
+using MusicerBeat.Models.Databases;
 using NAudio.Wave;
 using NVorbis;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
 {
-    public class SoundFile : BindableBase
+    public class SoundFile : BindableBase, IEntity
     {
         private string fullName;
         private string name;
@@ -31,16 +33,27 @@ namespace MusicerBeat.Models
             Extension = Path.GetExtension(filePath).ToLower();
         }
 
+        // ReSharper disable once UnusedMember.Global
+        // EntityFramework で利用するため、デフォルトコンストラクタが必要。
+        public SoundFile()
+        {
+        }
+
+        public int Id { get; set; }
+
         public string FullName { get => fullName; set => SetProperty(ref fullName, value); }
 
+        [NotMapped]
         public string Name { get => name; set => SetProperty(ref name, value); }
 
+        [NotMapped]
         public string NameWithoutExtension
         {
             get => nameWithoutExtension;
             set => SetProperty(ref nameWithoutExtension, value);
         }
 
+        [NotMapped]
         public string Extension { get; set; }
 
         public int TotalSeconds { get => totalSeconds; set => SetProperty(ref totalSeconds, value); }
@@ -49,8 +62,10 @@ namespace MusicerBeat.Models
 
         public bool IsSkip { get => isSkip; set => SetProperty(ref isSkip, value); }
 
+        [NotMapped]
         public bool Playing { get => playing; set => SetProperty(ref playing, value); }
 
+        [NotMapped]
         public int Index { get => index; set => SetProperty(ref index, value); }
 
         public static bool IsSoundFile(string filePath)
