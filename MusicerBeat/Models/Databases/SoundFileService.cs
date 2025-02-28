@@ -60,7 +60,7 @@ namespace MusicerBeat.Models.Databases
 
             await listenHistoryRepository.AddAsync(new ListenHistory()
             {
-                SoundFileId = soundFile.Id,
+                SoundFileId = record.Id,
                 DateTime = DateTime.Now,
             });
         }
