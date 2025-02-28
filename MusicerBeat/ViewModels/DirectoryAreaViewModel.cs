@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Databases;
@@ -140,7 +141,9 @@ namespace MusicerBeat.ViewModels
 
             while (databaseRequestQueue.TryDequeue(out var sounds))
             {
-                await soundFileService.AddSoundFileCollectionAsync(sounds);
+                var soundList = sounds.ToList();
+                await soundFileService.AddSoundFileCollectionAsync(soundList);
+                await soundFileService.LoadSoundInfo(soundList);
             }
 
             isProcessing = false;

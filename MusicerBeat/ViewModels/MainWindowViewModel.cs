@@ -15,7 +15,7 @@ namespace MusicerBeat.ViewModels
         public MainWindowViewModel()
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
-            soundListViewModel = new SoundListViewModel(directoryAreaViewModel, null);
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory());
             SetDummies();
         }
@@ -23,7 +23,7 @@ namespace MusicerBeat.ViewModels
         public MainWindowViewModel(IContainerProvider containerProvider)
         {
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test", containerProvider);
-            soundListViewModel = new SoundListViewModel(directoryAreaViewModel, containerProvider);
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
 
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
             SetDummies();
