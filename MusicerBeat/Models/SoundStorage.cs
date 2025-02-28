@@ -10,6 +10,7 @@ namespace MusicerBeat.Models
     {
         private string fullPath;
         private string name;
+        private IEnumerable<SoundFile> soundFilesCache;
 
         public string FullPath
         {
@@ -51,19 +52,28 @@ namespace MusicerBeat.Models
 
         public IEnumerable<SoundFile> GetFiles()
         {
-            if (IsM3U)
+            if (soundFilesCache != null)
             {
-                return ParseM3U(File.ReadAllText(FullPath));
+                return soundFilesCache;
             }
 
-            return Directory.GetFiles(FullPath)
+            if (IsM3U)
+            {
+                soundFilesCache = ParseM3U(File.ReadAllText(FullPath)).ToList();
+                return soundFilesCache;
+            }
+
+            soundFilesCache = Directory.GetFiles(FullPath)
                 .Where(SoundFile.IsSoundFile)
                 .Select(d =>
                 {
                     var sf = new SoundFile(d);
                     return sf;
                 })
-                .OrderBy(f => f.Name);
+                .OrderBy(f => f.Name)
+                .ToList();
+
+            return soundFilesCache;
         }
 
         public List<SoundFile> ParseM3U(string text)
