@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using MusicerBeat.Models;
-using Prism.Commands;
+using MusicerBeat.Models.Databases;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace MusicerBeat.ViewModels
@@ -21,6 +22,12 @@ namespace MusicerBeat.ViewModels
             CurrentStorage = new SoundStorage() { FullPath = rootPath, };
             originalSoundStorages = new ObservableCollection<SoundStorage>();
             SoundStorages = new ReadOnlyObservableCollection<SoundStorage>(originalSoundStorages);
+        }
+
+        public DirectoryAreaViewModel(string rootPath, IContainerProvider containerProvider)
+            : this(rootPath)
+        {
+            soundFileService = containerProvider.Resolve<SoundFileService>();
         }
 
         public event EventHandler SoundsSourceUpdated;
@@ -48,10 +55,12 @@ namespace MusicerBeat.ViewModels
             }
         }
 
+        private readonly SoundFileService soundFileService;
+
         /// <summary>
         /// SelectedItem に基づいて、カレントディレクトリを変更するコマンドを実行します。
         /// </summary>
-        public DelegateCommand OpenDirectoryCommand => new DelegateCommand(() =>
+        public AsyncDelegateCommand OpenDirectoryCommand => new (async () =>
         {
             if (SelectedItem == null)
             {
@@ -59,12 +68,13 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(SelectedItem.FullPath);
+            await soundFileService.AddSoundFileCollectionAsync(GetSounds());
         });
 
         /// <summary>
         /// 一段上の SoundStorage に移動します。
         /// </summary>
-        public DelegateCommand DirectoryUpCommand => new DelegateCommand(() =>
+        public AsyncDelegateCommand DirectoryUpCommand => new (async () =>
         {
             if (CurrentStorage == null)
             {
@@ -79,6 +89,7 @@ namespace MusicerBeat.ViewModels
             }
 
             OpenDirectory(parentPath);
+            await soundFileService.AddSoundFileCollectionAsync(GetSounds());
         });
 
         public void AddSoundStorage(SoundStorage item)

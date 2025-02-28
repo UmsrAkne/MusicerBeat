@@ -22,7 +22,7 @@ namespace MusicerBeat.ViewModels
 
         public MainWindowViewModel(IContainerProvider containerProvider)
         {
-            directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test");
+            directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test", containerProvider);
             soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
 
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);

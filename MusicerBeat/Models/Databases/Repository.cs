@@ -32,6 +32,12 @@ namespace MusicerBeat.Models.Databases
             await context.SaveChangesAsync();
         }
 
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await dbSet.AddRangeAsync(entities);
+            await context.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(T entity)
         {
             dbSet.Update(entity);
