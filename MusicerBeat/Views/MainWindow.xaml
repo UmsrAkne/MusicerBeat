@@ -76,8 +76,10 @@
             Grid.Row="1"
             Grid.Column="2"
             HorizontalContentAlignment="Stretch"
+            AlternationCount="2"
             ItemsSource="{Binding SoundListViewModel.Sounds}"
             SelectedItem="{Binding SoundListViewModel.SelectedItem}">
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundFile}">
                     <Grid>
@@ -135,6 +137,15 @@
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
         <StackPanel
