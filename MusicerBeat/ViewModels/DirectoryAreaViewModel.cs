@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MusicerBeat.Models;
+using MusicerBeat.Models.Commands;
 using MusicerBeat.Models.Databases;
 using Prism.Ioc;
 using Prism.Mvvm;

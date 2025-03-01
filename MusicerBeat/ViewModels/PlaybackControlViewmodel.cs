@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Threading;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Databases;
+using MusicerBeat.Models.Interfaces;
+using MusicerBeat.Models.Services;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;

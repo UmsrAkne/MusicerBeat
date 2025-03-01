@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using MusicerBeat.Models;
+using MusicerBeat.Models.Services;
 using Prism.Ioc;
 using Prism.Mvvm;
 

@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MusicerBeat.Models
+namespace MusicerBeat.Models.Commands
 {
     public class AsyncDelegateCommand : ICommand
     {
