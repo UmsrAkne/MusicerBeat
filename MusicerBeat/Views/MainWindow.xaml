@@ -148,18 +148,31 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <StackPanel
+        <Grid
             Grid.Row="2"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Height="50">
+            Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
             <Button
+                Grid.Row="0"
                 Width="100"
                 Margin="15"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Command="{Binding PlaybackControlViewmodel.PlayCommand}"
                 Content="▷" />
-        </StackPanel>
+
+            <Border
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                Background="LightSteelBlue">
+                <TextBlock Margin="4" Text="{Binding PlaybackControlViewmodel.PlayingSoundFile.Name}" />
+            </Border>
+        </Grid>
+
     </Grid>
 </Window>

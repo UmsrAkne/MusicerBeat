@@ -21,6 +21,7 @@ namespace MusicerBeat.ViewModels
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
+        private SoundFile playingSoundFile;
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -58,6 +59,12 @@ namespace MusicerBeat.ViewModels
                 var dur = 1.0 / (TimeSpan.FromSeconds(1).TotalMilliseconds / timer.Interval.TotalMilliseconds * crossFadeDuration.TotalSeconds);
                 VolumeController.VolumeFadeStep = (float)dur;
             }
+        }
+
+        public SoundFile PlayingSoundFile
+        {
+            get => playingSoundFile;
+            set => SetProperty(ref playingSoundFile, value);
         }
 
         private IPlaylist PlayListSource { get; init; }
@@ -161,6 +168,7 @@ namespace MusicerBeat.ViewModels
             newPlayer.PlaySound(soundFile);
 
             soundFileService?.AddListenHistoryAsync(soundFile);
+            PlayingSoundFile = soundFile;
 
             newPlayer.Volume = GetStatus() switch
             {
@@ -185,6 +193,8 @@ namespace MusicerBeat.ViewModels
 
         private void Stop()
         {
+            PlayingSoundFile = null;
+
             foreach (var p in soundPlayers)
             {
                 p.Stop();
