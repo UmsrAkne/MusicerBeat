@@ -14,6 +14,10 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
+    <Window.Resources>
+        <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -72,8 +76,10 @@
             Grid.Row="1"
             Grid.Column="2"
             HorizontalContentAlignment="Stretch"
+            AlternationCount="2"
             ItemsSource="{Binding SoundListViewModel.Sounds}"
             SelectedItem="{Binding SoundListViewModel.SelectedItem}">
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundFile}">
                     <Grid>
@@ -88,7 +94,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition />
-                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="60" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -126,25 +132,47 @@
                         <TextBlock
                             Grid.Column="3"
                             Margin="5,0"
-                            Text="{Binding TotalSeconds}" />
+                            Text="{Binding TotalSeconds, Converter={StaticResource IntToTimeSpanConverter}}" />
 
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <StackPanel
+        <Grid
             Grid.Row="2"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
-            Height="50">
+            Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
             <Button
+                Grid.Row="0"
                 Width="100"
                 Margin="15"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Command="{Binding PlaybackControlViewmodel.PlayCommand}"
                 Content="▷" />
-        </StackPanel>
+
+            <Border
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                Background="LightSteelBlue">
+                <TextBlock Margin="4" Text="{Binding PlaybackControlViewmodel.PlayingSoundFile.Name}" />
+            </Border>
+        </Grid>
+
     </Grid>
 </Window>

@@ -1,6 +1,6 @@
 using System;
 
-namespace MusicerBeat.Models
+namespace MusicerBeat.Models.Interfaces
 {
     public interface ISoundPlayer
     {

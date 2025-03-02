@@ -1,9 +1,10 @@
 using System;
+using MusicerBeat.Models.Interfaces;
 using NAudio.Vorbis;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace MusicerBeat.Models
+namespace MusicerBeat.Models.Services
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class SoundPlayer : IDisposable, ISoundPlayer

@@ -1,4 +1,4 @@
-namespace MusicerBeat.Models
+namespace MusicerBeat.Models.Interfaces
 {
     public interface ISoundPlayerFactory
     {

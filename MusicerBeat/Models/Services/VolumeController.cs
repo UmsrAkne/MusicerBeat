@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using MusicerBeat.Models.Interfaces;
 
-namespace MusicerBeat.Models
+namespace MusicerBeat.Models.Services
 {
     public class VolumeController
     {
