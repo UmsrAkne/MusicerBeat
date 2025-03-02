@@ -13,6 +13,8 @@ namespace MusicerBeatTests.ViewModels
 
         public bool IsPlaying { get; private set; }
 
+        public SoundFile PlayingSound { get; }
+
         public float Volume { get; set; }
 
         public TimeSpan CurrentTime
