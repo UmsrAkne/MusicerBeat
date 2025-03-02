@@ -35,6 +35,8 @@ namespace MusicerBeat.Models.Services
 
         public bool IsPlaying { get; private set; }
 
+        public SoundFile PlayingSound { get; set; }
+
         public void PlaySound(SoundFile soundFile)
         {
             if (waveOutEvent != null)
@@ -65,6 +67,7 @@ namespace MusicerBeat.Models.Services
             IsPlaying = true;
             sound = soundFile;
             soundFile.Playing = true;
+            PlayingSound = soundFile;
 
             waveOutEvent.PlaybackStopped += WaveOutEventOnPlaybackStopped;
         }
@@ -79,6 +82,8 @@ namespace MusicerBeat.Models.Services
             {
                 sound.Playing = false;
             }
+
+            PlayingSound = null;
         }
 
         public void Dispose()
@@ -107,6 +112,7 @@ namespace MusicerBeat.Models.Services
                     sound.Playing = false;
                 }
 
+                PlayingSound = null;
                 SoundEnded?.Invoke(this, EventArgs.Empty);
             }
         }

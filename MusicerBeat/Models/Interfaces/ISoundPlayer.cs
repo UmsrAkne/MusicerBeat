@@ -14,6 +14,8 @@ namespace MusicerBeat.Models.Interfaces
 
         bool IsPlaying { get; }
 
+        public SoundFile PlayingSound { get; }
+
         void PlaySound(SoundFile soundFile);
 
         void Stop();
