@@ -13,7 +13,7 @@ namespace MusicerBeatTests.ViewModels
 
         public bool IsPlaying { get; private set; }
 
-        public SoundFile PlayingSound { get; }
+        public SoundFile? PlayingSound { get; private set; }
 
         public float Volume { get; set; }
 
@@ -50,11 +50,13 @@ namespace MusicerBeatTests.ViewModels
 
             LastPlayedSoundFile = soundFile;
             IsPlaying = true;
+            PlayingSound = soundFile;
         }
 
         public void Stop()
         {
             IsPlaying = false;
+            PlayingSound = null;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MusicerBeat.ViewModels
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
-        private string soundFileName;
+        private string soundFileName = string.Empty;
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -193,6 +193,7 @@ namespace MusicerBeat.ViewModels
             if (sender is ISoundPlayer p)
             {
                 soundPlayers.Remove(p);
+                UpdateSoundFileName();
             }
 
             if (GetStatus() == PlayingStatus.Stopped)
