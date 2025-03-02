@@ -21,7 +21,7 @@ namespace MusicerBeat.ViewModels
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
-        private SoundFile playingSoundFile;
+        private string soundFileName;
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -44,6 +44,8 @@ namespace MusicerBeat.ViewModels
 
         public VolumeController VolumeController { get; set; }
 
+        public string SoundFileName { get => soundFileName; set => SetProperty(ref soundFileName, value); }
+
         public DelegateCommand<SoundFile> PlayCommand => new (Play);
 
         /// <summary>
@@ -59,12 +61,6 @@ namespace MusicerBeat.ViewModels
                 var dur = 1.0 / (TimeSpan.FromSeconds(1).TotalMilliseconds / timer.Interval.TotalMilliseconds * crossFadeDuration.TotalSeconds);
                 VolumeController.VolumeFadeStep = (float)dur;
             }
-        }
-
-        public SoundFile PlayingSoundFile
-        {
-            get => playingSoundFile;
-            set => SetProperty(ref playingSoundFile, value);
         }
 
         private IPlaylist PlayListSource { get; init; }
@@ -168,13 +164,27 @@ namespace MusicerBeat.ViewModels
             newPlayer.PlaySound(soundFile);
 
             soundFileService?.AddListenHistoryAsync(soundFile);
-            PlayingSoundFile = soundFile;
 
             newPlayer.Volume = GetStatus() switch
             {
                 PlayingStatus.Playing => 1.0f,
                 PlayingStatus.Fading => 0f,
                 _ => newPlayer.Volume,
+            };
+
+            UpdateSoundFileName();
+        }
+
+        private void UpdateSoundFileName()
+        {
+            SoundFileName = GetStatus() switch
+            {
+                PlayingStatus.Stopped => string.Empty,
+                PlayingStatus.Playing => soundPlayers.First().PlayingSound?.NameWithoutExtension,
+                PlayingStatus.Fading => soundPlayers.First().PlayingSound?.NameWithoutExtension
+                                        + " ---> "
+                                        + soundPlayers.Last().PlayingSound?.NameWithoutExtension,
+                _ => SoundFileName,
             };
         }
 
@@ -193,8 +203,6 @@ namespace MusicerBeat.ViewModels
 
         private void Stop()
         {
-            PlayingSoundFile = null;
-
             foreach (var p in soundPlayers)
             {
                 p.Stop();
@@ -205,6 +213,7 @@ namespace MusicerBeat.ViewModels
             }
 
             soundPlayers.Clear();
+            UpdateSoundFileName();
         }
 
         private void Next()
@@ -218,6 +227,7 @@ namespace MusicerBeat.ViewModels
         private void Timer_Tick(object sender, EventArgs e)
         {
             UpdatePlaybackState();
+            UpdateSoundFileName();
         }
     }
 }
