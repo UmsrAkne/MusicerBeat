@@ -13,6 +13,8 @@ namespace MusicerBeatTests.ViewModels
 
         public bool IsPlaying { get; private set; }
 
+        public SoundFile? PlayingSound { get; private set; }
+
         public float Volume { get; set; }
 
         public TimeSpan CurrentTime
@@ -48,11 +50,13 @@ namespace MusicerBeatTests.ViewModels
 
             LastPlayedSoundFile = soundFile;
             IsPlaying = true;
+            PlayingSound = soundFile;
         }
 
         public void Stop()
         {
             IsPlaying = false;
+            PlayingSound = null;
         }
     }
 }
