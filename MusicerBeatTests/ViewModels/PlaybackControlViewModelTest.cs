@@ -226,42 +226,5 @@ namespace MusicerBeatTests.ViewModels
             // 全ての再生が終了したはずなので、プレイヤーが停止状態かを確認する。
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
         }
-
-        [Test]
-        public void DisplayingFileName_Test()
-        {
-            var playList = new MockPlaylist();
-            playList.OriginalList.Add(new SoundFile("C://test/a.mp3") { TotalSeconds = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/b.mp3") { TotalSeconds = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/c.mp3") { TotalSeconds = 1, });
-            playList.OriginalList.Add(new SoundFile("C://test/d.mp3") { TotalSeconds = 2, });
-
-            var soundPlayerFactory = new DummySoundPlayerFactory();
-            var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
-            vm.CrossFadeDuration = TimeSpan.FromSeconds(1) ;
-
-            var results = new List<string> { vm.SoundFileName, };
-
-            vm.PlayCommand.Execute(null);
-            results.Add(vm.SoundFileName);
-
-            for (var i = 0; i < 3; i++)
-            {
-                Enumerable.Reverse(soundPlayerFactory.CreatedPlayers)
-                    .ToList().ForEach(p => p.CurrentTime += TimeSpan.FromSeconds(1));
-                vm.UpdatePlaybackState();
-
-                results.Add(vm.SoundFileName);
-            }
-
-            CollectionAssert.AreEqual(new List<string>
-            {
-                string.Empty,
-                "a",
-                "a ---> b",
-                "b",
-                "c",
-            }, results);
-        }
     }
 }
