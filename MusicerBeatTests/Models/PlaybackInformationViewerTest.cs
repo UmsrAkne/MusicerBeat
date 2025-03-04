@@ -5,7 +5,7 @@ using MusicerBeatTests.ViewModels;
 namespace MusicerBeatTests.Models
 {
     [TestFixture]
-    public class PlayingFileNameViewerTest
+    public class PlaybackInformationViewerTest
     {
         private static IEnumerable<TestCaseData> ShowFileNameTestCases()
         {
@@ -35,8 +35,8 @@ namespace MusicerBeatTests.Models
         [TestCaseSource(nameof(ShowFileNameTestCases))]
         public void ShowFileNameTest(IEnumerable<ISoundPlayer> players, string expectedResult)
         {
-            var viewer = new PlayingFileNameViewer();
-            viewer.UpdatePlayingFileName(players);
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
             Assert.That(viewer.PlayingFileName, Is.EqualTo(expectedResult));
         }
     }

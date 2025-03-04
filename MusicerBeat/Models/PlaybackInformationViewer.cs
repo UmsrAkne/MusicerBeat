@@ -5,7 +5,7 @@ using Prism.Mvvm;
 
 namespace MusicerBeat.Models
 {
-    public class PlayingFileNameViewer : BindableBase
+    public class PlaybackInformationViewer : BindableBase
     {
         private string playingFileName = string.Empty;
 
@@ -15,7 +15,7 @@ namespace MusicerBeat.Models
             private set => SetProperty(ref playingFileName, value);
         }
 
-        public void UpdatePlayingFileName(IEnumerable<ISoundPlayer> players)
+        public void UpdatePlaybackInformation(IEnumerable<ISoundPlayer> players)
         {
             var list = players.ToList();
             if (list.Count == 0)

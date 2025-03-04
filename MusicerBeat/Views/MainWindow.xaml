@@ -170,7 +170,7 @@
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 Background="LightSteelBlue">
-                <TextBlock Margin="4" Text="{Binding PlaybackControlViewmodel.PlayingFileNameViewer.PlayingFileName}" />
+                <TextBlock Margin="4" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
             </Border>
         </Grid>
 
