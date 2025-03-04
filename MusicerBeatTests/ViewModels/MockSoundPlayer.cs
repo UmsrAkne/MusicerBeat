@@ -7,13 +7,24 @@ namespace MusicerBeatTests.ViewModels
     {
         private TimeSpan currentTime = TimeSpan.Zero;
 
+        public MockSoundPlayer()
+        {
+        }
+
+        public MockSoundPlayer(TimeSpan defaultCurrentTime)
+        {
+            IsPlaying = true;
+            CurrentTime = defaultCurrentTime;
+            IsPlaying = false;
+        }
+
         public event EventHandler? SoundEnded;
 
         public SoundFile? LastPlayedSoundFile { get; private set; }
 
         public bool IsPlaying { get; private set; }
 
-        public SoundFile? PlayingSound { get; private set; }
+        public SoundFile? PlayingSound { get; set; }
 
         public float Volume { get; set; }
 

@@ -170,7 +170,10 @@
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 Background="LightSteelBlue">
-                <TextBlock Margin="4" Text="{Binding PlaybackControlViewmodel.SoundFileName}" />
+                <StackPanel Margin="4" Orientation="Horizontal">
+                    <TextBlock Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
+                    <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
+                </StackPanel>
             </Border>
         </Grid>
 

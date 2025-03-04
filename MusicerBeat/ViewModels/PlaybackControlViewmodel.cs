@@ -44,7 +44,7 @@ namespace MusicerBeat.ViewModels
 
         public VolumeController VolumeController { get; set; }
 
-        public string SoundFileName { get => soundFileName; set => SetProperty(ref soundFileName, value); }
+        public PlaybackInformationViewer PlaybackInformationViewer { get; set; } = new ();
 
         public DelegateCommand<SoundFile> PlayCommand => new (Play);
 
@@ -172,20 +172,7 @@ namespace MusicerBeat.ViewModels
                 _ => newPlayer.Volume,
             };
 
-            UpdateSoundFileName();
-        }
-
-        private void UpdateSoundFileName()
-        {
-            SoundFileName = GetStatus() switch
-            {
-                PlayingStatus.Stopped => string.Empty,
-                PlayingStatus.Playing => soundPlayers.First().PlayingSound?.NameWithoutExtension,
-                PlayingStatus.Fading => soundPlayers.First().PlayingSound?.NameWithoutExtension
-                                        + " ---> "
-                                        + soundPlayers.Last().PlayingSound?.NameWithoutExtension,
-                _ => SoundFileName,
-            };
+            PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 
         private void RemoveAndPlay(object sender, EventArgs e)
@@ -193,7 +180,7 @@ namespace MusicerBeat.ViewModels
             if (sender is ISoundPlayer p)
             {
                 soundPlayers.Remove(p);
-                UpdateSoundFileName();
+                PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
             }
 
             if (GetStatus() == PlayingStatus.Stopped)
@@ -214,7 +201,7 @@ namespace MusicerBeat.ViewModels
             }
 
             soundPlayers.Clear();
-            UpdateSoundFileName();
+            PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 
         private void Next()
@@ -228,7 +215,7 @@ namespace MusicerBeat.ViewModels
         private void Timer_Tick(object sender, EventArgs e)
         {
             UpdatePlaybackState();
-            UpdateSoundFileName();
+            PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
     }
 }
