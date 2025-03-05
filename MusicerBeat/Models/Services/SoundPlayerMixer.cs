@@ -7,12 +7,23 @@ namespace MusicerBeat.Models.Services
 {
     public class SoundPlayerMixer
     {
-        public SoundPlayerMixer(ISoundPlayerFactory soundPlayerFactory)
+        /// <summary>
+        /// SoundPlayerMixer をインスタンス化するコンストラクタです。
+        /// </summary>
+        /// <param name="soundPlayers">入力されたリストは内部で参照が保持され、`SoundPlayer` が生成された際に新しいプレイヤーを追加します。</param>
+        /// <param name="soundPlayerFactory">このクラスの内部で `ISoundPlayer` を生成するファクトリークラスを入力します。</param>
+        public SoundPlayerMixer(List<ISoundPlayer> soundPlayers, ISoundPlayerFactory soundPlayerFactory)
         {
+            SoundPlayers = soundPlayers;
             SoundPlayerFactory = soundPlayerFactory;
         }
 
-        private List<ISoundPlayer> SoundPlayers { get; set; }
+        /// <summary>
+        /// このインスタンスが保持するプレイヤーの再生が終了した時に発生するイベントです。
+        /// </summary>
+        public event EventHandler SoundEnded;
+
+        private List<ISoundPlayer> SoundPlayers { get; }
 
         private ISoundPlayerFactory SoundPlayerFactory { get; }
 
@@ -45,7 +56,12 @@ namespace MusicerBeat.Models.Services
             throw new InvalidOperationException("Invalid Status");
         }
 
-        private void Play(SoundFile soundFile)
+        /// <summary>
+        /// 入力された `SoundFile` を使って再生を開始します。<br/>
+        /// このメソッドにより再生を開始した場合、プレイヤーの初期音量はこのインスタンスの内部状態によって適宜調整されます。
+        /// </summary>
+        /// <param name="soundFile">再生する `SoundFile` を入力します。</param>
+        public void Play(SoundFile soundFile)
         {
             var newPlayer = SoundPlayerFactory.CreateSoundPlayer();
             newPlayer.SoundEnded += RemoveAndPlay;
@@ -60,6 +76,20 @@ namespace MusicerBeat.Models.Services
             };
         }
 
+        public void Stop()
+        {
+            foreach (var p in SoundPlayers)
+            {
+                p.Stop();
+                if (p is IDisposable d)
+                {
+                    d.Dispose();
+                }
+            }
+
+            SoundPlayers.Clear();
+        }
+
         private void RemoveAndPlay(object sender, EventArgs e)
         {
             if (sender is ISoundPlayer p)
@@ -67,10 +97,7 @@ namespace MusicerBeat.Models.Services
                 SoundPlayers.Remove(p);
             }
 
-            if (GetStatus() == PlayingStatus.Stopped)
-            {
-                Play(null);
-            }
+            SoundEnded?.Invoke(this, EventArgs.Empty);
         }
     }
 }

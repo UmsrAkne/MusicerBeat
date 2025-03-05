@@ -15,21 +15,24 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class PlaybackControlViewmodel : BindableBase, IDisposable
     {
-        private readonly ISoundPlayerFactory soundPlayerFactory;
         private readonly List<ISoundPlayer> soundPlayers = new ();
         private readonly SoundFileService soundFileService;
+        private readonly SoundPlayerMixer soundPlayerMixer;
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
-            this.soundPlayerFactory = soundPlayerFactory;
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
             VolumeController = new VolumeController(soundPlayers);
             CrossFadeDuration = TimeSpan.FromSeconds(10);
+
+            soundPlayerMixer = new SoundPlayerMixer(soundPlayers, soundPlayerFactory);
+            soundPlayerMixer.SoundEnded += PlayNext;
+
             timer.Start();
         }
 
@@ -66,31 +69,7 @@ namespace MusicerBeat.ViewModels
 
         public PlayingStatus GetStatus()
         {
-            if (soundPlayers.Count == 0)
-            {
-                return PlayingStatus.Stopped;
-            }
-
-            if (soundPlayers.Count == 1)
-            {
-                if (!soundPlayers.First().IsPlaying)
-                {
-                    throw new InvalidOperationException("Invalid Status");
-                }
-
-                return PlayingStatus.Playing;
-            }
-
-            if (soundPlayers.Count == 2)
-            {
-                if (soundPlayers.All(p => p.IsPlaying))
-                {
-                    // リストの中のプレイヤーが両方動いている。
-                    return PlayingStatus.Fading;
-                }
-            }
-
-            throw new InvalidOperationException("Invalid Status");
+            return soundPlayerMixer.GetStatus();
         }
 
         public void Dispose()
@@ -157,31 +136,14 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
-            var newPlayer = soundPlayerFactory.CreateSoundPlayer();
-            newPlayer.SoundEnded += RemoveAndPlay;
-            soundPlayers.Add(newPlayer);
-            newPlayer.PlaySound(soundFile);
+            soundPlayerMixer.Play(soundFile);
 
             soundFileService?.AddListenHistoryAsync(soundFile);
-
-            newPlayer.Volume = GetStatus() switch
-            {
-                PlayingStatus.Playing => 1.0f,
-                PlayingStatus.Fading => 0f,
-                _ => newPlayer.Volume,
-            };
-
             PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 
-        private void RemoveAndPlay(object sender, EventArgs e)
+        private void PlayNext(object sender, EventArgs e)
         {
-            if (sender is ISoundPlayer p)
-            {
-                soundPlayers.Remove(p);
-                PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
-            }
-
             if (GetStatus() == PlayingStatus.Stopped)
             {
                 Play(null);
@@ -190,16 +152,7 @@ namespace MusicerBeat.ViewModels
 
         private void Stop()
         {
-            foreach (var p in soundPlayers)
-            {
-                p.Stop();
-                if (p is IDisposable d)
-                {
-                    d.Dispose();
-                }
-            }
-
-            soundPlayers.Clear();
+            soundPlayerMixer.Stop();
             PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 
