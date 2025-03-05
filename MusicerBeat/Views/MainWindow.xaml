@@ -132,7 +132,7 @@
                         <TextBlock
                             Grid.Column="3"
                             Margin="5,0"
-                            Text="{Binding TotalSeconds, Converter={StaticResource IntToTimeSpanConverter}}" />
+                            Text="{Binding TotalMilliSeconds, Converter={StaticResource IntToTimeSpanConverter}}" />
 
                     </Grid>
                 </DataTemplate>

@@ -83,7 +83,7 @@ namespace MusicerBeat.Models.Databases
             {
                 if (dic.TryGetValue(soundFile.FullName, out var s))
                 {
-                    results.Add((s.ListenCount, s.TotalSeconds));
+                    results.Add((s.ListenCount, s.TotalMilliSeconds));
                 }
             }
 
@@ -103,7 +103,7 @@ namespace MusicerBeat.Models.Databases
                 }
 
                 soundFile.ListenCount = s.ListenCount;
-                soundFile.TotalSeconds = s.TotalSeconds;
+                soundFile.TotalMilliSeconds = s.TotalMilliSeconds;
             }
         }
     }

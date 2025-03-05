@@ -13,7 +13,7 @@ namespace MusicerBeat.Models
     {
         private string fullName;
         private string name;
-        private int totalSeconds;
+        private int totalMilliSeconds;
         private int listenCount;
         private bool isSkip;
         private bool playing;
@@ -56,7 +56,7 @@ namespace MusicerBeat.Models
         [NotMapped]
         public string Extension { get; set; }
 
-        public int TotalSeconds { get => totalSeconds; set => SetProperty(ref totalSeconds, value); }
+        public int TotalMilliSeconds { get => totalMilliSeconds; set => SetProperty(ref totalMilliSeconds, value); }
 
         public int ListenCount { get => listenCount; set => SetProperty(ref listenCount, value); }
 
@@ -79,13 +79,13 @@ namespace MusicerBeat.Models
             if (Extension == ".ogg")
             {
                 using var vr = new VorbisReader(FullName);
-                TotalSeconds = (int)vr.TotalTime.TotalSeconds;
+                TotalMilliSeconds = (int)vr.TotalTime.TotalSeconds;
                 return;
             }
 
             using var afr = new AudioFileReader(FullName);
             var time = (int)afr.TotalTime.TotalSeconds;
-            TotalSeconds = time;
+            TotalMilliSeconds = time;
         }
     }
 }
