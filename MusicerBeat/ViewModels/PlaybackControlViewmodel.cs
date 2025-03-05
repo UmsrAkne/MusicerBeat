@@ -18,6 +18,7 @@ namespace MusicerBeat.ViewModels
         private readonly ISoundPlayerFactory soundPlayerFactory;
         private readonly List<ISoundPlayer> soundPlayers = new ();
         private readonly SoundFileService soundFileService;
+        private readonly SoundPlayerMixer soundPlayerMixer;
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
@@ -30,6 +31,9 @@ namespace MusicerBeat.ViewModels
             timer.Tick += Timer_Tick;
             VolumeController = new VolumeController(soundPlayers);
             CrossFadeDuration = TimeSpan.FromSeconds(10);
+
+            soundPlayerMixer = new SoundPlayerMixer(soundPlayers, soundPlayerFactory);
+
             timer.Start();
         }
 
@@ -66,31 +70,7 @@ namespace MusicerBeat.ViewModels
 
         public PlayingStatus GetStatus()
         {
-            if (soundPlayers.Count == 0)
-            {
-                return PlayingStatus.Stopped;
-            }
-
-            if (soundPlayers.Count == 1)
-            {
-                if (!soundPlayers.First().IsPlaying)
-                {
-                    throw new InvalidOperationException("Invalid Status");
-                }
-
-                return PlayingStatus.Playing;
-            }
-
-            if (soundPlayers.Count == 2)
-            {
-                if (soundPlayers.All(p => p.IsPlaying))
-                {
-                    // リストの中のプレイヤーが両方動いている。
-                    return PlayingStatus.Fading;
-                }
-            }
-
-            throw new InvalidOperationException("Invalid Status");
+            return soundPlayerMixer.GetStatus();
         }
 
         public void Dispose()
