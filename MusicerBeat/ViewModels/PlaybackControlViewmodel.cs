@@ -15,7 +15,6 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class PlaybackControlViewmodel : BindableBase, IDisposable
     {
-        private readonly ISoundPlayerFactory soundPlayerFactory;
         private readonly List<ISoundPlayer> soundPlayers = new ();
         private readonly SoundFileService soundFileService;
         private readonly SoundPlayerMixer soundPlayerMixer;
@@ -25,7 +24,6 @@ namespace MusicerBeat.ViewModels
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
-            this.soundPlayerFactory = soundPlayerFactory;
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
             timer.Tick += Timer_Tick;
@@ -33,6 +31,7 @@ namespace MusicerBeat.ViewModels
             CrossFadeDuration = TimeSpan.FromSeconds(10);
 
             soundPlayerMixer = new SoundPlayerMixer(soundPlayers, soundPlayerFactory);
+            soundPlayerMixer.SoundEnded += PlayNext;
 
             timer.Start();
         }
@@ -137,31 +136,14 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
-            var newPlayer = soundPlayerFactory.CreateSoundPlayer();
-            newPlayer.SoundEnded += RemoveAndPlay;
-            soundPlayers.Add(newPlayer);
-            newPlayer.PlaySound(soundFile);
+            soundPlayerMixer.Play(soundFile);
 
             soundFileService?.AddListenHistoryAsync(soundFile);
-
-            newPlayer.Volume = GetStatus() switch
-            {
-                PlayingStatus.Playing => 1.0f,
-                PlayingStatus.Fading => 0f,
-                _ => newPlayer.Volume,
-            };
-
             PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 
-        private void RemoveAndPlay(object sender, EventArgs e)
+        private void PlayNext(object sender, EventArgs e)
         {
-            if (sender is ISoundPlayer p)
-            {
-                soundPlayers.Remove(p);
-                PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
-            }
-
             if (GetStatus() == PlayingStatus.Stopped)
             {
                 Play(null);
@@ -170,16 +152,7 @@ namespace MusicerBeat.ViewModels
 
         private void Stop()
         {
-            foreach (var p in soundPlayers)
-            {
-                p.Stop();
-                if (p is IDisposable d)
-                {
-                    d.Dispose();
-                }
-            }
-
-            soundPlayers.Clear();
+            soundPlayerMixer.Stop();
             PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 
