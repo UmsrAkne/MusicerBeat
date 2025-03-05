@@ -42,10 +42,10 @@ namespace MusicerBeatTests.ViewModels
         public void PlayCommand_StateTransitionTest()
         {
             var playList = new MockPlaylist();
-            playList.OriginalList.Add(new SoundFile("C://test/a.mp3") { TotalMilliSeconds = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/b.mp3") { TotalMilliSeconds = 2, });
-            playList.OriginalList.Add(new SoundFile("C://test/c.mp3") { TotalMilliSeconds = 1, });
-            playList.OriginalList.Add(new SoundFile("C://test/d.mp3") { TotalMilliSeconds = 2, });
+            playList.OriginalList.Add(new SoundFile("C://test/a.mp3") { TotalMilliSeconds = 2000, });
+            playList.OriginalList.Add(new SoundFile("C://test/b.mp3") { TotalMilliSeconds = 2000, });
+            playList.OriginalList.Add(new SoundFile("C://test/c.mp3") { TotalMilliSeconds = 1000, });
+            playList.OriginalList.Add(new SoundFile("C://test/d.mp3") { TotalMilliSeconds = 2000, });
 
             var ps = new List<MockSoundPlayer>
             {
@@ -92,10 +92,10 @@ namespace MusicerBeatTests.ViewModels
             yield return (
                 new List<(string, int, string)>
                 {
-                    (@"C:\test\a.mp3", 2, "p1"),
-                    (@"C:\test\b.mp3", 2, "p2"),
-                    (@"C:\test\c.mp3", 2, "p3"),
-                    (@"C:\test\d.mp3", 2, "p4"),
+                    (@"C:\test\a.mp3", 2000, "p1"),
+                    (@"C:\test\b.mp3", 2000, "p2"),
+                    (@"C:\test\c.mp3", 2000, "p3"),
+                    (@"C:\test\d.mp3", 2000, "p4"),
                 },
                 new List<(TimeSpan, double?, double?, string)>
                 {
@@ -123,10 +123,10 @@ namespace MusicerBeatTests.ViewModels
             yield return (
                 new List<(string, int, string)>
                 {
-                    (@"C:\test\a.mp3", 2, "p1"),
-                    (@"C:\test\b.mp3", 2, "p2"),
-                    (@"C:\test\c.mp3", 1, "p3"),
-                    (@"C:\test\d.mp3", 2, "p4"),
+                    (@"C:\test\a.mp3", 2000, "p1"),
+                    (@"C:\test\b.mp3", 2000, "p2"),
+                    (@"C:\test\c.mp3", 1000, "p3"),
+                    (@"C:\test\d.mp3", 2000, "p4"),
                 },
                 new List<(TimeSpan, double?, double?, string)>
                 {
@@ -148,9 +148,9 @@ namespace MusicerBeatTests.ViewModels
             yield return (
                 new List<(string, int, string)>
                 {
-                    (@"C:\test\a.mp3", 1, "p1"),
-                    (@"C:\test\b.mp3", 1, "p2"),
-                    (@"C:\test\c.mp3", 1, "p3"),
+                    (@"C:\test\a.mp3", 1000, "p1"),
+                    (@"C:\test\b.mp3", 1000, "p2"),
+                    (@"C:\test\c.mp3", 1000, "p3"),
                 },
                 new List<(TimeSpan, double?, double?, string)>
                 {

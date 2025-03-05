@@ -56,7 +56,7 @@ namespace MusicerBeatTests.ViewModels
         {
             if (soundFile.TotalMilliSeconds > 0)
             {
-                Duration = TimeSpan.FromSeconds(soundFile.TotalMilliSeconds);
+                Duration = TimeSpan.FromMilliseconds(soundFile.TotalMilliSeconds);
             }
 
             LastPlayedSoundFile = soundFile;

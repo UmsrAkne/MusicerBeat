@@ -80,7 +80,7 @@ namespace MusicerBeat.Models
             var sound = SelectSoundFile();
             Index = originalIndex;
 
-            return sound != null && TimeSpan.FromSeconds(sound.TotalMilliSeconds) >= threshold;
+            return sound != null && TimeSpan.FromMilliseconds(sound.TotalMilliSeconds) >= threshold;
         }
     }
 }
