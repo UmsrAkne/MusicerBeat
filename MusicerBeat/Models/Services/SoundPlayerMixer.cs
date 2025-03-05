@@ -7,12 +7,18 @@ namespace MusicerBeat.Models.Services
 {
     public class SoundPlayerMixer
     {
-        public SoundPlayerMixer(ISoundPlayerFactory soundPlayerFactory)
+        /// <summary>
+        /// SoundPlayerMixer をインスタンス化するコンストラクタです。
+        /// </summary>
+        /// <param name="soundPlayers">入力されたリストは内部で参照が保持され、`SoundPlayer` が生成された際に新しいプレイヤーを追加します。</param>
+        /// <param name="soundPlayerFactory">このクラスの内部で `ISoundPlayer` を生成するファクトリークラスを入力します。</param>
+        public SoundPlayerMixer(List<ISoundPlayer> soundPlayers, ISoundPlayerFactory soundPlayerFactory)
         {
+            SoundPlayers = soundPlayers;
             SoundPlayerFactory = soundPlayerFactory;
         }
 
-        private List<ISoundPlayer> SoundPlayers { get; set; }
+        private List<ISoundPlayer> SoundPlayers { get; }
 
         private ISoundPlayerFactory SoundPlayerFactory { get; }
 
