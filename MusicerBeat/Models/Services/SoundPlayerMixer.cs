@@ -66,6 +66,20 @@ namespace MusicerBeat.Models.Services
             };
         }
 
+        public void Stop()
+        {
+            foreach (var p in SoundPlayers)
+            {
+                p.Stop();
+                if (p is IDisposable d)
+                {
+                    d.Dispose();
+                }
+            }
+
+            SoundPlayers.Clear();
+        }
+
         private void RemoveAndPlay(object sender, EventArgs e)
         {
             if (sender is ISoundPlayer p)
