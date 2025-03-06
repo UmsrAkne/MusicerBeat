@@ -11,11 +11,12 @@ namespace MusicerBeatTests.ViewModels
         {
         }
 
-        public MockSoundPlayer(TimeSpan defaultCurrentTime)
+        public MockSoundPlayer(TimeSpan defaultCurrentTime, bool defaultPlaying = false)
         {
             IsPlaying = true;
             CurrentTime = defaultCurrentTime;
             IsPlaying = false;
+            IsPlaying = defaultPlaying;
         }
 
         public event EventHandler? SoundEnded;
