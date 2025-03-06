@@ -22,6 +22,7 @@ namespace MusicerBeat.ViewModels
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
         private float volume = 1.0f;
+        private PlayingStatus playingStatus;
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -77,6 +78,12 @@ namespace MusicerBeat.ViewModels
             }
         }
 
+        public PlayingStatus PlayingStatus
+        {
+            get => playingStatus;
+            set => SetProperty(ref playingStatus, value);
+        }
+
         private IPlaylist PlayListSource { get; init; }
 
         public PlayingStatus GetStatus()
@@ -118,10 +125,18 @@ namespace MusicerBeat.ViewModels
                 }
             }
 
-            if (GetStatus() == PlayingStatus.Fading)
+            var state = GetStatus();
+
+            if (state == PlayingStatus.Fading)
             {
                 VolumeController.ChangeVolumes();
+                PlayingStatus = PlayingStatus.Fading;
+                return;
             }
+
+            PlayingStatus = state == PlayingStatus.Playing
+                ? PlayingStatus.Playing
+                : PlayingStatus.Stopped;
         }
 
         protected virtual void Dispose(bool disposing)
