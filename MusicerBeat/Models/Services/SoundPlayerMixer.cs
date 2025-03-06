@@ -64,7 +64,7 @@ namespace MusicerBeat.Models.Services
         public void Play(SoundFile soundFile)
         {
             var newPlayer = SoundPlayerFactory.CreateSoundPlayer();
-            newPlayer.SoundEnded += RemoveAndPlay;
+            newPlayer.SoundEnded += RemovePlayer;
             SoundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
 
@@ -90,7 +90,7 @@ namespace MusicerBeat.Models.Services
             SoundPlayers.Clear();
         }
 
-        private void RemoveAndPlay(object sender, EventArgs e)
+        private void RemovePlayer(object sender, EventArgs e)
         {
             if (sender is ISoundPlayer p)
             {
