@@ -11,11 +11,12 @@ namespace MusicerBeatTests.ViewModels
         {
         }
 
-        public MockSoundPlayer(TimeSpan defaultCurrentTime)
+        public MockSoundPlayer(TimeSpan defaultCurrentTime, bool defaultPlaying = false)
         {
             IsPlaying = true;
             CurrentTime = defaultCurrentTime;
             IsPlaying = false;
+            IsPlaying = defaultPlaying;
         }
 
         public event EventHandler? SoundEnded;
@@ -54,9 +55,9 @@ namespace MusicerBeatTests.ViewModels
 
         public void PlaySound(SoundFile soundFile)
         {
-            if (soundFile.TotalSeconds > 0)
+            if (soundFile.TotalMilliSeconds > 0)
             {
-                Duration = TimeSpan.FromSeconds(soundFile.TotalSeconds);
+                Duration = TimeSpan.FromMilliseconds(soundFile.TotalMilliSeconds);
             }
 
             LastPlayedSoundFile = soundFile;

@@ -1,4 +1,3 @@
-using MusicerBeat.Models;
 using MusicerBeat.Models.Services;
 using MusicerBeatTests.ViewModels;
 
