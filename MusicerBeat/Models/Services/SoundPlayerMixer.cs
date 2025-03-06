@@ -27,6 +27,8 @@ namespace MusicerBeat.Models.Services
 
         private ISoundPlayerFactory SoundPlayerFactory { get; }
 
+        public float DefaultVolume { private get; set; } = 1.0f;
+
         public PlayingStatus GetStatus()
         {
             if (SoundPlayers.Count == 0)
@@ -70,7 +72,7 @@ namespace MusicerBeat.Models.Services
 
             newPlayer.Volume = GetStatus() switch
             {
-                PlayingStatus.Playing => 1.0f,
+                PlayingStatus.Playing => DefaultVolume,
                 PlayingStatus.Fading => 0f,
                 _ => newPlayer.Volume,
             };

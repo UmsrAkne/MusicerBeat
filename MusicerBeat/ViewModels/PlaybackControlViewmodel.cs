@@ -21,6 +21,7 @@ namespace MusicerBeat.ViewModels
 
         private readonly DispatcherTimer timer;
         private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
+        private float volume = 1.0f;
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
@@ -45,6 +46,17 @@ namespace MusicerBeat.ViewModels
         public bool IsPlaying { get; set; }
 
         public VolumeController VolumeController { get; set; }
+
+        public float Volume
+        {
+            get => volume;
+            set
+            {
+                SetProperty(ref volume, value);
+                VolumeController.CurrentVolume = value;
+                soundPlayerMixer.DefaultVolume = value;
+            }
+        }
 
         public PlaybackInformationViewer PlaybackInformationViewer { get; set; } = new ();
 

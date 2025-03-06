@@ -157,8 +157,14 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
             <Button
                 Grid.Row="0"
+                Grid.Column="0"
                 Width="100"
                 Margin="15"
                 HorizontalAlignment="Left"
@@ -166,8 +172,26 @@
                 Command="{Binding PlaybackControlViewmodel.PlayCommand}"
                 Content="▷" />
 
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="15"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <TextBlock Text="Vol :" />
+                <Border Margin="5,0" />
+                <Slider
+                    Width="250"
+                    HorizontalAlignment="Right"
+                    Maximum="1.0"
+                    Minimum="0"
+                    Value="{Binding PlaybackControlViewmodel.Volume}" />
+            </StackPanel>
+
             <Border
                 Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
                 Background="LightSteelBlue">
                 <StackPanel Margin="4" Orientation="Horizontal">
