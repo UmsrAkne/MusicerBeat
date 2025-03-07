@@ -117,7 +117,7 @@ namespace MusicerBeat.ViewModels
             if (GetStatus() == PlayingStatus.Playing)
             {
                 var p = soundPlayers.First();
-                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2);
+                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2, TimeSpan.Zero, TimeSpan.Zero);
                 var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
                 if (p.CurrentTime >= p.Duration - CrossFadeDuration && nextIsLongSound && currentlyIsLongSound)
                 {
