@@ -119,7 +119,8 @@ namespace MusicerBeat.ViewModels
                 var p = soundPlayers.First();
                 var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2, TimeSpan.Zero, TimeSpan.Zero);
                 var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
-                if (p.CurrentTime >= p.Duration - CrossFadeDuration && nextIsLongSound && currentlyIsLongSound)
+                var endPoint = p.Duration - CrossFadeDuration - soundPlayerMixer.BackCut;
+                if (p.CurrentTime >= endPoint && nextIsLongSound && currentlyIsLongSound)
                 {
                     Play(null);
                 }
