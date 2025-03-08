@@ -94,6 +94,36 @@ namespace MusicerBeat.Models.Services
             }
         }
 
+        public void ChangeVolumes(CrossFadeSetting setting)
+        {
+            if (SoundPlayers.Count != 2)
+            {
+                return;
+            }
+
+            var oldPlayer = SoundPlayers[0];
+            var newPlayer = SoundPlayers[1];
+
+            if (oldPlayer.Volume == 0 && Math.Abs(newPlayer.Volume - CurrentVolume) < 0.001)
+            {
+                return;
+            }
+
+            setting.MaxVolume = CurrentVolume;
+
+            if (oldPlayer.Volume > 0)
+            {
+                oldPlayer.Volume -= setting.VolumeFadeStep;
+                oldPlayer.Volume = Math.Max(0, oldPlayer.Volume);
+            }
+
+            if (newPlayer.Volume < CurrentVolume)
+            {
+                newPlayer.Volume += setting.VolumeFadeStep;
+                newPlayer.Volume = Math.Min(CurrentVolume, newPlayer.Volume);
+            }
+        }
+
         /// <summary>
         /// このクラスが保持する ISoundPlayer オブジェクトのリストをクリアします。
         /// </summary>

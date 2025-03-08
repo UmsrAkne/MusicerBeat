@@ -20,17 +20,17 @@ namespace MusicerBeat.ViewModels
         private readonly SoundPlayerMixer soundPlayerMixer;
 
         private readonly DispatcherTimer timer;
-        private TimeSpan crossFadeDuration = TimeSpan.FromSeconds(10);
         private float volume = 1.0f;
         private PlayingStatus playingStatus;
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
+            CrossFadeSetting = new CrossFadeSetting() { Duration = TimeSpan.FromSeconds(10), };
+
             PlayListSource = playlist;
-            timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200), };
+            timer = new DispatcherTimer { Interval = CrossFadeSetting.FadeProcessInterval, };
             timer.Tick += Timer_Tick;
             VolumeController = new VolumeController(soundPlayers);
-            CrossFadeDuration = TimeSpan.FromSeconds(10);
 
             soundPlayerMixer = new SoundPlayerMixer(soundPlayers, soundPlayerFactory);
             soundPlayerMixer.SoundEnded += PlayNext;
@@ -61,22 +61,9 @@ namespace MusicerBeat.ViewModels
 
         public PlaybackInformationViewer PlaybackInformationViewer { get; set; } = new ();
 
-        public DelegateCommand<SoundFile> PlayCommand => new (Play);
+        public CrossFadeSetting CrossFadeSetting { get; set; } = new ();
 
-        /// <summary>
-        /// クロスフェード時、音量の変化が完了するまでの時間を設定します。<br/>
-        /// このプロパティに値をセットすると、時間あたりの音量の変更量が変化するため、`VolumeController.VolumeFadeStep`も自動で変更されます。
-        /// </summary>
-        public TimeSpan CrossFadeDuration
-        {
-            get => crossFadeDuration;
-            set
-            {
-                SetProperty(ref crossFadeDuration, value);
-                var dur = 1.0 / (TimeSpan.FromSeconds(1).TotalMilliseconds / timer.Interval.TotalMilliseconds * crossFadeDuration.TotalSeconds);
-                VolumeController.VolumeFadeStep = (float)dur;
-            }
-        }
+        public DelegateCommand<SoundFile> PlayCommand => new (Play);
 
         public PlayingStatus PlayingStatus
         {
@@ -117,9 +104,9 @@ namespace MusicerBeat.ViewModels
             if (GetStatus() == PlayingStatus.Playing)
             {
                 var p = soundPlayers.First();
-                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeDuration * 2, TimeSpan.Zero, TimeSpan.Zero);
-                var currentlyIsLongSound = p.Duration >= CrossFadeDuration * 2;
-                var endPoint = p.Duration - CrossFadeDuration - soundPlayerMixer.BackCut;
+                var nextIsLongSound = PlayListSource.SequentialSelector.NextIsLongSound(CrossFadeSetting);
+                var currentlyIsLongSound = p.Duration >= CrossFadeSetting.RequiredCrossFadeDuration;
+                var endPoint = p.Duration - CrossFadeSetting.Duration - soundPlayerMixer.BackCut;
                 if (p.CurrentTime >= endPoint && nextIsLongSound && currentlyIsLongSound)
                 {
                     Play(null);
@@ -130,7 +117,7 @@ namespace MusicerBeat.ViewModels
 
             if (state == PlayingStatus.Fading)
             {
-                VolumeController.ChangeVolumes();
+                VolumeController.ChangeVolumes(CrossFadeSetting);
                 PlayingStatus = PlayingStatus.Fading;
                 return;
             }

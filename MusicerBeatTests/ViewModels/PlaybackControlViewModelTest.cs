@@ -58,7 +58,7 @@ namespace MusicerBeatTests.ViewModels
             var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = ps, };
 
             var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
-            vm.CrossFadeDuration = TimeSpan.FromSeconds(1);
+            vm.CrossFadeSetting.Duration = TimeSpan.FromSeconds(1);
             vm.VolumeController.VolumeFadeStep = 0.5f;
 
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
@@ -101,20 +101,23 @@ namespace MusicerBeatTests.ViewModels
                 {
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p1, p2 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (4) "),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p2 p3 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p2 p3 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p2 p3 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p2 p3 クロスフェード終了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (4) "),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p3 p4 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p3 p4 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p3 p4 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p3 p4 クロスフェード終了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (4) "),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
                 }
@@ -132,10 +135,11 @@ namespace MusicerBeatTests.ViewModels
                 {
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p1, p2 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 + 500ms"),
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 end"),
@@ -183,7 +187,7 @@ namespace MusicerBeatTests.ViewModels
             var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = ps, };
 
             var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
-            vm.CrossFadeDuration = TimeSpan.FromSeconds(1);
+            vm.CrossFadeSetting.Duration = TimeSpan.FromSeconds(1);
             vm.VolumeController.VolumeFadeStep = 0.25f;
 
             // プレイヤーが止まっているかチェック。

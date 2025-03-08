@@ -49,5 +49,24 @@ namespace MusicerBeat.Models
         }
 
         public TimeSpan RequiredCrossFadeDuration => (Duration * 2) + FrontCut + BackCut;
+
+        /// <summary>
+        /// クロスフェードの音量変更処理のインターバルです。
+        /// </summary>
+        public TimeSpan FadeProcessInterval => TimeSpan.FromMilliseconds(200);
+
+        /// <summary>
+        /// クロスフェード上昇側の音量の最大値です。
+        /// </summary>
+        public float MaxVolume { get; set; } = 1.0f;
+
+        public float VolumeFadeStep
+        {
+            get
+            {
+                var numStepPerSec = Duration.TotalMilliseconds / FadeProcessInterval.TotalMilliseconds;
+                return (float)(MaxVolume / numStepPerSec);
+            }
+        }
     }
 }

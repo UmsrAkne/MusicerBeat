@@ -85,5 +85,17 @@ namespace MusicerBeat.Models
 
             return sound != null && TimeSpan.FromMilliseconds(sound.TotalMilliSeconds) >= threshold;
         }
+
+        /// <summary>
+        /// `CrossFadeSetting` の情報から、次に選択されるサウンドの長さがクロスフェードに必要な長さかどうかを取得します。
+        /// </summary>
+        /// <param name="setting">クロスフェードの情報が入ったオブジェクト</param>
+        /// <returns>次に選択されるサウンドの長さが、クロスフェードに必要な長さかどうか。<br/>
+        /// ただし、次に選択されるサウンドが null の場合は false を返します。
+        /// </returns>
+        public bool NextIsLongSound(CrossFadeSetting setting)
+        {
+            return NextIsLongSound(setting.RequiredCrossFadeDuration, TimeSpan.Zero, TimeSpan.Zero);
+        }
     }
 }
