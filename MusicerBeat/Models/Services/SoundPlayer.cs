@@ -29,7 +29,21 @@ namespace MusicerBeat.Models.Services
             }
         }
 
-        public TimeSpan CurrentTime => audioReader?.CurrentTime ?? vorbisReader?.CurrentTime ?? TimeSpan.Zero;
+        public TimeSpan CurrentTime
+        {
+            get => audioReader?.CurrentTime ?? vorbisReader?.CurrentTime ?? TimeSpan.Zero;
+            set
+            {
+                if (audioReader != null)
+                {
+                    audioReader.CurrentTime = value;
+                }
+                else if (vorbisReader != null)
+                {
+                    vorbisReader.CurrentTime = value;
+                }
+            }
+        }
 
         public TimeSpan Duration => audioReader?.TotalTime ?? vorbisReader?.TotalTime ?? TimeSpan.Zero;
 
@@ -37,7 +51,7 @@ namespace MusicerBeat.Models.Services
 
         public SoundFile PlayingSound { get; set; }
 
-        public void PlaySound(SoundFile soundFile)
+        public void PlaySound(SoundFile soundFile, TimeSpan startPosition = default)
         {
             if (waveOutEvent != null)
             {
@@ -63,6 +77,11 @@ namespace MusicerBeat.Models.Services
 
             waveOutEvent.Init(volumeSampleProvider);
             waveOutEvent.Play();
+
+            if (startPosition != TimeSpan.Zero && startPosition < Duration)
+            {
+                CurrentTime = startPosition;
+            }
 
             IsPlaying = true;
             sound = soundFile;

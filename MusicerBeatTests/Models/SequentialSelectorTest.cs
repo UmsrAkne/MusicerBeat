@@ -214,13 +214,13 @@ namespace MusicerBeatTests.Models
             Assert.Multiple(() =>
             {
                 // 長いサウンドか判定した後に、インデックスが動いていないことを確認するため、`SelectSoundFile()`を実行する。
-                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10)), Is.True);
+                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10), TimeSpan.Zero, TimeSpan.Zero), Is.True);
                 Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file1.mp3"));
 
-                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10)), Is.True);
+                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10), TimeSpan.Zero, TimeSpan.Zero), Is.True);
                 Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file2.mp3"));
 
-                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10)), Is.False);
+                Assert.That(s.NextIsLongSound(TimeSpan.FromSeconds(10), TimeSpan.Zero, TimeSpan.Zero), Is.False);
                 Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file3.mp3"));
             });
         }
