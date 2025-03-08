@@ -152,6 +152,7 @@ namespace MusicerBeat.ViewModels
             }
 
             soundPlayerMixer.Play(soundFile);
+            soundPlayerMixer.FrontCut = CrossFadeSetting.FrontCut;
 
             soundFileService?.AddListenHistoryAsync(soundFile);
             PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);

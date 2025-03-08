@@ -1,4 +1,5 @@
 using MusicerBeat.Models;
+using MusicerBeat.Models.Interfaces;
 using MusicerBeat.ViewModels;
 
 namespace MusicerBeatTests.ViewModels
@@ -229,6 +230,95 @@ namespace MusicerBeatTests.ViewModels
 
             // 全ての再生が終了したはずなので、プレイヤーが停止状態かを確認する。
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+        }
+
+        private static IEnumerable<TestCaseData> TestCases()
+        {
+            yield return new TestCaseData(
+                new List<SoundFile>
+                {
+                    new (@"C:\test\a.mp3") { TotalMilliSeconds = 3000, },
+                    new (@"C:\test\b.mp3") { TotalMilliSeconds = 3000, },
+                },
+                new List<MockSoundPlayer>
+                {
+                    new MockSoundPlayer(){ Name = "p1", },
+                    new MockSoundPlayer(){ Name = "p2", },
+                },
+                new List<(TimeSpan, PlayingStatus, string)>
+                {
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t1"),
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-1"),
+                    (TimeSpan.FromMilliseconds(500),  PlayingStatus.Fading,   "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Stopped,  "t3"),
+                },
+                new CrossFadeSetting()
+                {
+                    FrontCut = TimeSpan.FromMilliseconds(500),
+                    BackCut = TimeSpan.Zero,
+                }
+            ).SetName("冒頭カット");
+
+            // 末尾のカットは片方のプレイヤーの音量を指定秒数早く 0 にしているだけであり、各プレイヤーの状態変遷は冒頭カットのみの場合と全く同じであるはず。
+            yield return new TestCaseData(
+                new List<SoundFile>
+                {
+                    new (@"C:\test\a.mp3") { TotalMilliSeconds = 3000, },
+                    new (@"C:\test\b.mp3") { TotalMilliSeconds = 3000, },
+                },
+                new List<MockSoundPlayer>
+                {
+                    new MockSoundPlayer(){ Name = "p1", },
+                    new MockSoundPlayer(){ Name = "p2", },
+                },
+                new List<(TimeSpan, PlayingStatus, string)>
+                {
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t1"),
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-1"),
+                    (TimeSpan.FromMilliseconds(500),  PlayingStatus.Fading,   "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Stopped,  "t3"),
+                },
+                new CrossFadeSetting()
+                {
+                    FrontCut = TimeSpan.FromMilliseconds(500),
+                    BackCut = TimeSpan.FromMilliseconds(500),
+                }
+            ).SetName("冒頭カット + 末尾カット");
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void CrossFade_WithTrimmedSound_Test(
+            List<SoundFile> soundFiles,
+            List<MockSoundPlayer> players,
+            List<(TimeSpan, PlayingStatus, string)> transitions,
+            CrossFadeSetting setting)
+        {
+            var playList = new MockPlaylist();
+            foreach (var sf in soundFiles)
+            {
+                playList.OriginalList.Add(sf);
+            }
+
+            var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = players, };
+
+            var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
+            vm.CrossFadeSetting = setting;
+            vm.CrossFadeSetting.Duration = TimeSpan.FromSeconds(1);
+
+            // プレイヤーが止まっているかチェック。
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+            vm.PlayCommand.Execute(null);
+
+            foreach (var (forwardTime, status, description) in transitions)
+            {
+                vm.UpdatePlaybackState();
+                var r = Enumerable.Reverse(soundPlayerFactory.PlayerSource).ToList();
+                r.ForEach(p => p.CurrentTime += forwardTime);
+
+                Assert.That(vm.GetStatus(), Is.EqualTo(status));
+            }
         }
     }
 }
