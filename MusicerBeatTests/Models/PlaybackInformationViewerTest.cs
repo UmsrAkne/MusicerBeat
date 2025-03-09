@@ -50,9 +50,11 @@ namespace MusicerBeatTests.Models
             yield return new TestCaseData(
                 new List<ISoundPlayer>
                 {
-                    new MockSoundPlayer(TimeSpan.FromSeconds(1))
+                    new MockSoundPlayer(TimeSpan.FromSeconds(1), true)
                     {
-                        PlayingSound = new SoundFile("a.mp3"),
+                        PlayingSound = new SoundFile("a.mp3") { TotalMilliSeconds = 1000, },
+                        Duration = TimeSpan.FromSeconds(2),
+                        CurrentTime = TimeSpan.FromSeconds(1),
                     },
                 },
                 "00:00:01"
@@ -61,13 +63,17 @@ namespace MusicerBeatTests.Models
             yield return new TestCaseData(
                 new List<ISoundPlayer>
                 {
-                    new MockSoundPlayer(TimeSpan.FromSeconds(4))
+                    new MockSoundPlayer(TimeSpan.FromSeconds(0), true)
                     {
-                        PlayingSound = new SoundFile("a.mp3"),
+                        PlayingSound = new SoundFile("a.mp3"){ TotalMilliSeconds = 4000, },
+                        Duration = TimeSpan.FromSeconds(5),
+                        CurrentTime = TimeSpan.FromSeconds(4),
                     },
-                    new MockSoundPlayer(TimeSpan.FromSeconds(2))
+                    new MockSoundPlayer(TimeSpan.FromSeconds(0), true)
                     {
-                        PlayingSound = new SoundFile("b.mp3"),
+                        PlayingSound = new SoundFile("b.mp3"){ TotalMilliSeconds = 2000, },
+                        Duration = TimeSpan.FromSeconds(3),
+                        CurrentTime = TimeSpan.FromSeconds(2),
                     },
                 },
                 "00:00:04 --> 00:00:02"
