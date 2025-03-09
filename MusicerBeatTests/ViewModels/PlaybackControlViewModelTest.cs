@@ -245,13 +245,13 @@ namespace MusicerBeatTests.ViewModels
                     new MockSoundPlayer(){ Name = "p1", },
                     new MockSoundPlayer(){ Name = "p2", },
                 },
-                new List<(TimeSpan, PlayingStatus, string)>
+                new List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)>
                 {
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t1"),
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-1"),
-                    (TimeSpan.FromMilliseconds(500),  PlayingStatus.Fading,   "t2-2"),
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-3"),
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Stopped,  "t3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t1"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t2-1"),
+                    (TimeSpan.FromMilliseconds(500),  TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading,   "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing,  "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped,  "t3"),
                 },
                 new CrossFadeSetting()
                 {
@@ -272,13 +272,13 @@ namespace MusicerBeatTests.ViewModels
                     new MockSoundPlayer(){ Name = "p1", },
                     new MockSoundPlayer(){ Name = "p2", },
                 },
-                new List<(TimeSpan, PlayingStatus, string)>
+                new List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)>
                 {
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t1"),
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-1"),
-                    (TimeSpan.FromMilliseconds(500),  PlayingStatus.Fading,   "t2-2"),
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing,  "t2-3"),
-                    (TimeSpan.FromMilliseconds(1000), PlayingStatus.Stopped,  "t3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t1"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t2-1"),
+                    (TimeSpan.FromMilliseconds(500),  TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading,   "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing,  "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped,  "t3"),
                 },
                 new CrossFadeSetting()
                 {
@@ -292,7 +292,7 @@ namespace MusicerBeatTests.ViewModels
         public void CrossFade_WithTrimmedSound_Test(
             List<SoundFile> soundFiles,
             List<MockSoundPlayer> players,
-            List<(TimeSpan, PlayingStatus, string)> transitions,
+            List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)> transitions,
             CrossFadeSetting setting)
         {
             var playList = new MockPlaylist();
@@ -310,14 +310,22 @@ namespace MusicerBeatTests.ViewModels
             // プレイヤーが止まっているかチェック。
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
             vm.PlayCommand.Execute(null);
+            var counter = 1;
 
-            foreach (var (forwardTime, status, description) in transitions)
+            foreach (var (forwardTime, p1CurrentTime, p2CurrentTime, status, description) in transitions)
             {
                 vm.UpdatePlaybackState();
                 var r = Enumerable.Reverse(soundPlayerFactory.PlayerSource).ToList();
                 r.ForEach(p => p.CurrentTime += forwardTime);
 
-                Assert.That(vm.GetStatus(), Is.EqualTo(status));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(vm.GetStatus(), Is.EqualTo(status));
+                    Assert.That(soundPlayerFactory.PlayerSource[0].CurrentTime, Is.EqualTo(p1CurrentTime));
+                    Assert.That(soundPlayerFactory.PlayerSource[1].CurrentTime, Is.EqualTo(p2CurrentTime));
+                });
+
+                counter++;
             }
         }
     }

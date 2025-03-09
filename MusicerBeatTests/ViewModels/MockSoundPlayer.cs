@@ -43,6 +43,7 @@ namespace MusicerBeatTests.ViewModels
 
                 if (currentTime >= Duration)
                 {
+                    currentTime = Duration;
                     SoundEnded?.Invoke(this, EventArgs.Empty);
                     IsPlaying = false;
                 }
