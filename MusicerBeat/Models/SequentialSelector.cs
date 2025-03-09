@@ -71,16 +71,31 @@ namespace MusicerBeat.Models
         /// このメソッドによって内部のインデックスが変化することはありません。
         /// </summary>
         /// <param name="threshold">長いサウンドかを判定するための基準となる TimeSpan を入力します。</param>
-        /// <returns>次に選択されるサウンドの長さが引数に入力された TimeSpan よりも長いかどうか。<br/>
+        /// <param name="frontCut">サウンドの冒頭カットの時間を入力します。</param>
+        /// <param name="backCut">サウンドの末尾のカットの時間を入力します。</param>
+        /// <returns>次に選択されるサウンドの長さが、引数に入力された TimeSpan にカットの時間を加えたものよりも長いかどうか。<br/>
         /// ただし、次に選択されるサウンドが null の場合は false を返します。
         /// </returns>
-        public bool NextIsLongSound(TimeSpan threshold)
+        public bool NextIsLongSound(TimeSpan threshold, TimeSpan frontCut, TimeSpan backCut)
         {
             var originalIndex = Index;
             var sound = SelectSoundFile();
             Index = originalIndex;
+            threshold += frontCut + backCut;
 
             return sound != null && TimeSpan.FromMilliseconds(sound.TotalMilliSeconds) >= threshold;
+        }
+
+        /// <summary>
+        /// `CrossFadeSetting` の情報から、次に選択されるサウンドの長さがクロスフェードに必要な長さかどうかを取得します。
+        /// </summary>
+        /// <param name="setting">クロスフェードの情報が入ったオブジェクト</param>
+        /// <returns>次に選択されるサウンドの長さが、クロスフェードに必要な長さかどうか。<br/>
+        /// ただし、次に選択されるサウンドが null の場合は false を返します。
+        /// </returns>
+        public bool NextIsLongSound(CrossFadeSetting setting)
+        {
+            return NextIsLongSound(setting.RequiredCrossFadeDuration, TimeSpan.Zero, TimeSpan.Zero);
         }
     }
 }

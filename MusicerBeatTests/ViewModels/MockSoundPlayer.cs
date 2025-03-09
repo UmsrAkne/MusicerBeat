@@ -43,6 +43,7 @@ namespace MusicerBeatTests.ViewModels
 
                 if (currentTime >= Duration)
                 {
+                    currentTime = Duration;
                     SoundEnded?.Invoke(this, EventArgs.Empty);
                     IsPlaying = false;
                 }
@@ -53,7 +54,7 @@ namespace MusicerBeatTests.ViewModels
 
         public string Name { get; set; } = string.Empty;
 
-        public void PlaySound(SoundFile soundFile)
+        public void PlaySound(SoundFile soundFile, TimeSpan startPosition = default)
         {
             if (soundFile.TotalMilliSeconds > 0)
             {

@@ -29,6 +29,10 @@ namespace MusicerBeat.Models.Services
 
         public float DefaultVolume { private get; set; } = 1.0f;
 
+        public TimeSpan FrontCut { get; set; } = TimeSpan.Zero;
+
+        public TimeSpan BackCut { get; set; } = TimeSpan.Zero;
+
         public PlayingStatus GetStatus()
         {
             if (SoundPlayers.Count == 0)
@@ -69,6 +73,11 @@ namespace MusicerBeat.Models.Services
             newPlayer.SoundEnded += RemovePlayer;
             SoundPlayers.Add(newPlayer);
             newPlayer.PlaySound(soundFile);
+
+            if (GetStatus() == PlayingStatus.Fading)
+            {
+                newPlayer.CurrentTime = FrontCut;
+            }
 
             newPlayer.Volume = GetStatus() switch
             {

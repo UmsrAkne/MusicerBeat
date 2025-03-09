@@ -58,7 +58,7 @@ namespace MusicerBeatTests.ViewModels
             var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = ps, };
 
             var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
-            vm.CrossFadeDuration = TimeSpan.FromSeconds(1);
+            vm.CrossFadeSetting.Duration = TimeSpan.FromSeconds(1);
             vm.VolumeController.VolumeFadeStep = 0.5f;
 
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
@@ -67,9 +67,9 @@ namespace MusicerBeatTests.ViewModels
             var expectedTransitions = new List<(TimeSpan, PlayingStatus)>
             {
                 (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p1
-                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading),  // p1, p2
-                (TimeSpan.FromMilliseconds(500),  PlayingStatus.Playing), // p2 + 500ms
-                (TimeSpan.FromMilliseconds(500),  PlayingStatus.Playing), // p2 end, p3 + 500ms
+                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading), // p1, p2
+                (TimeSpan.FromMilliseconds(500), PlayingStatus.Playing), // p2 + 500ms
+                (TimeSpan.FromMilliseconds(500), PlayingStatus.Playing), // p2 end, p3 + 500ms
                 (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p3 end, p4 + 1000ms
                 (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p4 end,
             };
@@ -85,9 +85,9 @@ namespace MusicerBeatTests.ViewModels
         }
 
         private static IEnumerable<(
-            List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
-            List<(TimeSpan, double?, double?, string)> expectedTransitions)>
-        VolumeTransitionTestCases()
+                List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
+                List<(TimeSpan, double?, double?, string)> expectedTransitions)>
+            VolumeTransitionTestCases()
         {
             yield return (
                 new List<(string, int, string)>
@@ -101,20 +101,23 @@ namespace MusicerBeatTests.ViewModels
                 {
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p1, p2 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (4) "),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p2 p3 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p2 p3 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p2 p3 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p2 p3 クロスフェード終了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (4) "),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p3 p4 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p3 p4 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p3 p4 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p3 p4 クロスフェード終了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (4) "),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
                 }
@@ -132,10 +135,11 @@ namespace MusicerBeatTests.ViewModels
                 {
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p1"),
 
-                    (TimeSpan.FromMilliseconds(250), 0.75, 0.25, "p1, p2 (1) クロスフェード開始"),
-                    (TimeSpan.FromMilliseconds(250), 0.5, 0.5, "p1, p2 (2)"),
-                    (TimeSpan.FromMilliseconds(250), 0.25, 0.75, "p1, p2 (3)"),
-                    (TimeSpan.FromMilliseconds(250), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
+                    (TimeSpan.FromMilliseconds(200), 0.8, 0.2, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.6, 0.4, "p1, p2 (1) クロスフェード開始"),
+                    (TimeSpan.FromMilliseconds(200), 0.4, 0.6, "p1, p2 (2)"),
+                    (TimeSpan.FromMilliseconds(200), 0.2, 0.8, "p1, p2 (3)"),
+                    (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 + 500ms"),
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p2 end"),
@@ -167,9 +171,9 @@ namespace MusicerBeatTests.ViewModels
         [TestCaseSource(nameof(VolumeTransitionTestCases))]
         public void PlayCommand_VolumeTransitionTests(
             (
-            List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
-            List<(TimeSpan, double?, double?, string)> transitions) args
-            )
+                List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
+                List<(TimeSpan, double?, double?, string)> transitions) args
+        )
         {
             var playList = new MockPlaylist();
             foreach (var data in args.soundAndPlayers)
@@ -183,7 +187,7 @@ namespace MusicerBeatTests.ViewModels
             var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = ps, };
 
             var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
-            vm.CrossFadeDuration = TimeSpan.FromSeconds(1);
+            vm.CrossFadeSetting.Duration = TimeSpan.FromSeconds(1);
             vm.VolumeController.VolumeFadeStep = 0.25f;
 
             // プレイヤーが止まっているかチェック。
@@ -191,7 +195,7 @@ namespace MusicerBeatTests.ViewModels
 
             vm.PlayCommand.Execute(null);
 
-            foreach (var (time, expectedVolOld, expectedVolNew,description) in args.transitions)
+            foreach (var (time, expectedVolOld, expectedVolNew, description) in args.transitions)
             {
                 vm.UpdatePlaybackState();
 
@@ -225,6 +229,103 @@ namespace MusicerBeatTests.ViewModels
 
             // 全ての再生が終了したはずなので、プレイヤーが停止状態かを確認する。
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+        }
+
+        private static IEnumerable<TestCaseData> TestCases()
+        {
+            yield return new TestCaseData(
+                new List<SoundFile>
+                {
+                    new (@"C:\test\a.mp3") { TotalMilliSeconds = 3000, },
+                    new (@"C:\test\b.mp3") { TotalMilliSeconds = 3000, },
+                },
+                new List<MockSoundPlayer>
+                {
+                    new MockSoundPlayer() { Name = "p1", },
+                    new MockSoundPlayer() { Name = "p2", },
+                },
+                new List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)>
+                {
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t1"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t2-1"),
+                    (TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading, "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing, "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped, "t3"),
+                },
+                new CrossFadeSetting()
+                {
+                    FrontCut = TimeSpan.FromMilliseconds(500),
+                    BackCut = TimeSpan.Zero,
+                }
+            ).SetName("冒頭カット");
+
+            // 末尾のカットは片方のプレイヤーの音量を指定秒数早く 0 にしているだけであり、各プレイヤーの状態変遷は冒頭カットのみの場合と全く同じであるはず。
+            yield return new TestCaseData(
+                new List<SoundFile>
+                {
+                    new (@"C:\test\a.mp3") { TotalMilliSeconds = 3000, },
+                    new (@"C:\test\b.mp3") { TotalMilliSeconds = 3000, },
+                },
+                new List<MockSoundPlayer>
+                {
+                    new MockSoundPlayer() { Name = "p1", },
+                    new MockSoundPlayer() { Name = "p2", },
+                },
+                new List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)>
+                {
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t1"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t2-1"),
+                    (TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading, "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing, "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped, "t3"),
+                },
+                new CrossFadeSetting()
+                {
+                    FrontCut = TimeSpan.FromMilliseconds(500),
+                    BackCut = TimeSpan.FromMilliseconds(500),
+                }
+            ).SetName("冒頭カット + 末尾カット");
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void CrossFade_WithTrimmedSound_Test(
+            List<SoundFile> soundFiles,
+            List<MockSoundPlayer> players,
+            List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)> transitions,
+            CrossFadeSetting setting)
+        {
+            var playList = new MockPlaylist();
+            foreach (var sf in soundFiles)
+            {
+                playList.OriginalList.Add(sf);
+            }
+
+            var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = players, };
+
+            var vm = new PlaybackControlViewmodel(playList, soundPlayerFactory);
+            vm.CrossFadeSetting = setting;
+            vm.CrossFadeSetting.Duration = TimeSpan.FromSeconds(1);
+
+            // プレイヤーが止まっているかチェック。
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+            vm.PlayCommand.Execute(null);
+            var counter = 1;
+
+            foreach (var (forwardTime, p1CurrentTime, p2CurrentTime, status, description) in transitions)
+            {
+                vm.UpdatePlaybackState();
+                var r = Enumerable.Reverse(soundPlayerFactory.PlayerSource).ToList();
+                r.ForEach(p => p.CurrentTime += forwardTime);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(vm.GetStatus(), Is.EqualTo(status));
+                    Assert.That(soundPlayerFactory.PlayerSource[0].CurrentTime, Is.EqualTo(p1CurrentTime));
+                    Assert.That(soundPlayerFactory.PlayerSource[1].CurrentTime, Is.EqualTo(p2CurrentTime));
+                });
+
+                counter++;
+            }
         }
     }
 }

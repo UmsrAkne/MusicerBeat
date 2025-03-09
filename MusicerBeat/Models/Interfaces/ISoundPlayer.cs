@@ -8,7 +8,7 @@ namespace MusicerBeat.Models.Interfaces
 
         float Volume { get; set; }
 
-        TimeSpan CurrentTime { get; }
+        TimeSpan CurrentTime { get; set; }
 
         TimeSpan Duration { get; }
 
@@ -16,7 +16,7 @@ namespace MusicerBeat.Models.Interfaces
 
         public SoundFile PlayingSound { get; }
 
-        void PlaySound(SoundFile soundFile);
+        void PlaySound(SoundFile soundFile, TimeSpan startPosition = default);
 
         void Stop();
     }
