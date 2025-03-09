@@ -1,5 +1,4 @@
 using MusicerBeat.Models;
-using MusicerBeat.Models.Interfaces;
 using MusicerBeat.ViewModels;
 
 namespace MusicerBeatTests.ViewModels
@@ -68,9 +67,9 @@ namespace MusicerBeatTests.ViewModels
             var expectedTransitions = new List<(TimeSpan, PlayingStatus)>
             {
                 (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p1
-                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading),  // p1, p2
-                (TimeSpan.FromMilliseconds(500),  PlayingStatus.Playing), // p2 + 500ms
-                (TimeSpan.FromMilliseconds(500),  PlayingStatus.Playing), // p2 end, p3 + 500ms
+                (TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading), // p1, p2
+                (TimeSpan.FromMilliseconds(500), PlayingStatus.Playing), // p2 + 500ms
+                (TimeSpan.FromMilliseconds(500), PlayingStatus.Playing), // p2 end, p3 + 500ms
                 (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p3 end, p4 + 1000ms
                 (TimeSpan.FromMilliseconds(1000), PlayingStatus.Playing), // p4 end,
             };
@@ -86,9 +85,9 @@ namespace MusicerBeatTests.ViewModels
         }
 
         private static IEnumerable<(
-            List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
-            List<(TimeSpan, double?, double?, string)> expectedTransitions)>
-        VolumeTransitionTestCases()
+                List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
+                List<(TimeSpan, double?, double?, string)> expectedTransitions)>
+            VolumeTransitionTestCases()
         {
             yield return (
                 new List<(string, int, string)>
@@ -172,9 +171,9 @@ namespace MusicerBeatTests.ViewModels
         [TestCaseSource(nameof(VolumeTransitionTestCases))]
         public void PlayCommand_VolumeTransitionTests(
             (
-            List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
-            List<(TimeSpan, double?, double?, string)> transitions) args
-            )
+                List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
+                List<(TimeSpan, double?, double?, string)> transitions) args
+        )
         {
             var playList = new MockPlaylist();
             foreach (var data in args.soundAndPlayers)
@@ -196,7 +195,7 @@ namespace MusicerBeatTests.ViewModels
 
             vm.PlayCommand.Execute(null);
 
-            foreach (var (time, expectedVolOld, expectedVolNew,description) in args.transitions)
+            foreach (var (time, expectedVolOld, expectedVolNew, description) in args.transitions)
             {
                 vm.UpdatePlaybackState();
 
@@ -242,16 +241,16 @@ namespace MusicerBeatTests.ViewModels
                 },
                 new List<MockSoundPlayer>
                 {
-                    new MockSoundPlayer(){ Name = "p1", },
-                    new MockSoundPlayer(){ Name = "p2", },
+                    new MockSoundPlayer() { Name = "p1", },
+                    new MockSoundPlayer() { Name = "p2", },
                 },
                 new List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)>
                 {
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t1"),
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t2-1"),
-                    (TimeSpan.FromMilliseconds(500),  TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading,   "t2-2"),
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing,  "t2-3"),
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped,  "t3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t1"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t2-1"),
+                    (TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading, "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing, "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped, "t3"),
                 },
                 new CrossFadeSetting()
                 {
@@ -269,16 +268,16 @@ namespace MusicerBeatTests.ViewModels
                 },
                 new List<MockSoundPlayer>
                 {
-                    new MockSoundPlayer(){ Name = "p1", },
-                    new MockSoundPlayer(){ Name = "p2", },
+                    new MockSoundPlayer() { Name = "p1", },
+                    new MockSoundPlayer() { Name = "p2", },
                 },
                 new List<(TimeSpan, TimeSpan, TimeSpan, PlayingStatus, string)>
                 {
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t1"),
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing,  "t2-1"),
-                    (TimeSpan.FromMilliseconds(500),  TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading,   "t2-2"),
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing,  "t2-3"),
-                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped,  "t3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t1"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(0), PlayingStatus.Playing, "t2-1"),
+                    (TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(2500), TimeSpan.FromMilliseconds(1000), PlayingStatus.Fading, "t2-2"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(2000), PlayingStatus.Playing, "t2-3"),
+                    (TimeSpan.FromMilliseconds(1000), TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(3000), PlayingStatus.Stopped, "t3"),
                 },
                 new CrossFadeSetting()
                 {

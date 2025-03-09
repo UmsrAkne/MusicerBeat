@@ -65,13 +65,13 @@ namespace MusicerBeatTests.Models
                 {
                     new MockSoundPlayer(TimeSpan.FromSeconds(0), true)
                     {
-                        PlayingSound = new SoundFile("a.mp3"){ TotalMilliSeconds = 4000, },
+                        PlayingSound = new SoundFile("a.mp3") { TotalMilliSeconds = 4000, },
                         Duration = TimeSpan.FromSeconds(5),
                         CurrentTime = TimeSpan.FromSeconds(4),
                     },
                     new MockSoundPlayer(TimeSpan.FromSeconds(0), true)
                     {
-                        PlayingSound = new SoundFile("b.mp3"){ TotalMilliSeconds = 2000, },
+                        PlayingSound = new SoundFile("b.mp3") { TotalMilliSeconds = 2000, },
                         Duration = TimeSpan.FromSeconds(3),
                         CurrentTime = TimeSpan.FromSeconds(2),
                     },
@@ -81,7 +81,7 @@ namespace MusicerBeatTests.Models
         }
 
         [TestCaseSource(nameof(TestCases))]
-        public void PlaybackTimeStringTest(IEnumerable<ISoundPlayer> players,string expectedText)
+        public void PlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedText)
         {
             var viewer = new PlaybackInformationViewer();
             viewer.UpdatePlaybackInformation(players);
