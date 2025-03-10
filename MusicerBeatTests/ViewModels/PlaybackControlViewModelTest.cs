@@ -84,10 +84,7 @@ namespace MusicerBeatTests.ViewModels
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
         }
 
-        private static IEnumerable<(
-                List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
-                List<(TimeSpan, double?, double?, string)> expectedTransitions)>
-            VolumeTransitionTestCases()
+        private static IEnumerable<(List<(string SoundFilePath, int Duration, string PlayerName)> SoundAndPlayers, List<(TimeSpan, double?, double?, string)> ExpectedTransitions)> VolumeTransitionTestCases()
         {
             yield return (
                 new List<(string, int, string)>
@@ -120,8 +117,7 @@ namespace MusicerBeatTests.ViewModels
                     (TimeSpan.FromMilliseconds(200), 0, 1.0, "p1, p2 (4) クロスフェード完了"),
 
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
-                }
-            );
+                });
 
             yield return (
                 new List<(string, int, string)>
@@ -146,8 +142,7 @@ namespace MusicerBeatTests.ViewModels
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p3 end"),
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 + 1000ms"),
                     (TimeSpan.FromMilliseconds(1000), 1.0, null, "p4 end,"),
-                }
-            );
+                });
 
             yield return (
                 new List<(string, int, string)>
@@ -164,25 +159,21 @@ namespace MusicerBeatTests.ViewModels
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p2-2"),
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p3-1"),
                     (TimeSpan.FromMilliseconds(500), 1.0, null, "p3-2"),
-                }
-            );
+                });
         }
 
         [TestCaseSource(nameof(VolumeTransitionTestCases))]
         public void PlayCommand_VolumeTransitionTests(
-            (
-                List<(string soundFilePath, int duration, string playerName)> soundAndPlayers,
-                List<(TimeSpan, double?, double?, string)> transitions) args
-        )
+            (List<(string SoundFilePath, int Duration, string PlayerName)> SoundAndPlayers, List<(TimeSpan, double?, double?, string)> Transitions) args)
         {
             var playList = new MockPlaylist();
-            foreach (var data in args.soundAndPlayers)
+            foreach (var data in args.SoundAndPlayers)
             {
-                playList.OriginalList.Add(new SoundFile(data.soundFilePath) { TotalMilliSeconds = data.duration, });
+                playList.OriginalList.Add(new SoundFile(data.SoundFilePath) { TotalMilliSeconds = data.Duration, });
             }
 
             var ps =
-                args.soundAndPlayers.Select(d => new MockSoundPlayer() { Name = d.playerName, }).ToList();
+                args.SoundAndPlayers.Select(d => new MockSoundPlayer() { Name = d.PlayerName, }).ToList();
 
             var soundPlayerFactory = new DummySoundPlayerFactory { PlayerSource = ps, };
 
@@ -195,7 +186,7 @@ namespace MusicerBeatTests.ViewModels
 
             vm.PlayCommand.Execute(null);
 
-            foreach (var (time, expectedVolOld, expectedVolNew, description) in args.transitions)
+            foreach (var (time, expectedVolOld, expectedVolNew, description) in args.Transitions)
             {
                 vm.UpdatePlaybackState();
 
@@ -256,8 +247,7 @@ namespace MusicerBeatTests.ViewModels
                 {
                     FrontCut = TimeSpan.FromMilliseconds(500),
                     BackCut = TimeSpan.Zero,
-                }
-            ).SetName("冒頭カット");
+                }).SetName("冒頭カット");
 
             // 末尾のカットは片方のプレイヤーの音量を指定秒数早く 0 にしているだけであり、各プレイヤーの状態変遷は冒頭カットのみの場合と全く同じであるはず。
             yield return new TestCaseData(
@@ -283,8 +273,7 @@ namespace MusicerBeatTests.ViewModels
                 {
                     FrontCut = TimeSpan.FromMilliseconds(500),
                     BackCut = TimeSpan.FromMilliseconds(500),
-                }
-            ).SetName("冒頭カット + 末尾カット");
+                }).SetName("冒頭カット + 末尾カット");
         }
 
         [TestCaseSource(nameof(TestCases))]

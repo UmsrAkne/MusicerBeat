@@ -12,16 +12,16 @@ namespace MusicerBeatTests.Models.Service
         {
             yield return new TestCaseData(
                 new List<ISoundPlayer>(),
-                PlayingStatus.Stopped
-            ).SetName("停止中");
+                PlayingStatus.Stopped)
+                .SetName("停止中");
 
             yield return new TestCaseData(
                 new List<ISoundPlayer>
                 {
                     new MockSoundPlayer(TimeSpan.Zero, true),
                 },
-                PlayingStatus.Playing
-            ).SetName("通常の再生中");
+                PlayingStatus.Playing)
+                .SetName("通常の再生中");
 
             yield return new TestCaseData(
                 new List<ISoundPlayer>
@@ -29,8 +29,8 @@ namespace MusicerBeatTests.Models.Service
                     new MockSoundPlayer(TimeSpan.Zero, true),
                     new MockSoundPlayer(TimeSpan.Zero, true),
                 },
-                PlayingStatus.Fading
-            ).SetName("曲のフェード中");
+                PlayingStatus.Fading)
+                .SetName("曲のフェード中");
         }
 
         [TestCaseSource(nameof(GetStatusTestCases))]

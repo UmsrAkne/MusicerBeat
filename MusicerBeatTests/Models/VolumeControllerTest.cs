@@ -9,8 +9,8 @@ namespace MusicerBeatTests.Models
         [Test]
         public void ChangeVolumeTest()
         {
-            var p1 = new MockSoundPlayer(){ Volume = 1, };
-            var p2 = new MockSoundPlayer(){ Volume = 0, };
+            var p1 = new MockSoundPlayer() { Volume = 1, };
+            var p2 = new MockSoundPlayer() { Volume = 0, };
             var vc = new VolumeController() { VolumeFadeStep = 0.4f, };
             vc.Add(p1);
             vc.Add(p2);
@@ -42,9 +42,9 @@ namespace MusicerBeatTests.Models
         [Test]
         public void ChangeVolumeTest_3Add()
         {
-            var p1 = new MockSoundPlayer(){ Volume = 1, };
-            var p2 = new MockSoundPlayer(){ Volume = 0, };
-            var p3 = new MockSoundPlayer(){ Volume = 0, };
+            var p1 = new MockSoundPlayer() { Volume = 1, };
+            var p2 = new MockSoundPlayer() { Volume = 0, };
+            var p3 = new MockSoundPlayer() { Volume = 0, };
 
             var vc = new VolumeController() { VolumeFadeStep = 0.4f, };
             vc.Add(p1);
@@ -83,7 +83,6 @@ namespace MusicerBeatTests.Models
             });
         }
 
-
         // 内部のリストが空の状態で ChangeVolumes を実行しても例外がスローされたりしないか確認する。
         [Test]
         public void ChangeVolumeTest_Empty()
@@ -98,7 +97,7 @@ namespace MusicerBeatTests.Models
         [Test]
         public void ChangeVolumeTest_OneElement()
         {
-            var p1 = new MockSoundPlayer(){ Volume = 1, };
+            var p1 = new MockSoundPlayer() { Volume = 1, };
             var vc = new VolumeController() { VolumeFadeStep = 0.4f, };
             vc.Add(p1);
 

@@ -11,25 +11,25 @@ namespace MusicerBeatTests.Models
                 @"C:\\t\a.mp3" + "\r\n" +
                 @"C:\\t\b.mp3" + "\r\n" +
                 @"C:\\t\c.mp3" + "\r\n",
-                new[] { @"C:\\t\a.mp3", @"C:\\t\b.mp3", @"C:\\t\c.mp3", }
-            ).SetName("基本的なM3Uファイルのパース");
+                new[] { @"C:\\t\a.mp3", @"C:\\t\b.mp3", @"C:\\t\c.mp3", })
+                .SetName("基本的なM3Uファイルのパース");
 
             yield return new TestCaseData(
                 @"C:\\music\song1.mp3" + "\r\n" +
                 @"C:\\music\song2.mp3",
-                new[] { @"C:\\music\song1.mp3", @"C:\\music\song2.mp3", }
-            ).SetName("2つのエントリだけのM3U");
+                new[] { @"C:\\music\song1.mp3", @"C:\\music\song2.mp3", })
+                .SetName("2つのエントリだけのM3U");
 
             yield return new TestCaseData(
                 @" # C:\\music\song1.mp3" + "\r\n" +
                 @"C:\\music\song2.mp3 # comment" + "\r\n" +
                 @"C:\\music\song3.mp3",
-                new[] { @"C:\\music\song2.mp3", @"C:\\music\song3.mp3", }
-            ).SetName("コメントアウトを含むM3U");
+                new[] { @"C:\\music\song2.mp3", @"C:\\music\song3.mp3", })
+                .SetName("コメントアウトを含むM3U");
 
             yield return new TestCaseData(
-                "", Array.Empty<string>()
-            ).SetName("空のM3U");
+                string.Empty, Array.Empty<string>())
+                .SetName("空のM3U");
         }
 
         [TestCaseSource(nameof(ParseM3U_TestCases))]
