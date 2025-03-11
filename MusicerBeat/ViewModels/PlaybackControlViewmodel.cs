@@ -198,6 +198,7 @@ namespace MusicerBeat.ViewModels
             if (status == PlayingStatus.Fading)
             {
                 soundPlayerMixer.StopOldSound();
+                PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
             }
         }
 

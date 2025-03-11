@@ -316,5 +316,85 @@ namespace MusicerBeatTests.ViewModels
                 counter++;
             }
         }
+
+        [Test]
+        public void PlayNextCommand_WhenStopping_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+
+            // 停止中の実行では何も起こらないはず。例外がスローされたりせず、状態に変化がなければOK
+            vm.PlayNextCommand.Execute();
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+        }
+
+        [Test]
+        public void PlayNextCommand_WhenPlaying_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+            vm.PlayCommand.Execute(null);
+
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing));
+
+            vm.UpdatePlaybackState();
+            Assert.That(vm.PlaybackInformationViewer.PlayingFileName, Is.EqualTo("a"));
+
+            vm.PlayNextCommand.Execute();
+            vm.UpdatePlaybackState();
+            Assert.That(vm.PlaybackInformationViewer.PlayingFileName, Is.EqualTo("b"));
+        }
+
+        [Test]
+        public void PlayNextCommand_WhenFading_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+            vm.PlayCommand.Execute(null);
+
+            // クロスフェードが始まる時点までシーク
+            vmParams.SpFactory.PlayerSource.First().CurrentTime = TimeSpan.FromSeconds(2);
+
+            // 状態を更新してクロスフェードに入っていることを確認する。
+            vm.UpdatePlaybackState();
+            Assert.That(vm.PlaybackInformationViewer.PlayingFileName, Is.EqualTo("a --> b"));
+
+            // NextCommand を実行し、 b だけを再生している状態に切り替わるかを確認する。
+            vm.PlayNextCommand.Execute();
+            vm.UpdatePlaybackState();
+            Assert.That(vm.PlaybackInformationViewer.PlayingFileName, Is.EqualTo("b"));
+        }
+
+        private (MockPlaylist PlayListSource, DummySoundPlayerFactory SpFactory) CreatePlaybackControlVmParams()
+        {
+            var soundFiles = new List<SoundFile>
+            {
+                new (@"C:\test\a.mp3") { TotalMilliSeconds = 3000, },
+                new (@"C:\test\b.mp3") { TotalMilliSeconds = 3000, },
+            };
+
+            var playList = new MockPlaylist();
+            foreach (var sf in soundFiles)
+            {
+                playList.OriginalList.Add(sf);
+            }
+
+            var soundPlayerFactory = new DummySoundPlayerFactory
+            {
+                PlayerSource =
+                    new List<MockSoundPlayer> { new () { Name = "p1", }, new () { Name = "p2", }, },
+            };
+
+            return (playList, soundPlayerFactory);
+        }
     }
 }
