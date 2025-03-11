@@ -65,6 +65,8 @@ namespace MusicerBeat.ViewModels
 
         public DelegateCommand<SoundFile> PlayCommand => new (Play);
 
+        public DelegateCommand PlayNextCommand => new (Next);
+
         public PlayingStatus PlayingStatus
         {
             get => playingStatus;
@@ -135,6 +137,11 @@ namespace MusicerBeat.ViewModels
             }
         }
 
+        /// <summary>
+        /// 指定された `SoundFile` を適切な手順を踏んでから再生します。
+        /// </summary>
+        /// <param name="soundFile">再生する `SoundFile` を指定します。<br/>
+        /// `null` が入力された場合は、次に再生するべきサウンドを内部で自動取得します。</param>
         private void Play(SoundFile soundFile)
         {
             if (soundFile != null)
@@ -174,6 +181,24 @@ namespace MusicerBeat.ViewModels
 
         private void Next()
         {
+            var status = GetStatus();
+
+            if (status == PlayingStatus.Stopped)
+            {
+                return;
+            }
+
+            if (status == PlayingStatus.Playing)
+            {
+                var file = PlayListSource.SequentialSelector.SelectSoundFile();
+                Play(file);
+                return;
+            }
+
+            if (status == PlayingStatus.Fading)
+            {
+                soundPlayerMixer.StopOldSound();
+            }
         }
 
         private void Previous()
