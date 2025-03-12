@@ -222,5 +222,30 @@ namespace MusicerBeatTests.Models
                 Assert.That(s.SelectSoundFile()?.Name, Is.EqualTo("file3.mp3"));
             });
         }
+
+        [Test]
+        public void ResetIndex_Test()
+        {
+            var items =
+                new ReadOnlyObservableCollection<SoundFile>(
+                    new ObservableCollection<SoundFile>()
+                    {
+                        new (@"C:\t\a.mp3"),
+                        new (@"C:\t\b.mp3"),
+                        new (@"C:\t\c.mp3"),
+                    });
+
+            var selector = new SequentialSelector(items);
+            var gotItems = new List<SoundFile?>
+            {
+                selector.SelectSoundFile(),
+                selector.SelectSoundFile(),
+            };
+
+            selector.ResetIndex();
+            gotItems.Add(selector.SelectSoundFile());
+
+            CollectionAssert.AreEqual(new[] { "a.mp3", "b.mp3", "a.mp3", }, gotItems.Select(s => s?.Name));
+        }
     }
 }
