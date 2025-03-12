@@ -29,6 +29,7 @@ namespace MusicerBeat.Models
             if (list.Count == 0)
             {
                 PlayingFileName = string.Empty;
+                PlaybackTimeString = string.Empty;
                 return;
             }
 
