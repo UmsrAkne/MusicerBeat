@@ -91,6 +91,7 @@ namespace MusicerBeat.Models.Services
         {
             foreach (var p in SoundPlayers)
             {
+                p.SoundEnded -= RemovePlayer;
                 p.Stop();
                 if (p is IDisposable d)
                 {

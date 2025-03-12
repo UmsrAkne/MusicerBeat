@@ -374,6 +374,48 @@ namespace MusicerBeatTests.ViewModels
             Assert.That(vm.PlaybackInformationViewer.PlayingFileName, Is.EqualTo("b"));
         }
 
+        [Test]
+        public void StopCommand_WhenPlaying_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+
+            vm.PlayCommand.Execute(null);
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Playing));
+
+            vm.StopCommand.Execute();
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+        }
+
+        [Test]
+        public void StopCommand_WhenStopping_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+
+            vm.StopCommand.Execute();
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+        }
+
+        [Test]
+        public void StopCommand_WhenFading_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+            vm.PlayCommand.Execute(null);
+
+            vmParams.SpFactory.PlayerSource.First().CurrentTime += TimeSpan.FromSeconds(2);
+            vm.UpdatePlaybackState();
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Fading));
+
+            vm.StopCommand.Execute();
+            Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
+        }
+
         private (MockPlaylist PlayListSource, DummySoundPlayerFactory SpFactory) CreatePlaybackControlVmParams()
         {
             var soundFiles = new List<SoundFile>

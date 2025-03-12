@@ -181,6 +181,14 @@
                     VerticalAlignment="Center"
                     Command="{Binding PlaybackControlViewmodel.PlayNextCommand}"
                     Content="▷▷" />
+
+                <Button
+                    Width="60"
+                    Margin="30,10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding PlaybackControlViewmodel.StopCommand}"
+                    Content="■" />
             </StackPanel>
 
             <StackPanel
