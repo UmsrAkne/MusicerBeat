@@ -7,14 +7,14 @@ namespace MusicerBeatTests.Models
     public class SequentialSelectorTest
     {
         [Test]
-        [TestCase(new[] { "C://t/file1.mp3", "C://t/file2.mp3",}, new [] { "file1.mp3", "file2.mp3", null, })]
-        [TestCase(new[] { "C://t/file1.mp3", }, new [] { "file1.mp3", null, null, })]
-        [TestCase(new string [] {}, new string?[] { null, null, null, })]
+        [TestCase(new[] { "C://t/file1.mp3", "C://t/file2.mp3", }, new[] { "file1.mp3", "file2.mp3", null, })]
+        [TestCase(new[] { "C://t/file1.mp3", }, new[] { "file1.mp3", null, null, })]
+        [TestCase(new string[] { }, new string?[] { null, null, null, })]
         public void SelectSoundFile_Test(string[] paths, string[] expected)
         {
             var list = new ObservableCollection<SoundFile>(paths.Select(p => new SoundFile(p)));
             var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list));
-            var results = new []
+            var results = new[]
             {
                 s.SelectSoundFile()?.Name,
                 s.SelectSoundFile()?.Name,
@@ -22,14 +22,12 @@ namespace MusicerBeatTests.Models
             };
 
             CollectionAssert.AreEqual(expected, results);
-
-
         }
 
         [Test]
-        [TestCase(new[] { "C://t/file1.mp3", "C://t/file2.mp3",}, new [] { "file1.mp3", "file2.mp3", "file1.mp3", })]
-        [TestCase(new[] { "C://t/file1.mp3", }, new [] { "file1.mp3", "file1.mp3", "file1.mp3", })]
-        [TestCase(new string [] {}, new string?[] { null, null, null, })]
+        [TestCase(new[] { "C://t/file1.mp3", "C://t/file2.mp3", }, new[] { "file1.mp3", "file2.mp3", "file1.mp3", })]
+        [TestCase(new[] { "C://t/file1.mp3", }, new[] { "file1.mp3", "file1.mp3", "file1.mp3", })]
+        [TestCase(new string[] { }, new string?[] { null, null, null, })]
         public void SelectSoundFile_Loop_Test(string[] paths, string[] expected)
         {
             var list = new ObservableCollection<SoundFile>(paths.Select(p => new SoundFile(p)));
@@ -38,7 +36,7 @@ namespace MusicerBeatTests.Models
                 IsLoop = true,
             };
 
-            var results = new []
+            var results = new[]
             {
                 s.SelectSoundFile()?.Name,
                 s.SelectSoundFile()?.Name,
@@ -53,68 +51,68 @@ namespace MusicerBeatTests.Models
             yield return new TestCaseData(
                 new List<SoundFile>
                 {
-                    new (@"C:\t\a.mp3"){ IsSkip = false, },
-                    new (@"C:\t\b.mp3"){ IsSkip = false, },
-                    new (@"C:\t\c.mp3"){ IsSkip = false, },
+                    new (@"C:\t\a.mp3") { IsSkip = false, },
+                    new (@"C:\t\b.mp3") { IsSkip = false, },
+                    new (@"C:\t\c.mp3") { IsSkip = false, },
                 },
                 new List<string> { "a.mp3", "b.mp3", "c.mp3", },
-                false
-            ).SetName("スキップなしの通常再生");
+                false)
+                .SetName("スキップなしの通常再生");
 
             yield return new TestCaseData(
                 new List<SoundFile>
                 {
-                    new (@"C:\t\a.mp3"){ IsSkip = true, },
-                    new (@"C:\t\b.mp3"){ IsSkip = false, },
-                    new (@"C:\t\c.mp3"){ IsSkip = false, },
+                    new (@"C:\t\a.mp3") { IsSkip = true, },
+                    new (@"C:\t\b.mp3") { IsSkip = false, },
+                    new (@"C:\t\c.mp3") { IsSkip = false, },
                 },
                 new List<string> { "b.mp3", "c.mp3", null, },
-                false
-            ).SetName("最初の曲をスキップ");
+                false)
+                .SetName("最初の曲をスキップ");
 
             yield return new TestCaseData(
                 new List<SoundFile>
                 {
-                    new (@"C:\t\a.mp3"){ IsSkip = false, },
-                    new (@"C:\t\b.mp3"){ IsSkip = true, },
-                    new (@"C:\t\c.mp3"){ IsSkip = false, },
+                    new (@"C:\t\a.mp3") { IsSkip = false, },
+                    new (@"C:\t\b.mp3") { IsSkip = true, },
+                    new (@"C:\t\c.mp3") { IsSkip = false, },
                 },
                 new List<string> { "a.mp3", "c.mp3", null, },
-                false
-            ).SetName("真ん中にある曲をスキップ");
+                false)
+                .SetName("真ん中にある曲をスキップ");
 
             yield return new TestCaseData(
                 new List<SoundFile>
                 {
-                    new (@"C:\t\a.mp3"){ IsSkip = false, },
-                    new (@"C:\t\b.mp3"){ IsSkip = false, },
-                    new (@"C:\t\c.mp3"){ IsSkip = true, },
+                    new (@"C:\t\a.mp3") { IsSkip = false, },
+                    new (@"C:\t\b.mp3") { IsSkip = false, },
+                    new (@"C:\t\c.mp3") { IsSkip = true, },
                 },
                 new List<string> { "a.mp3", "b.mp3", null, },
-                false
-            ).SetName("最後の曲をスキップ");
+                false)
+                .SetName("最後の曲をスキップ");
 
             yield return new TestCaseData(
                 new List<SoundFile>
                 {
-                    new (@"C:\t\a.mp3"){ IsSkip = false, },
-                    new (@"C:\t\b.mp3"){ IsSkip = false, },
-                    new (@"C:\t\c.mp3"){ IsSkip = true, },
+                    new (@"C:\t\a.mp3") { IsSkip = false, },
+                    new (@"C:\t\b.mp3") { IsSkip = false, },
+                    new (@"C:\t\c.mp3") { IsSkip = true, },
                 },
                 new List<string> { "a.mp3", "b.mp3", "a.mp3", },
-                true
-            ).SetName("最後の曲をスキップ(ループ)");
+                true)
+                .SetName("最後の曲をスキップ(ループ)");
 
             yield return new TestCaseData(
                 new List<SoundFile>
                 {
-                    new (@"C:\t\a.mp3"){ IsSkip = true, },
-                    new (@"C:\t\b.mp3"){ IsSkip = false, },
-                    new (@"C:\t\c.mp3"){ IsSkip = false, },
+                    new (@"C:\t\a.mp3") { IsSkip = true, },
+                    new (@"C:\t\b.mp3") { IsSkip = false, },
+                    new (@"C:\t\c.mp3") { IsSkip = false, },
                 },
                 new List<string> { "b.mp3", "c.mp3", "b.mp3", },
-                true
-            ).SetName("最初の曲をスキップ(ループ)");
+                true)
+                .SetName("最初の曲をスキップ(ループ)");
         }
 
         [TestCaseSource(nameof(SequentialSelectorCases))]
@@ -129,7 +127,7 @@ namespace MusicerBeatTests.Models
                 IsLoop = loopFlag,
             };
 
-            var results = new []
+            var results = new[]
             {
                 s.SelectSoundFile()?.Name,
                 s.SelectSoundFile()?.Name,
@@ -146,7 +144,7 @@ namespace MusicerBeatTests.Models
             {
                 new ("C://t/a.mp3"),
                 new ("C://t/b.mp3"),
-                new ("C://t/c.mp3") {IsSkip = true, },
+                new ("C://t/c.mp3") { IsSkip = true, },
             };
 
             var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list))
@@ -156,7 +154,7 @@ namespace MusicerBeatTests.Models
 
             var expected = new[] { "a.mp3", "b.mp3", null, };
 
-            var results = new []
+            var results = new[]
             {
                 s.SelectSoundFile()?.Name,
                 s.SelectSoundFile()?.Name,
@@ -171,9 +169,9 @@ namespace MusicerBeatTests.Models
         {
             var list = new ObservableCollection<SoundFile>()
             {
-                new SoundFile("C://t/file1.mp3"),
-                new SoundFile("C://t/file2.mp3"),
-                new SoundFile("C://t/file3.mp3"),
+                new ("C://t/file1.mp3"),
+                new ("C://t/file2.mp3"),
+                new ("C://t/file3.mp3"),
             };
 
             var f2 = list[1];
@@ -185,7 +183,7 @@ namespace MusicerBeatTests.Models
 
             s.SetIndexBySoundFile(f2);
 
-            var results = new []
+            var results = new[]
             {
                 s.SelectSoundFile()?.Name,
                 s.SelectSoundFile()?.Name,
@@ -193,7 +191,7 @@ namespace MusicerBeatTests.Models
             };
 
             // 最後に file2 を取得したのと同じ状態になるわけだから、次の取得は file3 で、ループなしならばその次は null。
-            CollectionAssert.AreEqual(new []{"file3.mp3", null, null, }, results);
+            CollectionAssert.AreEqual(new[] { "file3.mp3", null, null, }, results);
         }
 
         [Test]
@@ -201,9 +199,9 @@ namespace MusicerBeatTests.Models
         {
             var list = new ObservableCollection<SoundFile>()
             {
-                new SoundFile("C://t/file1.mp3") { TotalMilliSeconds = 20000, },
-                new SoundFile("C://t/file2.mp3") { TotalMilliSeconds = 10000, },
-                new SoundFile("C://t/file3.mp3") { TotalMilliSeconds = 5000, },
+                new ("C://t/file1.mp3") { TotalMilliSeconds = 20000, },
+                new ("C://t/file2.mp3") { TotalMilliSeconds = 10000, },
+                new ("C://t/file3.mp3") { TotalMilliSeconds = 5000, },
             };
 
             var s = new SequentialSelector(new ReadOnlyObservableCollection<SoundFile>(list))

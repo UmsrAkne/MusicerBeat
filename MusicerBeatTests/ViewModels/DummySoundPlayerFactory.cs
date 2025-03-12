@@ -4,13 +4,19 @@ namespace MusicerBeatTests.ViewModels
 {
     public class DummySoundPlayerFactory : ISoundPlayerFactory
     {
+        public List<MockSoundPlayer> CreatedPlayers { get; } = new ();
+
+        public List<MockSoundPlayer> PlayerSource { get; set; } = new ();
+
+        public int CreatedCount { get; set; }
+
         /// <summary>
         /// `MockSoundPlayer` を取得します。<br/>
         /// `PlayerSource` に要素が入っている場合、実行のたびに `PlayerSource` から順番にアイテムを取り出して取得します。<br/>
         /// それ以外の場合は MockSoundPlayer を新しく生成して取得します。<br/>
         /// いずれの場合も、返したインスタンスを `CreatedPlayers` に追加します。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>生成した`DummySoundPlayer`を取得します。</returns>
         public ISoundPlayer CreateSoundPlayer()
         {
             if (PlayerSource.Count != 0)
@@ -24,11 +30,5 @@ namespace MusicerBeatTests.ViewModels
             CreatedPlayers.Add(s);
             return s;
         }
-
-        public List<MockSoundPlayer> CreatedPlayers { get; } = new ();
-
-        public List<MockSoundPlayer> PlayerSource { get; set; } = new ();
-
-        public int CreatedCount { get; set; }
     }
 }

@@ -15,21 +15,21 @@ namespace MusicerBeatTests.Models
                     new MockSoundPlayer() { PlayingSound = new SoundFile("a.mp3"), },
                     new MockSoundPlayer() { PlayingSound = new SoundFile("b.mp3"), },
                 },
-                "a --> b"
-            ).SetName("クロスフェード中");
+                "a --> b")
+                .SetName("クロスフェード中");
 
             yield return new TestCaseData(
                 new List<ISoundPlayer>
                 {
                     new MockSoundPlayer() { PlayingSound = new SoundFile("a.mp3"), },
                 },
-                "a"
-            ).SetName("一曲だけ再生中");
+                "a")
+                .SetName("一曲だけ再生中");
 
             yield return new TestCaseData(
                 new List<ISoundPlayer>(),
-                string.Empty
-            ).SetName("停止状態");
+                string.Empty)
+                .SetName("停止状態");
         }
 
         [TestCaseSource(nameof(ShowFileNameTestCases))]
@@ -44,8 +44,8 @@ namespace MusicerBeatTests.Models
         {
             yield return new TestCaseData(
                 new List<ISoundPlayer>(),
-                string.Empty
-            ).SetName("停止状態");
+                string.Empty)
+                .SetName("停止状態");
 
             yield return new TestCaseData(
                 new List<ISoundPlayer>
@@ -57,8 +57,8 @@ namespace MusicerBeatTests.Models
                         CurrentTime = TimeSpan.FromSeconds(1),
                     },
                 },
-                "00:00:01"
-            ).SetName("単体再生");
+                "00:00:01")
+                .SetName("単体再生");
 
             yield return new TestCaseData(
                 new List<ISoundPlayer>
@@ -76,8 +76,8 @@ namespace MusicerBeatTests.Models
                         CurrentTime = TimeSpan.FromSeconds(2),
                     },
                 },
-                "00:00:04 --> 00:00:02"
-            ).SetName("２曲再生");
+                "00:00:04 --> 00:00:02")
+                .SetName("２曲再生");
         }
 
         [TestCaseSource(nameof(TestCases))]

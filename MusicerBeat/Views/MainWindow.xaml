@@ -162,15 +162,26 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Button
+            <StackPanel
                 Grid.Row="0"
                 Grid.Column="0"
-                Width="100"
-                Margin="15"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Command="{Binding PlaybackControlViewmodel.PlayCommand}"
-                Content="▷" />
+                Orientation="Horizontal">
+                <Button
+                    Width="100"
+                    Margin="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding PlaybackControlViewmodel.PlayCommand}"
+                    Content="▷" />
+
+                <Button
+                    Width="80"
+                    Margin="10"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Command="{Binding PlaybackControlViewmodel.PlayNextCommand}"
+                    Content="▷▷" />
+            </StackPanel>
 
             <StackPanel
                 Grid.Row="0"

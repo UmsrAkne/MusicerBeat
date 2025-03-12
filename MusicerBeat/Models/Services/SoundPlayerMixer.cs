@@ -101,6 +101,23 @@ namespace MusicerBeat.Models.Services
             SoundPlayers.Clear();
         }
 
+        /// <summary>
+        /// クロスフェード中に実行した時、古いプレイヤーの方を停止して、強制的に `PlayingStatus.Playing`に移行します。
+        /// </summary>
+        public void StopOldSound()
+        {
+            if (GetStatus() != PlayingStatus.Fading)
+            {
+                return;
+            }
+
+            var p = SoundPlayers.First();
+            p.Stop();
+            SoundPlayers.Remove(p);
+
+            SoundPlayers.Last().Volume = DefaultVolume;
+        }
+
         private void RemovePlayer(object sender, EventArgs e)
         {
             if (sender is ISoundPlayer p)
