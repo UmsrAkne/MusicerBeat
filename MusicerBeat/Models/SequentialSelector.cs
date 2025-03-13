@@ -97,5 +97,13 @@ namespace MusicerBeat.Models
         {
             return NextIsLongSound(setting.RequiredCrossFadeDuration, TimeSpan.Zero, TimeSpan.Zero);
         }
+
+        /// <summary>
+        /// このセレクターが保持しているインデックスをリセットします。
+        /// </summary>
+        public void ResetIndex()
+        {
+            Index = 0;
+        }
     }
 }

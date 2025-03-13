@@ -67,6 +67,8 @@ namespace MusicerBeat.ViewModels
 
         public DelegateCommand PlayNextCommand => new (Next);
 
+        public DelegateCommand StopCommand => new (Stop);
+
         public PlayingStatus PlayingStatus
         {
             get => playingStatus;
