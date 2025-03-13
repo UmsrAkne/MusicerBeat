@@ -12,6 +12,7 @@
     Height="600"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="{StaticResource DarkBgBrush}"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -19,6 +20,12 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+            </Style>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -36,7 +43,10 @@
             Grid.Column="0"
             Grid.ColumnSpan="3">
             <Menu />
-            <TextBox Text="{Binding DirectoryAreaViewModel.CurrentStorage.FullPath}" />
+            <TextBox
+                Background="Transparent"
+                Foreground="{StaticResource ForegroundBrush}"
+                Text="{Binding DirectoryAreaViewModel.CurrentStorage.FullPath}" />
 
         </StackPanel>
 
@@ -44,6 +54,7 @@
         <ListBox
             Grid.Row="1"
             Grid.Column="0"
+            Background="Transparent"
             ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}"
             SelectedItem="{Binding DirectoryAreaViewModel.SelectedItem}">
 
@@ -58,7 +69,7 @@
                         <StackPanel.InputBindings>
                             <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
                         </StackPanel.InputBindings>
-                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Foreground="{StaticResource ForegroundBrush}" Text="{Binding Name}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -77,12 +88,19 @@
             Grid.Column="2"
             HorizontalContentAlignment="Stretch"
             AlternationCount="2"
+            Background="Transparent"
             ItemsSource="{Binding SoundListViewModel.Sounds}"
             SelectedItem="{Binding SoundListViewModel.SelectedItem}">
 
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundFile}">
                     <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+                            </Style>
+                        </Grid.Resources>
+
                         <Grid.InputBindings>
                             <MouseBinding
                                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.PlaybackControlViewmodel.PlayCommand}"
@@ -141,7 +159,7 @@
                 <Style TargetType="ListBoxItem">
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="WhiteSmoke" />
+                            <Setter Property="Background" Value="{StaticResource MediumBgBrush}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -224,6 +242,13 @@
                 HorizontalAlignment="Stretch"
                 Background="LightSteelBlue">
                 <StackPanel Margin="4" Orientation="Horizontal">
+
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="Black" />
+                        </Style>
+                    </StackPanel.Resources>
+
                     <TextBlock Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
                     <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
                 </StackPanel>
