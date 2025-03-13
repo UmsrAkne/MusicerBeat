@@ -51,7 +51,7 @@ namespace MusicerBeatTests.Models
             Assert.That(viewer.PlayingFileName, Is.EqualTo(string.Empty));
         }
 
-        private static IEnumerable<TestCaseData> TestCases()
+        private static IEnumerable<TestCaseData> CurrentTimeStringTestCases()
         {
             yield return new TestCaseData(
                 new List<ISoundPlayer>(),
@@ -91,7 +91,7 @@ namespace MusicerBeatTests.Models
                 .SetName("２曲再生");
         }
 
-        [TestCaseSource(nameof(TestCases))]
+        [TestCaseSource(nameof(CurrentTimeStringTestCases))]
         public void PlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedText)
         {
             var viewer = new PlaybackInformationViewer();
@@ -99,7 +99,7 @@ namespace MusicerBeatTests.Models
             Assert.That(viewer.PlaybackTimeString, Is.EqualTo(expectedText));
         }
 
-        [TestCaseSource(nameof(TestCases))]
+        [TestCaseSource(nameof(CurrentTimeStringTestCases))]
         public void ResetPlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedResult)
         {
             var viewer = new PlaybackInformationViewer();
