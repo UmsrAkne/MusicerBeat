@@ -40,6 +40,17 @@ namespace MusicerBeatTests.Models
             Assert.That(viewer.PlayingFileName, Is.EqualTo(expectedResult));
         }
 
+        [TestCaseSource(nameof(ShowFileNameTestCases))]
+        public void ResetFileNameTest(IEnumerable<ISoundPlayer> players, string expectedResult)
+        {
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
+
+            // 空のリストをセットし、空文字が出力されるかを確認する。
+            viewer.UpdatePlaybackInformation(new List<ISoundPlayer>());
+            Assert.That(viewer.PlayingFileName, Is.EqualTo(string.Empty));
+        }
+
         private static IEnumerable<TestCaseData> TestCases()
         {
             yield return new TestCaseData(
@@ -86,6 +97,17 @@ namespace MusicerBeatTests.Models
             var viewer = new PlaybackInformationViewer();
             viewer.UpdatePlaybackInformation(players);
             Assert.That(viewer.PlaybackTimeString, Is.EqualTo(expectedText));
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ResetPlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedResult)
+        {
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
+
+            // 空のリストをセットし、空文字が出力されるかを確認する。
+            viewer.UpdatePlaybackInformation(new List<ISoundPlayer>());
+            Assert.That(viewer.PlaybackTimeString, Is.EqualTo(string.Empty));
         }
     }
 }
