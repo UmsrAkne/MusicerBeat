@@ -23,6 +23,7 @@
         <Grid.Resources>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+                <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
             </Style>
         </Grid.Resources>
 
@@ -45,6 +46,7 @@
             <Menu />
             <TextBox
                 Background="Transparent"
+                FontSize="{StaticResource BasicFontSize}"
                 Foreground="{StaticResource ForegroundBrush}"
                 Text="{Binding DirectoryAreaViewModel.CurrentStorage.FullPath}" />
 
@@ -69,7 +71,10 @@
                         <StackPanel.InputBindings>
                             <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
                         </StackPanel.InputBindings>
-                        <TextBlock Foreground="{StaticResource ForegroundBrush}" Text="{Binding Name}" />
+                        <TextBlock
+                            FontSize="{StaticResource BasicFontSize}"
+                            Foreground="{StaticResource ForegroundBrush}"
+                            Text="{Binding Name}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -98,6 +103,7 @@
                         <Grid.Resources>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
+                                <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
                             </Style>
                         </Grid.Resources>
 
@@ -150,6 +156,7 @@
                         <TextBlock
                             Grid.Column="3"
                             Margin="5,0"
+                            FontSize="{StaticResource BasicFontSize}"
                             Text="{Binding TotalMilliSeconds, Converter={StaticResource IntToTimeSpanConverter}}" />
 
                     </Grid>
@@ -246,6 +253,7 @@
                     <StackPanel.Resources>
                         <Style TargetType="TextBlock">
                             <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
                         </Style>
                     </StackPanel.Resources>
 
