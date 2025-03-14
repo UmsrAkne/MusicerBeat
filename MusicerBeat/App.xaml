@@ -2,6 +2,7 @@
     x:Class="MusicerBeat.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="clr-namespace:MusicerBeat.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:system="clr-namespace:System;assembly=System.Runtime">
     <Application.Resources>
@@ -9,5 +10,6 @@
         <SolidColorBrush x:Key="MediumBgBrush" Color="#444460" />
         <SolidColorBrush x:Key="ForegroundBrush" Color="LightGray" />
         <system:Double x:Key="BasicFontSize">14.0</system:Double>
+        <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
     </Application.Resources>
 </prism:PrismApplication>

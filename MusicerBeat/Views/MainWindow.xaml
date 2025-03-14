@@ -17,7 +17,11 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-        <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/CustomTVControlTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
@@ -75,12 +79,13 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="Template" Value="{StaticResource TreeViewCustomControlTemplate}" />
                 </Style>
             </TreeView.ItemContainerStyle>
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:SoundStorage}" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Margin="4,1" Orientation="Horizontal">
                         <StackPanel.InputBindings>
                             <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
                         </StackPanel.InputBindings>
