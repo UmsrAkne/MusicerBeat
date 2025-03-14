@@ -45,7 +45,26 @@ namespace MusicerBeat.ViewModels
             private set => SetProperty(ref soundStorages, value);
         }
 
-        public SoundStorage SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
+        // public SoundStorage SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
+
+        public SoundStorage SelectedItem
+        {
+            get => selectedItem;
+            set
+            {
+                if (selectedItem != null)
+                {
+                    selectedItem.IsSelected = false; // 前の選択を解除
+                }
+
+                SetProperty(ref selectedItem, value);
+
+                if (selectedItem != null)
+                {
+                    selectedItem.IsSelected = true; // 新しい選択を設定
+                }
+            }
+        }
 
         /// <summary>
         /// 現在作業中の Storage です。ファイルシステムでのカレントディレクトリに当たります。

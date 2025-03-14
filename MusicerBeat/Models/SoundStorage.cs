@@ -11,6 +11,8 @@ namespace MusicerBeat.Models
         private string fullPath;
         private string name;
         private IEnumerable<SoundFile> soundFilesCache;
+        private bool isSelected;
+        private bool isExpanded;
 
         public string FullPath
         {
@@ -30,6 +32,10 @@ namespace MusicerBeat.Models
             get => Path.GetFileName(FullPath);
             private set => SetProperty(ref name, value);
         }
+
+        public bool IsSelected { get => isSelected; set => SetProperty(ref isSelected, value); }
+
+        public bool IsExpanded { get => isExpanded; set => SetProperty(ref isExpanded, value); }
 
         private bool IsM3U { get; set; }
 

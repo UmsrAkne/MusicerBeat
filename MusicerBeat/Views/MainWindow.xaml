@@ -53,23 +53,28 @@
         </StackPanel>
 
         <!--  ディレクトリエリア  -->
-        <ListBox
+        <TreeView
             Grid.Row="1"
             Grid.Column="0"
             Background="Transparent"
-            ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}"
-            SelectedItem="{Binding DirectoryAreaViewModel.SelectedItem}">
+            ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}">
 
-            <ListBox.InputBindings>
+            <TreeView.InputBindings>
                 <KeyBinding Key="Back" Command="{Binding DirectoryAreaViewModel.DirectoryUpCommand}" />
                 <KeyBinding Key="Return" Command="{Binding DirectoryAreaViewModel.OpenDirectoryCommand}" />
-            </ListBox.InputBindings>
+            </TreeView.InputBindings>
 
-            <ListBox.ItemTemplate>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+
+            <TreeView.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundStorage}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
+                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
                         </StackPanel.InputBindings>
                         <TextBlock
                             FontSize="{StaticResource BasicFontSize}"
@@ -77,8 +82,8 @@
                             Text="{Binding Name}" />
                     </StackPanel>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </TreeView.ItemTemplate>
+        </TreeView>
 
         <GridSplitter
             Grid.Row="1"
