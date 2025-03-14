@@ -132,11 +132,14 @@ namespace MusicerBeat.ViewModels
         /// <param name="path">移動先のストレージのフルパスを入力します。</param>
         private void OpenDirectory(string path)
         {
-            var currently = new SoundStorage() { FullPath = path, };
-            CurrentStorage = currently;
-            var items = currently.GetChildren();
-            originalSoundStorages.Clear();
-            originalSoundStorages.AddRange(items);
+            CurrentStorage = new SoundStorage() { FullPath = path, };
+
+            // var items = currently.GetChildren();
+
+            SelectedItem.Children = SelectedItem.GetChildren().ToList();
+            SelectedItem.IsExpanded = true;
+            // originalSoundStorages.Clear();
+            // originalSoundStorages.AddRange(items);
         }
 
         private async Task EnqueueRequest(IEnumerable<SoundFile> sounds)

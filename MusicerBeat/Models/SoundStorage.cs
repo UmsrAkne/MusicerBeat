@@ -13,6 +13,7 @@ namespace MusicerBeat.Models
         private IEnumerable<SoundFile> soundFilesCache;
         private bool isSelected;
         private bool isExpanded;
+        private List<SoundStorage> children;
 
         public string FullPath
         {
@@ -36,6 +37,8 @@ namespace MusicerBeat.Models
         public bool IsSelected { get => isSelected; set => SetProperty(ref isSelected, value); }
 
         public bool IsExpanded { get => isExpanded; set => SetProperty(ref isExpanded, value); }
+
+        public List<SoundStorage> Children { get => children; set => SetProperty(ref children, value); }
 
         private bool IsM3U { get; set; }
 
