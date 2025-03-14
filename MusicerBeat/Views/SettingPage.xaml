@@ -11,6 +11,10 @@
     Background="{StaticResource DarkBgBrush}"
     mc:Ignorable="d">
 
+    <Page.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CloseCommand}" />
+    </Page.InputBindings>
+
     <Page.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
@@ -23,7 +27,11 @@
         </Style>
     </Page.Resources>
 
-    <Border BorderBrush="DeepSkyBlue" BorderThickness="1">
+    <Border
+        BorderBrush="DeepSkyBlue"
+        BorderThickness="1"
+        FocusManager.FocusedElement="{Binding ElementName=DefaultTextBox}">
+
         <Grid Margin="10">
 
             <Grid.RowDefinitions>
@@ -34,7 +42,7 @@
 
             <StackPanel Grid.Row="0">
                 <TextBlock Text="Root Directory" />
-                <TextBox Text="{Binding ApplicationSetting.RootDirectoryPath}" />
+                <TextBox x:Name="DefaultTextBox" Text="{Binding ApplicationSetting.RootDirectoryPath}" />
 
                 <Border Width="0" Margin="0,5" />
 
@@ -61,7 +69,7 @@
                 <Button
                     Width="150"
                     Command="{Binding CloseCommand}"
-                    Content="Close" />
+                    Content="Close (Escape)" />
             </StackPanel>
 
         </Grid>
