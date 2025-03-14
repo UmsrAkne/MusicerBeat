@@ -19,6 +19,7 @@
 
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="{StaticResource MediumBgBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
         </Style>
     </Page.Resources>
 
