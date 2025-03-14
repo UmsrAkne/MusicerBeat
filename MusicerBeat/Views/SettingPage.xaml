@@ -33,7 +33,7 @@
 
             <StackPanel Grid.Row="0">
                 <TextBlock Text="Root Directory" />
-                <TextBox />
+                <TextBox Text="{Binding ApplicationSetting.RootDirectoryPath}" />
 
                 <Border Width="0" Margin="0,5" />
 

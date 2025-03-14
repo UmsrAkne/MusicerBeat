@@ -24,6 +24,7 @@ namespace MusicerBeat.ViewModels
 
         public void OnDialogClosed()
         {
+            ApplicationSetting.SaveToXml(ApplicationSetting.SettingFileName);
         }
 
         public void OnDialogOpened(IDialogParameters parameters)

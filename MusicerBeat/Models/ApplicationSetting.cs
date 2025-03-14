@@ -1,10 +1,14 @@
 using System;
+using System.IO;
+using System.Xml.Serialization;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
 {
     public class ApplicationSetting : BindableBase
     {
+        public static readonly string SettingFileName = "setting.xml";
+
         private TimeSpan frontCut = TimeSpan.Zero;
         private TimeSpan backCut = TimeSpan.Zero;
         private TimeSpan crossFadeDuration = TimeSpan.Zero;
@@ -24,6 +28,25 @@ namespace MusicerBeat.Models
         {
             get => rootDirectoryPath;
             set => SetProperty(ref rootDirectoryPath, value);
+        }
+
+        public static ApplicationSetting LoadFromXml(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return new ApplicationSetting();
+            }
+
+            var serializer = new XmlSerializer(typeof(ApplicationSetting));
+            using var reader = new StreamReader(filePath);
+            return (ApplicationSetting)serializer.Deserialize(reader);
+        }
+
+        public void SaveToXml(string filePath)
+        {
+            var serializer = new XmlSerializer(typeof(ApplicationSetting));
+            using var writer = new StreamWriter(filePath);
+            serializer.Serialize(writer, this);
         }
     }
 }

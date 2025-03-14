@@ -32,15 +32,21 @@ namespace MusicerBeat.ViewModels
 
             dialogService = containerProvider.Resolve<IDialogService>();
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
+
+            ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
+
             SetDummies();
         }
 
         public DelegateCommand ShowSettingPageCommand => new DelegateCommand(() =>
         {
             dialogService.ShowDialog(nameof(SettingPage), new DialogParameters(), _ => { });
+            ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
         });
 
         public TextWrapper Title { get; set; } = new ();
+
+        public ApplicationSetting ApplicationSetting { get; set; } = new ();
 
         public DirectoryAreaViewModel DirectoryAreaViewModel
         {
