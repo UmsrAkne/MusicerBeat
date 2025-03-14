@@ -24,6 +24,13 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding
+            Key="OemComma"
+            Command="{Binding ShowSettingPageCommand}"
+            Modifiers="Control" />
+    </Window.InputBindings>
+
     <Grid>
         <Grid.Resources>
             <Style TargetType="TextBlock">
