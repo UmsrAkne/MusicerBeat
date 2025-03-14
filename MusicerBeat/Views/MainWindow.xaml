@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MusicerBeat.Models"
     xmlns:prism="http://prismlibrary.com/"
@@ -16,7 +17,11 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-        <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/CustomTVControlTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
@@ -53,32 +58,48 @@
         </StackPanel>
 
         <!--  ディレクトリエリア  -->
-        <ListBox
+        <TreeView
             Grid.Row="1"
             Grid.Column="0"
             Background="Transparent"
-            ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}"
-            SelectedItem="{Binding DirectoryAreaViewModel.SelectedItem}">
+            ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}">
 
-            <ListBox.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedItemChanged">
+                    <i:InvokeCommandAction Command="{Binding DirectoryAreaViewModel.RaiseSelectionChangedEventCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}, Path=SelectedItem}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <TreeView.InputBindings>
                 <KeyBinding Key="Back" Command="{Binding DirectoryAreaViewModel.DirectoryUpCommand}" />
                 <KeyBinding Key="Return" Command="{Binding DirectoryAreaViewModel.OpenDirectoryCommand}" />
-            </ListBox.InputBindings>
+            </TreeView.InputBindings>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:SoundStorage}">
-                    <StackPanel Orientation="Horizontal">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="Template" Value="{StaticResource TreeViewCustomControlTemplate}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:SoundStorage}" ItemsSource="{Binding Children}">
+                    <StackPanel Margin="4,1" Orientation="Horizontal">
                         <StackPanel.InputBindings>
-                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
+                            <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}, Path=DataContext.DirectoryAreaViewModel.OpenDirectoryCommand}" Gesture="LeftDoubleClick" />
                         </StackPanel.InputBindings>
                         <TextBlock
                             FontSize="{StaticResource BasicFontSize}"
                             Foreground="{StaticResource ForegroundBrush}"
                             Text="{Binding Name}" />
                     </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                </HierarchicalDataTemplate>
+
+                <!-- <DataTemplate DataType="{x:Type models:SoundStorage}"> -->
+                <!-- </DataTemplate> -->
+            </TreeView.ItemTemplate>
+        </TreeView>
 
         <GridSplitter
             Grid.Row="1"
