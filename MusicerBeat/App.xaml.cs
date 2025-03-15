@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Databases;
+using MusicerBeat.ViewModels;
 using MusicerBeat.Views;
 using Prism.Ioc;
 
@@ -23,6 +24,8 @@ namespace MusicerBeat
 
             containerRegistry.RegisterSingleton<DatabaseContext>();
             containerRegistry.RegisterSingleton<SoundFileService>();
+
+            containerRegistry.RegisterDialog<SettingPage, SettingPageViewModel>();
 
             var d = Container.Resolve<DatabaseContext>();
             d.Database.EnsureCreated();

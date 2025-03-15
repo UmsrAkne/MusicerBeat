@@ -1,8 +1,11 @@
 ﻿using System.Diagnostics;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Services;
+using MusicerBeat.Views;
+using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 
 namespace MusicerBeat.ViewModels
 {
@@ -12,6 +15,7 @@ namespace MusicerBeat.ViewModels
         private DirectoryAreaViewModel directoryAreaViewModel;
         private SoundListViewModel soundListViewModel;
         private PlaybackControlViewmodel playbackControlViewmodel;
+        private IDialogService dialogService;
 
         public MainWindowViewModel()
         {
@@ -26,11 +30,23 @@ namespace MusicerBeat.ViewModels
             directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test", containerProvider);
             soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
 
+            dialogService = containerProvider.Resolve<IDialogService>();
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
+
+            ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
+
             SetDummies();
         }
 
+        public DelegateCommand ShowSettingPageCommand => new DelegateCommand(() =>
+        {
+            dialogService.ShowDialog(nameof(SettingPage), new DialogParameters(), _ => { });
+            ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
+        });
+
         public TextWrapper Title { get; set; } = new ();
+
+        public ApplicationSetting ApplicationSetting { get; set; } = new ();
 
         public DirectoryAreaViewModel DirectoryAreaViewModel
         {
