@@ -175,7 +175,7 @@
                         </Condition.Value>
                     </Condition>
                 </MultiTrigger.Conditions>
-                <Setter TargetName="Bd" Property="Panel.Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                <Setter TargetName="Bd" Property="Panel.Background" Value="RoyalBlue" />
                 <Setter Property="TextElement.Foreground">
                     <Setter.Value>
                         <DynamicResource ResourceKey="{x:Static SystemColors.ControlTextBrushKey}" />
