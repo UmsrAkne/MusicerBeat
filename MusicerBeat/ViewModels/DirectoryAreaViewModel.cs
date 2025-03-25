@@ -28,7 +28,7 @@ namespace MusicerBeat.ViewModels
         public DirectoryAreaViewModel(string rootPath)
         {
             CurrentStorage = new SoundStorage() { FullPath = rootPath, };
-            originalSoundStorages = new ObservableCollection<SoundStorage>();
+            originalSoundStorages = new ObservableCollection<SoundStorage>(CurrentStorage.GetChildren());
             SoundStorages = new ReadOnlyObservableCollection<SoundStorage>(originalSoundStorages);
         }
 
