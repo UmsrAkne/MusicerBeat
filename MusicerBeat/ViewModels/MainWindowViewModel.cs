@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Services;
 using MusicerBeat.Views;
@@ -12,10 +13,10 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowViewModel : BindableBase
     {
+        private readonly IDialogService dialogService;
         private DirectoryAreaViewModel directoryAreaViewModel;
         private SoundListViewModel soundListViewModel;
         private PlaybackControlViewmodel playbackControlViewmodel;
-        private IDialogService dialogService;
 
         public MainWindowViewModel()
         {
@@ -27,15 +28,19 @@ namespace MusicerBeat.ViewModels
 
         public MainWindowViewModel(IContainerProvider containerProvider)
         {
-            directoryAreaViewModel = new DirectoryAreaViewModel(@"C:\test", containerProvider);
+            ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
+
+            var rootDirectoryPath = ApplicationSetting.RootDirectoryPath;
+            if (string.IsNullOrWhiteSpace(rootDirectoryPath) || !Directory.Exists(rootDirectoryPath))
+            {
+                rootDirectoryPath = @"C:\";
+            }
+
+            directoryAreaViewModel = new DirectoryAreaViewModel(rootDirectoryPath, containerProvider);
             soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
 
             dialogService = containerProvider.Resolve<IDialogService>();
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
-
-            ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
-
-            SetDummies();
         }
 
         public DelegateCommand ShowSettingPageCommand => new DelegateCommand(() =>

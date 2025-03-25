@@ -7,6 +7,44 @@ namespace MusicerBeatTests.Models
     [TestFixture]
     public class PlaybackInformationViewerTest
     {
+        [TestCaseSource(nameof(ShowFileNameTestCases))]
+        public void ShowFileNameTest(IEnumerable<ISoundPlayer> players, string expectedResult)
+        {
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
+            Assert.That(viewer.PlayingFileName, Is.EqualTo(expectedResult));
+        }
+
+        [TestCaseSource(nameof(ShowFileNameTestCases))]
+        public void ResetFileNameTest(IEnumerable<ISoundPlayer> players, string expectedResult)
+        {
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
+
+            // 空のリストをセットし、空文字が出力されるかを確認する。
+            viewer.UpdatePlaybackInformation(new List<ISoundPlayer>());
+            Assert.That(viewer.PlayingFileName, Is.EqualTo(string.Empty));
+        }
+
+        [TestCaseSource(nameof(CurrentTimeStringTestCases))]
+        public void PlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedText)
+        {
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
+            Assert.That(viewer.PlaybackTimeString, Is.EqualTo(expectedText));
+        }
+
+        [TestCaseSource(nameof(CurrentTimeStringTestCases))]
+        public void ResetPlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedResult)
+        {
+            var viewer = new PlaybackInformationViewer();
+            viewer.UpdatePlaybackInformation(players);
+
+            // 空のリストをセットし、空文字が出力されるかを確認する。
+            viewer.UpdatePlaybackInformation(new List<ISoundPlayer>());
+            Assert.That(viewer.PlaybackTimeString, Is.EqualTo(string.Empty));
+        }
+
         private static IEnumerable<TestCaseData> ShowFileNameTestCases()
         {
             yield return new TestCaseData(
@@ -30,25 +68,6 @@ namespace MusicerBeatTests.Models
                 new List<ISoundPlayer>(),
                 string.Empty)
                 .SetName("停止状態");
-        }
-
-        [TestCaseSource(nameof(ShowFileNameTestCases))]
-        public void ShowFileNameTest(IEnumerable<ISoundPlayer> players, string expectedResult)
-        {
-            var viewer = new PlaybackInformationViewer();
-            viewer.UpdatePlaybackInformation(players);
-            Assert.That(viewer.PlayingFileName, Is.EqualTo(expectedResult));
-        }
-
-        [TestCaseSource(nameof(ShowFileNameTestCases))]
-        public void ResetFileNameTest(IEnumerable<ISoundPlayer> players, string expectedResult)
-        {
-            var viewer = new PlaybackInformationViewer();
-            viewer.UpdatePlaybackInformation(players);
-
-            // 空のリストをセットし、空文字が出力されるかを確認する。
-            viewer.UpdatePlaybackInformation(new List<ISoundPlayer>());
-            Assert.That(viewer.PlayingFileName, Is.EqualTo(string.Empty));
         }
 
         private static IEnumerable<TestCaseData> CurrentTimeStringTestCases()
@@ -89,25 +108,6 @@ namespace MusicerBeatTests.Models
                 },
                 "00:00:04 --> 00:00:02")
                 .SetName("２曲再生");
-        }
-
-        [TestCaseSource(nameof(CurrentTimeStringTestCases))]
-        public void PlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedText)
-        {
-            var viewer = new PlaybackInformationViewer();
-            viewer.UpdatePlaybackInformation(players);
-            Assert.That(viewer.PlaybackTimeString, Is.EqualTo(expectedText));
-        }
-
-        [TestCaseSource(nameof(CurrentTimeStringTestCases))]
-        public void ResetPlaybackTimeStringTest(IEnumerable<ISoundPlayer> players, string expectedResult)
-        {
-            var viewer = new PlaybackInformationViewer();
-            viewer.UpdatePlaybackInformation(players);
-
-            // 空のリストをセットし、空文字が出力されるかを確認する。
-            viewer.UpdatePlaybackInformation(new List<ISoundPlayer>());
-            Assert.That(viewer.PlaybackTimeString, Is.EqualTo(string.Empty));
         }
     }
 }
