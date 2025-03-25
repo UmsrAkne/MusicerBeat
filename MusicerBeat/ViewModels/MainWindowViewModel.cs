@@ -41,8 +41,6 @@ namespace MusicerBeat.ViewModels
 
             dialogService = containerProvider.Resolve<IDialogService>();
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
-
-            SetDummies();
         }
 
         public DelegateCommand ShowSettingPageCommand => new DelegateCommand(() =>
