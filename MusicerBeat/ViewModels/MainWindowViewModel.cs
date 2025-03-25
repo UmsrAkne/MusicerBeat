@@ -13,10 +13,10 @@ namespace MusicerBeat.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowViewModel : BindableBase
     {
+        private readonly IDialogService dialogService;
         private DirectoryAreaViewModel directoryAreaViewModel;
         private SoundListViewModel soundListViewModel;
         private PlaybackControlViewmodel playbackControlViewmodel;
-        private IDialogService dialogService;
 
         public MainWindowViewModel()
         {
