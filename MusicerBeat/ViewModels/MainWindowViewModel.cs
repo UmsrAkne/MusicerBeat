@@ -43,15 +43,14 @@ namespace MusicerBeat.ViewModels
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
         }
 
-        public DelegateCommand ShowSettingPageCommand => new DelegateCommand(() =>
+        public DelegateCommand ShowSettingPageCommand => new (() =>
         {
             dialogService.ShowDialog(nameof(SettingPage), new DialogParameters(), _ => { });
             ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
+            PlaybackControlViewmodel.ApplySetting(ApplicationSetting);
         });
 
         public TextWrapper Title { get; set; } = new ();
-
-        public ApplicationSetting ApplicationSetting { get; set; } = new ();
 
         public DirectoryAreaViewModel DirectoryAreaViewModel
         {
@@ -70,6 +69,8 @@ namespace MusicerBeat.ViewModels
             get => playbackControlViewmodel;
             set => SetProperty(ref playbackControlViewmodel, value);
         }
+
+        private ApplicationSetting ApplicationSetting { get; set; } = new ();
 
         [Conditional("DEBUG")]
         private void SetDummies()

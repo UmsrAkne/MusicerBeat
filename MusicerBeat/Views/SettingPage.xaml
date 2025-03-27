@@ -2,6 +2,7 @@
     x:Class="MusicerBeat.Views.SettingPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MusicerBeat.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:MusicerBeat.ViewModels"
@@ -25,6 +26,8 @@
             <Setter Property="Background" Value="{StaticResource MediumBgBrush}" />
             <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}" />
         </Style>
+
+        <converters:SecToTimeSpanConverter x:Key="SecToTimeSpanConverter" />
     </Page.Resources>
 
     <Border
@@ -47,17 +50,17 @@
                 <Border Width="0" Margin="0,5" />
 
                 <TextBlock Text="CrossFade Duration (Sec)" />
-                <TextBox />
+                <TextBox Text="{Binding ApplicationSetting.CrossFadeDuration, Converter={StaticResource SecToTimeSpanConverter}}" />
 
                 <Border Width="0" Margin="0,5" />
 
                 <TextBlock Text="Front Cut (Sec)" />
-                <TextBox />
+                <TextBox Text="{Binding ApplicationSetting.FrontCut, Converter={StaticResource SecToTimeSpanConverter}}" />
 
                 <Border Width="0" Margin="0,5" />
 
                 <TextBlock Text="Back Cut (Sec)" />
-                <TextBox />
+                <TextBox Text="{Binding ApplicationSetting.BackCut, Converter={StaticResource SecToTimeSpanConverter}}" />
             </StackPanel>
 
             <StackPanel
