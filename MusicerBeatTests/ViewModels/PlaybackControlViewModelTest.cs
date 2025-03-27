@@ -416,6 +416,31 @@ namespace MusicerBeatTests.ViewModels
             Assert.That(vm.GetStatus(), Is.EqualTo(PlayingStatus.Stopped));
         }
 
+        [Test]
+        public void ApplySetting_Test()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            vmParams.PlayListSource.OriginalList[0].TotalMilliSeconds = 5000;
+            vmParams.PlayListSource.OriginalList[1].TotalMilliSeconds = 5000;
+
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.ApplySetting(new ApplicationSetting() { CrossFadeDuration = TimeSpan.FromSeconds(2), });
+            vm.PlayCommand.Execute(null);
+
+            var reverseList = vmParams.SpFactory.PlayerSource.AsEnumerable().Reverse().ToList();
+
+            // `timeIncrements` 時間を経過させた時点でのステータスを比較する
+            var timeIncrements = new[] { 3, 2, 3, };
+            var expectedStatuses = new[] { PlayingStatus.Fading, PlayingStatus.Playing, PlayingStatus.Stopped, };
+
+            for (var i = 0; i < timeIncrements.Length; i++)
+            {
+                reverseList.ForEach(p => p.CurrentTime += TimeSpan.FromSeconds(timeIncrements[i]));
+                vm.UpdatePlaybackState();
+                Assert.That(vm.GetStatus(), Is.EqualTo(expectedStatuses[i]));
+            }
+        }
+
         private (MockPlaylist PlayListSource, DummySoundPlayerFactory SpFactory) CreatePlaybackControlVmParams()
         {
             var soundFiles = new List<SoundFile>

@@ -131,6 +131,13 @@ namespace MusicerBeat.ViewModels
                 : PlayingStatus.Stopped;
         }
 
+        public void ApplySetting(ApplicationSetting setting)
+        {
+            CrossFadeSetting.FrontCut = setting.FrontCut;
+            CrossFadeSetting.BackCut = setting.BackCut;
+            CrossFadeSetting.Duration = setting.CrossFadeDuration;
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             foreach (var d in soundPlayers.Select(p => p as IDisposable))

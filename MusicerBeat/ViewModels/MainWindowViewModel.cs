@@ -47,6 +47,7 @@ namespace MusicerBeat.ViewModels
         {
             dialogService.ShowDialog(nameof(SettingPage), new DialogParameters(), _ => { });
             ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
+            PlaybackControlViewmodel.ApplySetting(ApplicationSetting);
         });
 
         public TextWrapper Title { get; set; } = new ();
