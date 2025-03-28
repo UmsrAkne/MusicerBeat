@@ -108,11 +108,11 @@
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsEmpty}" Value="False">
-                                            <Setter Property="Text" Value="↓" />
+                                            <Setter Property="Text" Value="[+]" />
                                         </DataTrigger>
 
-                                        <DataTrigger Binding="{Binding IsEmpty}" Value="True">
-                                            <Setter Property="Text" Value="" />
+                                        <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                            <Setter Property="Text" Value="[-]" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
