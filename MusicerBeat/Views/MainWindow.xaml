@@ -68,6 +68,7 @@
         <TreeView
             Grid.Row="1"
             Grid.Column="0"
+            AlternationCount="2"
             Background="Transparent"
             ItemsSource="{Binding DirectoryAreaViewModel.SoundStorages}">
 
@@ -87,6 +88,13 @@
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="Template" Value="{StaticResource TreeViewCustomControlTemplate}" />
+
+                    <Style.Triggers>
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="{StaticResource MediumBgBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+
                 </Style>
             </TreeView.ItemContainerStyle>
 
