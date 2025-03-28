@@ -14,6 +14,7 @@ namespace MusicerBeat.Models
         private bool isSelected;
         private bool isExpanded;
         private List<SoundStorage> children;
+        private bool isEmpty = true;
 
         public string FullPath
         {
@@ -24,6 +25,18 @@ namespace MusicerBeat.Models
                 {
                     IsM3U = Path.GetExtension(fullPath)?.ToLower() == ".m3u";
                     RaisePropertyChanged(nameof(Name));
+                }
+
+                if (IsM3U)
+                {
+                    IsEmpty = false;
+                    return;
+                }
+
+                var dirInfo = new DirectoryInfo(value);
+                if (dirInfo.Exists)
+                {
+                    IsEmpty = !dirInfo.GetDirectories().Any() && !dirInfo.GetFiles().Any();
                 }
             }
         }
@@ -39,6 +52,8 @@ namespace MusicerBeat.Models
         public bool IsExpanded { get => isExpanded; set => SetProperty(ref isExpanded, value); }
 
         public List<SoundStorage> Children { get => children; set => SetProperty(ref children, value); }
+
+        public bool IsEmpty { get => isEmpty; private set => SetProperty(ref isEmpty, value); }
 
         private bool IsM3U { get; set; }
 
