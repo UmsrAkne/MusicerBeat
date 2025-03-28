@@ -36,7 +36,10 @@ namespace MusicerBeat.Models
                 var dirInfo = new DirectoryInfo(value);
                 if (dirInfo.Exists)
                 {
-                    IsEmpty = !dirInfo.GetDirectories().Any() && !dirInfo.GetFiles().Any();
+                    var dirs = dirInfo.GetDirectories();
+                    var files = dirInfo.GetFiles().Where(s => SoundFile.IsSoundFile(s.FullName) || s.Extension.StartsWith(".m3u"));
+
+                    IsEmpty = !dirs.Any() && !files.Any();
                 }
             }
         }
