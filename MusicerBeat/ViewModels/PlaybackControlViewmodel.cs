@@ -25,8 +25,6 @@ namespace MusicerBeat.ViewModels
 
         public PlaybackControlViewmodel(IPlaylist playlist, ISoundPlayerFactory soundPlayerFactory)
         {
-            CrossFadeSetting = new CrossFadeSetting() { Duration = TimeSpan.FromSeconds(10), };
-
             PlayListSource = playlist;
             timer = new DispatcherTimer { Interval = CrossFadeSetting.FadeProcessInterval, };
             timer.Tick += Timer_Tick;
