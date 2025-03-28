@@ -52,7 +52,20 @@ namespace MusicerBeat.Models
 
         public bool IsSelected { get => isSelected; set => SetProperty(ref isSelected, value); }
 
-        public bool IsExpanded { get => isExpanded; set => SetProperty(ref isExpanded, value); }
+        public bool IsExpanded
+        {
+            get => isExpanded;
+            set
+            {
+                if (IsEmpty)
+                {
+                    SetProperty(ref isExpanded, false);
+                    return;
+                }
+
+                SetProperty(ref isExpanded, value);
+            }
+        }
 
         public List<SoundStorage> Children { get => children; set => SetProperty(ref children, value); }
 
