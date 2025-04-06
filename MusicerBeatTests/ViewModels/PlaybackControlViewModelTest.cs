@@ -374,6 +374,23 @@ namespace MusicerBeatTests.ViewModels
             Assert.That(vm.PlaybackInformationViewer.PlayingFileName, Is.EqualTo("b"));
         }
 
+        /// <summary>
+        /// StopCommand によって、インデックスが 0 に初期化されるかを確認する。
+        /// </summary>
+        [Test]
+        public void StopCommand_ResetIndexToZero()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+            vm.CrossFadeSetting = new CrossFadeSetting { Duration = TimeSpan.FromSeconds(1), };
+
+            vm.PlayCommand.Execute(null);
+            Assert.That(vmParams.PlayListSource.SequentialSelector.Index, Is.EqualTo(1));
+
+            vm.StopCommand.Execute();
+            Assert.That(vmParams.PlayListSource.SequentialSelector.Index, Is.EqualTo(0));
+        }
+
         [Test]
         public void StopCommand_WhenPlaying_Test()
         {

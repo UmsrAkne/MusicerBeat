@@ -183,6 +183,7 @@ namespace MusicerBeat.ViewModels
         private void Stop()
         {
             soundPlayerMixer.Stop();
+            PlayListSource.SequentialSelector.ResetIndex();
             PlaybackInformationViewer.UpdatePlaybackInformation(soundPlayers);
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using MusicerBeat.Utils;
 using Prism.Mvvm;
 
 namespace MusicerBeat.Models
@@ -36,8 +37,10 @@ namespace MusicerBeat.Models
                 var dirInfo = new DirectoryInfo(value);
                 if (dirInfo.Exists)
                 {
-                    var dirs = dirInfo.GetDirectories();
-                    var files = dirInfo.GetFiles().Where(s => SoundFile.IsSoundFile(s.FullName) || s.Extension.StartsWith(".m3u"));
+                    var dirs = FileSystemWrapper.GetSubDirectories(dirInfo.FullName).Select(p => new DirectoryInfo(p));
+                    var files = FileSystemWrapper.GetFiles(dirInfo.FullName)
+                        .Select(p => new FileInfo(p))
+                        .Where(s => SoundFile.IsSoundFile(s.FullName) || s.Extension.StartsWith(".m3u"));
 
                     IsEmpty = !dirs.Any() && !files.Any();
                 }
@@ -81,9 +84,9 @@ namespace MusicerBeat.Models
                 return list;
             }
 
-            list.AddRange(Directory.GetDirectories(FullPath).Select(d => new SoundStorage() { FullPath = d, }));
+            list.AddRange(FileSystemWrapper.GetSubDirectories(FullPath).Select(d => new SoundStorage() { FullPath = d, }));
             list.AddRange(
-                Directory.GetFiles(FullPath)
+                FileSystemWrapper.GetFiles(FullPath)
                     .Where(s => Path.GetExtension(s).ToLower() == ".m3u")
                     .Select(s => new SoundStorage() { FullPath = s, }));
 
@@ -103,7 +106,7 @@ namespace MusicerBeat.Models
                 return soundFilesCache;
             }
 
-            soundFilesCache = Directory.GetFiles(FullPath)
+            soundFilesCache = FileSystemWrapper.GetFiles(FullPath)
                 .Where(SoundFile.IsSoundFile)
                 .Select(d =>
                 {
