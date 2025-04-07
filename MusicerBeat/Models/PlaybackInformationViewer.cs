@@ -10,6 +10,8 @@ namespace MusicerBeat.Models
         private readonly string shortTimeFormat = @"hh\:mm\:ss";
         private string playingFileName = string.Empty;
         private string playbackTimeString = string.Empty;
+        private int currentSoundLength;
+        private int currentSoundPosition;
 
         public string PlayingFileName
         {
@@ -23,6 +25,24 @@ namespace MusicerBeat.Models
             set => SetProperty(ref playbackTimeString, value);
         }
 
+        /// <summary>
+        /// 現在再生中のサウンドの長さを秒数で取得します。
+        /// </summary>
+        public int CurrentSoundLength
+        {
+            get => currentSoundLength;
+            private set => SetProperty(ref currentSoundLength, value);
+        }
+
+        /// <summary>
+        /// 現在再生中のサウンドの再生位置を秒数で取得します。
+        /// </summary>
+        public int CurrentSoundPosition
+        {
+            get => currentSoundPosition;
+            set => SetProperty(ref currentSoundPosition, value);
+        }
+
         public void UpdatePlaybackInformation(IEnumerable<ISoundPlayer> players)
         {
             var list = players.ToList();
@@ -30,7 +50,17 @@ namespace MusicerBeat.Models
             {
                 PlayingFileName = string.Empty;
                 PlaybackTimeString = string.Empty;
+                CurrentSoundLength = 0;
+                CurrentSoundPosition = 0;
                 return;
+            }
+
+            if (list.Count >= 1)
+            {
+                CurrentSoundLength = (int)list.First().Duration.TotalSeconds;
+                CurrentSoundPosition = (int)list.First().CurrentTime.TotalSeconds;
+                System.Diagnostics.Debug.WriteLine($"{CurrentSoundLength}(PlaybackInformationViewer : 57)");
+                System.Diagnostics.Debug.WriteLine($"{CurrentSoundPosition}(PlaybackInformationViewer : 58)");
             }
 
             if (list.Count == 1)
