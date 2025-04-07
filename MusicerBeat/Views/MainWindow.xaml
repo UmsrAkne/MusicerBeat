@@ -46,7 +46,7 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.6*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
@@ -302,17 +302,25 @@
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Stretch"
                 Background="LightSteelBlue">
-                <StackPanel Margin="4" Orientation="Horizontal">
+                <StackPanel>
+                    <StackPanel Margin="4" Orientation="Horizontal">
 
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
-                        </Style>
-                    </StackPanel.Resources>
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
+                            </Style>
+                        </StackPanel.Resources>
 
-                    <TextBlock Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
-                    <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
+                        <TextBlock Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
+                        <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
+                    </StackPanel>
+
+                    <ProgressBar
+                        Height="3"
+                        Maximum="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundLength}"
+                        Minimum="0"
+                        Value="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
                 </StackPanel>
             </Border>
         </Grid>
