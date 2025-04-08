@@ -104,6 +104,7 @@ namespace MusicerBeat.Models.Databases
 
                 soundFile.ListenCount = s.ListenCount;
                 soundFile.TotalMilliSeconds = s.TotalMilliSeconds;
+                soundFile.IsSkip = s.IsSkip;
             }
         }
 
