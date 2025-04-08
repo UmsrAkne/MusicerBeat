@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
 using MusicerBeat.Models;
+using MusicerBeat.Models.Commands;
+using MusicerBeat.Models.Databases;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace MusicerBeat.ViewModels
@@ -10,6 +13,7 @@ namespace MusicerBeat.ViewModels
     {
         private readonly ISoundCollectionSource soundCollectionSource;
         private readonly ObservableCollection<SoundFile> originalSounds = new ();
+        private readonly SoundFileService soundFileService;
         private SoundFile selectedItem;
 
         public SoundListViewModel(ISoundCollectionSource soundCollectionSource)
@@ -21,11 +25,29 @@ namespace MusicerBeat.ViewModels
             SequentialSelector = new SequentialSelector(Sounds);
         }
 
+        public SoundListViewModel(DirectoryAreaViewModel directoryAreaViewModel, IContainerProvider containerProvider)
+        : this(directoryAreaViewModel)
+        {
+            soundFileService = containerProvider.Resolve<SoundFileService>();
+        }
+
         public ReadOnlyObservableCollection<SoundFile> Sounds { get; set; }
 
         public SequentialSelector SequentialSelector { get; set; }
 
         public SoundFile SelectedItem { get => selectedItem; set => SetProperty(ref selectedItem, value); }
+
+        /// <summary>
+        /// 選択中のサウンドの Skip プロパティをトグルします。
+        /// </summary>
+        public AsyncDelegateCommand ToggleSkipCommand => new AsyncDelegateCommand(async () =>
+        {
+            if (SelectedItem != null)
+            {
+                SelectedItem.IsSkip = !SelectedItem.IsSkip;
+                await soundFileService.ToggleSkip(SelectedItem);
+            }
+        });
 
         public void AddSoundFile(SoundFile item)
         {

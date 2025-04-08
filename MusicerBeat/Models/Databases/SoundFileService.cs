@@ -106,5 +106,17 @@ namespace MusicerBeat.Models.Databases
                 soundFile.TotalMilliSeconds = s.TotalMilliSeconds;
             }
         }
+
+        public async Task ToggleSkip(SoundFile soundFile)
+        {
+            var all = await soundFileRepository.GetAllAsync();
+            var s = all.FirstOrDefault(sound => sound.FullName == soundFile.FullName);
+            if (s != null)
+            {
+                s.IsSkip = soundFile.IsSkip;
+            }
+
+            await soundFileRepository.UpdateAsync(s);
+        }
     }
 }
