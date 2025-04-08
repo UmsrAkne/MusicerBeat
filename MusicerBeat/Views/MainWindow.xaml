@@ -151,6 +151,13 @@
             ItemsSource="{Binding SoundListViewModel.Sounds}"
             SelectedItem="{Binding SoundListViewModel.SelectedItem}">
 
+            <ListBox.InputBindings>
+                <KeyBinding
+                    Key="S"
+                    Command="{Binding SoundListViewModel.ToggleSkipCommand}"
+                    Modifiers="Control" />
+            </ListBox.InputBindings>
+
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:SoundFile}">
                     <Grid>
@@ -202,10 +209,20 @@
                             <TextBlock Padding="3,0" Text="{Binding ListenCount}" />
                         </Border>
 
-                        <TextBlock
-                            Grid.Column="2"
-                            Margin="5,0"
-                            Text="{Binding NameWithoutExtension}" />
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <TextBlock Margin="5,0" Text="{Binding NameWithoutExtension}" />
+                            <TextBlock Margin="5,0" Foreground="IndianRed">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSkip}" Value="True">
+                                                <Setter Property="Text" Value="(Skip)" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
 
                         <TextBlock
                             Grid.Column="3"

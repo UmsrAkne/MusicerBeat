@@ -37,7 +37,7 @@ namespace MusicerBeat.ViewModels
             }
 
             directoryAreaViewModel = new DirectoryAreaViewModel(rootDirectoryPath, containerProvider);
-            soundListViewModel = new SoundListViewModel(directoryAreaViewModel);
+            soundListViewModel = new SoundListViewModel(directoryAreaViewModel, containerProvider);
 
             dialogService = containerProvider.Resolve<IDialogService>();
             PlaybackControlViewmodel = new PlaybackControlViewmodel(soundListViewModel, new SoundPlayerFactory(), containerProvider);
