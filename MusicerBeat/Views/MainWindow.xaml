@@ -55,7 +55,9 @@
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="3">
-            <Menu />
+            <Menu>
+                <MenuItem Command="{Binding ShowSettingPageCommand}" Header="Setting" />
+            </Menu>
             <TextBox
                 Background="Transparent"
                 FontSize="{StaticResource BasicFontSize}"
