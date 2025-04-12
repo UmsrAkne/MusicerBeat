@@ -295,6 +295,15 @@
                 Margin="15"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
+                <ToggleButton Margin="15,0" IsChecked="{Binding PlaybackControlViewmodel.PlayListSource.SequentialSelector.IsLoop}">
+                    <ToggleButton.Content>
+                        <TextBlock
+                            Margin="8,0"
+                            Foreground="Black"
+                            Text="Loop" />
+                    </ToggleButton.Content>
+                </ToggleButton>
+
                 <TextBlock Text="Vol :" />
                 <Border Margin="5,0" />
                 <Slider
