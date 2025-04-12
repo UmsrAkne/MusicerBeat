@@ -79,6 +79,15 @@ namespace MusicerBeat.ViewModels
             ReIndex();
         });
 
+        public DelegateCommand SortPlayListByFileNameCommand => new (() =>
+        {
+            var sorted = originalSounds.OrderBy(s => s.Name).ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(sorted);
+
+            ReIndex();
+        });
+
         public void AddSoundFile(SoundFile item)
         {
             originalSounds.Add(item);
