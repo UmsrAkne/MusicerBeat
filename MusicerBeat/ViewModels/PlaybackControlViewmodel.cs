@@ -73,7 +73,7 @@ namespace MusicerBeat.ViewModels
             set => SetProperty(ref playingStatus, value);
         }
 
-        private IPlaylist PlayListSource { get; init; }
+        public IPlaylist PlayListSource { get; init; }
 
         public PlayingStatus GetStatus()
         {

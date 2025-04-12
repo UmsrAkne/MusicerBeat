@@ -1,7 +1,10 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Commands;
 using MusicerBeat.Models.Databases;
+using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 
@@ -49,6 +52,42 @@ namespace MusicerBeat.ViewModels
             }
         });
 
+        public DelegateCommand ReversePlayListCommand => new (() =>
+        {
+            var r = originalSounds.Reverse().ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(r);
+
+            ReIndex();
+        });
+
+        public DelegateCommand ShufflePlayListCommand => new (() =>
+        {
+            var random = originalSounds.OrderBy(_ => Guid.NewGuid()).ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(random);
+
+            ReIndex();
+        });
+
+        public DelegateCommand SortPlayListByPlayCountCommand => new (() =>
+        {
+            var sorted = originalSounds.OrderBy(s => s.ListenCount).ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(sorted);
+
+            ReIndex();
+        });
+
+        public DelegateCommand SortPlayListByFileNameCommand => new (() =>
+        {
+            var sorted = originalSounds.OrderBy(s => s.Name).ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(sorted);
+
+            ReIndex();
+        });
+
         public void AddSoundFile(SoundFile item)
         {
             originalSounds.Add(item);
@@ -59,6 +98,11 @@ namespace MusicerBeat.ViewModels
             originalSounds.Clear();
             originalSounds.AddRange(soundCollectionSource.GetSounds());
 
+            ReIndex();
+        }
+
+        private void ReIndex()
+        {
             for (var i = 0; i < originalSounds.Count; i++)
             {
                 originalSounds[i].Index = i + 1;

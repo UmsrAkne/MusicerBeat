@@ -1,10 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Prism.Mvvm;
 
 namespace MusicerBeat.Models
 {
-    public class SequentialSelector
+    public class SequentialSelector : BindableBase
     {
         private bool isLoop;
 
@@ -15,7 +16,11 @@ namespace MusicerBeat.Models
 
         public int Index { get; private set; }
 
-        public bool IsLoop { get => isLoop; set => isLoop = value; }
+        public bool IsLoop
+        {
+            get => isLoop;
+            set => SetProperty(ref isLoop, value);
+        }
 
         private ReadOnlyObservableCollection<SoundFile> SoundFiles { get; set; }
 
