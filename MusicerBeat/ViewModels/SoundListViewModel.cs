@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Commands;
 using MusicerBeat.Models.Databases;
+using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 
@@ -49,6 +51,15 @@ namespace MusicerBeat.ViewModels
             }
         });
 
+        public DelegateCommand ReversePlayListCommand => new (() =>
+        {
+            var r = originalSounds.Reverse().ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(r);
+
+            ReIndex();
+        });
+
         public void AddSoundFile(SoundFile item)
         {
             originalSounds.Add(item);
@@ -59,6 +70,11 @@ namespace MusicerBeat.ViewModels
             originalSounds.Clear();
             originalSounds.AddRange(soundCollectionSource.GetSounds());
 
+            ReIndex();
+        }
+
+        private void ReIndex()
+        {
             for (var i = 0; i < originalSounds.Count; i++)
             {
                 originalSounds[i].Index = i + 1;
