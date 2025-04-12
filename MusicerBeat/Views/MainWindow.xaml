@@ -58,6 +58,7 @@
             <Menu>
                 <MenuItem Command="{Binding ShowSettingPageCommand}" Header="Setting" />
                 <MenuItem Header="Sort">
+                    <MenuItem Command="{Binding SoundListViewModel.ShufflePlayListCommand}" Header="Shuffle Playlist" />
                     <MenuItem Command="{Binding SoundListViewModel.ReversePlayListCommand}" Header="Revers Playlist" />
                 </MenuItem>
             </Menu>

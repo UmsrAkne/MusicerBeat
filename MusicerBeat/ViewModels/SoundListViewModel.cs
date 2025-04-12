@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MusicerBeat.Models;
@@ -56,6 +57,15 @@ namespace MusicerBeat.ViewModels
             var r = originalSounds.Reverse().ToList();
             originalSounds.Clear();
             originalSounds.AddRange(r);
+
+            ReIndex();
+        });
+
+        public DelegateCommand ShufflePlayListCommand => new (() =>
+        {
+            var random = originalSounds.OrderBy(_ => Guid.NewGuid()).ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(random);
 
             ReIndex();
         });
