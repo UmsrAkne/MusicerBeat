@@ -70,6 +70,15 @@ namespace MusicerBeat.ViewModels
             ReIndex();
         });
 
+        public DelegateCommand SortPlayListByPlayCountCommand => new (() =>
+        {
+            var sorted = originalSounds.OrderBy(s => s.ListenCount).ToList();
+            originalSounds.Clear();
+            originalSounds.AddRange(sorted);
+
+            ReIndex();
+        });
+
         public void AddSoundFile(SoundFile item)
         {
             originalSounds.Add(item);

@@ -60,6 +60,7 @@
                 <MenuItem Header="Sort">
                     <MenuItem Command="{Binding SoundListViewModel.ShufflePlayListCommand}" Header="Shuffle Playlist" />
                     <MenuItem Command="{Binding SoundListViewModel.ReversePlayListCommand}" Header="Revers Playlist" />
+                    <MenuItem Command="{Binding SoundListViewModel.SortPlayListByPlayCountCommand}" Header="Sort by play count (Asc)" />
                 </MenuItem>
             </Menu>
             <TextBox
