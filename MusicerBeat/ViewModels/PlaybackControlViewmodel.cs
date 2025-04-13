@@ -53,6 +53,7 @@ namespace MusicerBeat.ViewModels
             {
                 SetProperty(ref volume, value);
                 VolumeController.CurrentVolume = value;
+                VolumeController.SetVolume(value);
                 soundPlayerMixer.DefaultVolume = value;
             }
         }
