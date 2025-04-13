@@ -125,6 +125,18 @@ namespace MusicerBeat.Models.Services
         }
 
         /// <summary>
+        /// このコントローラーが保持している全てのサウンドプレイヤーの音量を設定します。
+        /// </summary>
+        /// <param name="volume">設定する音量を 0 - 1.0 の間で指定します。</param>
+        public void SetVolume(float volume)
+        {
+            foreach (var p in SoundPlayers)
+            {
+                p.Volume = volume;
+            }
+        }
+
+        /// <summary>
         /// このクラスが保持する ISoundPlayer オブジェクトのリストをクリアします。
         /// </summary>
         public void Clear()
