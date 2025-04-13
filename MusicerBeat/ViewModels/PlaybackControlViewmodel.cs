@@ -163,6 +163,7 @@ namespace MusicerBeat.ViewModels
             soundFile ??= PlayListSource.SequentialSelector.SelectSoundFile();
             if (soundFile == null)
             {
+                PlayListSource.SequentialSelector.ResetIndex();
                 return;
             }
 
