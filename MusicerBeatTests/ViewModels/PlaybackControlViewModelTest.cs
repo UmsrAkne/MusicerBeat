@@ -458,6 +458,23 @@ namespace MusicerBeatTests.ViewModels
             }
         }
 
+        [Test]
+        public void ResetIndexToZero_WhenCompletePlaySounds()
+        {
+            var vmParams = CreatePlaybackControlVmParams();
+            var vm = new PlaybackControlViewmodel(vmParams.PlayListSource, vmParams.SpFactory);
+
+            var indexTransitions = new List<int>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                vm.PlayCommand.Execute(null);
+                indexTransitions.Add(vmParams.PlayListSource.SequentialSelector.Index);
+            }
+
+            CollectionAssert.AreEqual(new int[] { 1, 2, 0, }, indexTransitions);
+        }
+
         private (MockPlaylist PlayListSource, DummySoundPlayerFactory SpFactory) CreatePlaybackControlVmParams()
         {
             var soundFiles = new List<SoundFile>
