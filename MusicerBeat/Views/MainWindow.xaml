@@ -317,6 +317,7 @@
                     HorizontalAlignment="Right"
                     Maximum="1.0"
                     Minimum="0"
+                    Ticks="0.01"
                     Value="{Binding PlaybackControlViewmodel.Volume}">
                     <Slider.Style>
                         <Style TargetType="Slider">
