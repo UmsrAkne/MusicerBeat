@@ -6,6 +6,7 @@
     xmlns:converters="clr-namespace:MusicerBeat.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MusicerBeat.Models"
     xmlns:prism="http://prismlibrary.com/"
@@ -277,26 +278,31 @@
                 <Button
                     Width="100"
                     Margin="10"
+                    Padding="2"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Command="{Binding PlaybackControlViewmodel.PlayCommand}"
-                    Content="▷" />
+                    Command="{Binding PlaybackControlViewmodel.PlayCommand}">
+                    <iconPacks:PackIconMaterial Height="18" Kind="Play" />
+                </Button>
 
                 <Button
                     Width="80"
                     Margin="10"
+                    Padding="2"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Command="{Binding PlaybackControlViewmodel.PlayNextCommand}"
-                    Content="▷▷" />
+                    Command="{Binding PlaybackControlViewmodel.PlayNextCommand}">
+                    <iconPacks:PackIconMaterial Height="18" Kind="SkipNext" />
+                </Button>
 
                 <Button
                     Width="60"
-                    Margin="30,10"
+                    Padding="2"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Command="{Binding PlaybackControlViewmodel.StopCommand}"
-                    Content="■" />
+                    Command="{Binding PlaybackControlViewmodel.StopCommand}">
+                    <iconPacks:PackIconMaterial Height="18" Kind="Stop" />
+                </Button>
             </StackPanel>
 
             <StackPanel
