@@ -5,11 +5,24 @@
     xmlns:models="clr-namespace:MusicerBeat.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
     <Application.Resources>
-        <SolidColorBrush x:Key="DarkBgBrush" Color="#333340" />
-        <SolidColorBrush x:Key="MediumBgBrush" Color="#444460" />
-        <SolidColorBrush x:Key="ForegroundBrush" Color="LightGray" />
-        <system:Double x:Key="BasicFontSize">14.0</system:Double>
-        <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  MahApps のテーマとアクセントカラー  -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+
+                <!--  アクセントカラー（例: Blue）  -->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="DarkBgBrush" Color="#333340" />
+            <SolidColorBrush x:Key="MediumBgBrush" Color="#444460" />
+            <SolidColorBrush x:Key="ForegroundBrush" Color="LightGray" />
+            <system:Double x:Key="BasicFontSize">14.0</system:Double>
+            <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+        </ResourceDictionary>
     </Application.Resources>
+
 </prism:PrismApplication>
