@@ -320,15 +320,17 @@
                     </ToggleButton.Content>
                 </ToggleButton>
 
-                <TextBlock Text="Vol :" />
+                <TextBlock VerticalAlignment="Center" Text="Vol :" />
                 <TextBlock
                     Width="25"
+                    VerticalAlignment="Center"
                     Text="{Binding PlaybackControlViewmodel.Volume, Converter={StaticResource VolumePercentageConverter}}"
                     TextAlignment="Center" />
                 <Border Margin="5,0" />
                 <Slider
                     Width="250"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     Maximum="1.0"
                     Minimum="0"
                     Ticks="0.01"
