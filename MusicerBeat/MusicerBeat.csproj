@@ -5,6 +5,7 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="MahApps.Metro" Version="3.0.0-rc0516" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.20" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.20" />
         <PackageReference Include="NAudio" Version="2.2.1" />
