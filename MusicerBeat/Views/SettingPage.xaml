@@ -69,10 +69,9 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
 
-                <Button
-                    Width="150"
-                    Command="{Binding CloseCommand}"
-                    Content="Close (Escape)" />
+                <Button Width="150" Command="{Binding CloseCommand}">
+                    <TextBlock Foreground="DimGray" Text="Close (Escape)" />
+                </Button>
             </StackPanel>
 
         </Grid>
