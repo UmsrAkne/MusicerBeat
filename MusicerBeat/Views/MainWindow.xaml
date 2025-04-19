@@ -101,6 +101,7 @@
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     <Setter Property="Template" Value="{StaticResource TreeViewCustomControlTemplate}" />
+                    <Setter Property="Margin" Value="1" />
 
                     <Style.Triggers>
                         <Trigger Property="AlternationIndex" Value="1">
@@ -367,7 +368,7 @@
                         <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
                     </StackPanel>
 
-                    <ProgressBar
+                    <controls:MetroProgressBar
                         Height="3"
                         Maximum="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundLength}"
                         Minimum="0"
