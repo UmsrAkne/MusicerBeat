@@ -75,6 +75,16 @@ namespace MusicerBeat.ViewModels
 
         private ApplicationSetting ApplicationSetting { get; set; } = new ();
 
+        /// <summary>
+        /// 現在の音量を ApplicationSetting に書き込み、xml ファイルに保存します。
+        /// このメソッドは主にアプリの終了直前に App.xaml.cs から呼び出されることを想定しています。
+        /// </summary>
+        public void SaveVolume()
+        {
+            ApplicationSetting.Volume = PlaybackControlViewmodel.Volume;
+            ApplicationSetting.SaveToXml(ApplicationSetting.SettingFileName);
+        }
+
         [Conditional("DEBUG")]
         private void SetDummies()
         {

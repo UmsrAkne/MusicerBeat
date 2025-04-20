@@ -135,6 +135,7 @@ namespace MusicerBeat.ViewModels
             CrossFadeSetting.FrontCut = setting.FrontCut;
             CrossFadeSetting.BackCut = setting.BackCut;
             CrossFadeSetting.Duration = setting.CrossFadeDuration;
+            Volume = setting.Volume;
         }
 
         protected virtual void Dispose(bool disposing)

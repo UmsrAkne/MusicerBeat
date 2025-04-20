@@ -12,9 +12,13 @@ namespace MusicerBeat
     /// </summary>
     public partial class App
     {
+        private MainWindowViewModel mainWindowVm;
+
         protected override Window CreateShell()
         {
-            return Container.Resolve<MainWindow>();
+            var window = Container.Resolve<MainWindow>();
+            mainWindowVm = window.DataContext as MainWindowViewModel;
+            return window;
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -29,6 +33,15 @@ namespace MusicerBeat
 
             var d = Container.Resolve<DatabaseContext>();
             d.Database.EnsureCreated();
+        }
+
+        /// <summary>
+        /// アプリケーションが終了する時のイベント
+        /// </summary>
+        /// <param name="e">入力される EventArgs</param>
+        protected override void OnExit(ExitEventArgs e)
+        {
+            mainWindowVm?.SaveVolume();
         }
     }
 }
