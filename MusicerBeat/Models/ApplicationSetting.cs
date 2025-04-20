@@ -13,6 +13,7 @@ namespace MusicerBeat.Models
         private TimeSpan backCut = TimeSpan.Zero;
         private TimeSpan crossFadeDuration = TimeSpan.Zero;
         private string rootDirectoryPath = string.Empty;
+        private float volume = 1.0f;
 
         public TimeSpan FrontCut { get => frontCut; set => SetProperty(ref frontCut, value); }
 
@@ -29,6 +30,8 @@ namespace MusicerBeat.Models
             get => rootDirectoryPath;
             set => SetProperty(ref rootDirectoryPath, value);
         }
+
+        public float Volume { get => volume; set => SetProperty(ref volume, value); }
 
         public static ApplicationSetting LoadFromXml(string filePath)
         {
