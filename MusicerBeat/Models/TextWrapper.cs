@@ -31,8 +31,8 @@ namespace MusicerBeat.Models
         {
             const int major = 1;
             const int minor = 3;
-            const int patch = 4;
-            const string date = "20250419";
+            const int patch = 5;
+            const string date = "20250420";
             const string suffixId = "a";
 
             Version = $"{major}.{minor}.{patch} ({date}{suffixId})";
