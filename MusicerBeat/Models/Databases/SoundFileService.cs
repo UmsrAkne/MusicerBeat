@@ -90,6 +90,31 @@ namespace MusicerBeat.Models.Databases
             return results;
         }
 
+        /// <summary>
+        /// Retrieves a page of listen history records sorted by most recent first.
+        /// </summary>
+        /// <param name="pageNumber">The page number to retrieve (1-based).</param>
+        /// <param name="pageSize">The number of records per page.</param>
+        /// <returns>A list of listen history records for the specified page.</returns>
+        public async Task<List<ListenHistory>> GetPagedListenHistoriesAsync(int pageNumber, int pageSize)
+        {
+            var all = await listenHistoryRepository.GetAllAsync();
+            var sorted = all.OrderByDescending(s => s.DateTime);
+            var paged = sorted
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            foreach (var lh in paged)
+            {
+                var file = await soundFileRepository.GetByIdAsync(lh.SoundFileId);
+                var soundFile = new SoundFile(file.FullName);
+                lh.SoundFileName = soundFile.Name;
+            }
+
+            return paged;
+        }
+
         public async Task LoadSoundInfo(IEnumerable<SoundFile> soundFiles)
         {
             var all = await GetSoundFilesAsync();
