@@ -30,6 +30,7 @@ namespace MusicerBeat
             containerRegistry.RegisterSingleton<SoundFileService>();
 
             containerRegistry.RegisterDialog<SettingPage, SettingPageViewModel>();
+            containerRegistry.RegisterDialog<HistoryPage, HistoryPageViewModel>();
 
             var d = Container.Resolve<DatabaseContext>();
             d.Database.EnsureCreated();
