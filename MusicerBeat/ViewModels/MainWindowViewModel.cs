@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using MusicerBeat.Models;
+using MusicerBeat.Models.Databases;
 using MusicerBeat.Models.Services;
 using MusicerBeat.Views;
 using Prism.Commands;
@@ -14,6 +15,7 @@ namespace MusicerBeat.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly IDialogService dialogService;
+        private readonly IContainerProvider containerProvider;
         private DirectoryAreaViewModel directoryAreaViewModel;
         private SoundListViewModel soundListViewModel;
         private PlaybackControlViewmodel playbackControlViewmodel;
@@ -28,6 +30,7 @@ namespace MusicerBeat.ViewModels
 
         public MainWindowViewModel(IContainerProvider containerProvider)
         {
+            this.containerProvider = containerProvider;
             ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
 
             var rootDirectoryPath = ApplicationSetting.RootDirectoryPath;
@@ -55,7 +58,12 @@ namespace MusicerBeat.ViewModels
 
         public DelegateCommand ShowHistoryPageCommand => new DelegateCommand(() =>
         {
-            dialogService.ShowDialog(nameof(HistoryPage), new DialogParameters(), _ => { });
+            var param = new DialogParameters
+            {
+                { nameof(SoundFileService), containerProvider.Resolve<SoundFileService>() },
+            };
+
+            dialogService.ShowDialog(nameof(HistoryPage), param, _ => { });
         });
 
         public TextWrapper Title { get; set; } = new ();

@@ -18,7 +18,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="1" Background="{StaticResource DarkBgBrush}" />
+        <ListBox
+            Grid.Row="1"
+            Background="{StaticResource DarkBgBrush}"
+            ItemsSource="{Binding ListenHistories}" />
 
         <Border
             Grid.Row="2"
