@@ -53,6 +53,11 @@ namespace MusicerBeat.ViewModels
             PlaybackControlViewmodel.ApplySetting(ApplicationSetting);
         });
 
+        public DelegateCommand ShowHistoryPageCommand => new DelegateCommand(() =>
+        {
+            dialogService.ShowDialog(nameof(HistoryPage), new DialogParameters(), _ => { });
+        });
+
         public TextWrapper Title { get; set; } = new ();
 
         public DirectoryAreaViewModel DirectoryAreaViewModel
