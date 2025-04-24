@@ -99,7 +99,9 @@ namespace MusicerBeat.Models.Databases
         public async Task<List<ListenHistory>> GetPagedListenHistoriesAsync(int pageNumber, int pageSize)
         {
             var all = await listenHistoryRepository.GetAllAsync();
-            var sorted = all.OrderByDescending(s => s.DateTime);
+            var sorted = all.OrderByDescending(s => s.DateTime).ToList();
+            var maxPage = (int)Math.Ceiling((double)sorted.Count / pageSize);
+            pageNumber = Math.Min(pageNumber, maxPage);
             var paged = sorted
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

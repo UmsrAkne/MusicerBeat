@@ -24,15 +24,51 @@ namespace MusicerBeat.ViewModels
 
         public int PageNumber { get => pageNumber; set => SetProperty(ref pageNumber, value); }
 
-        public AsyncDelegateCommand ReloadHistoriesAsyncCommand => new (async () =>
+        public DelegateCommand<object> MovePageCommand => new ((pagingAction) =>
         {
-            var l = await soundFileService.GetPagedListenHistoriesAsync(pageNumber, pageSize);
-            ListenHistories.AddRange(l);
+            var pa = (PagingAction)pagingAction;
+            var oldPageNumber = PageNumber;
+            switch (pa)
+            {
+                case PagingAction.Next:
+                    if (ListenHistories.Count < pageSize)
+                    {
+                        return;
+                    }
+
+                    PageNumber++;
+                    break;
+                case PagingAction.Prev:
+                    if (PageNumber <= 1)
+                    {
+                        return;
+                    }
+
+                    PageNumber--;
+                    break;
+                case PagingAction.First:
+                    PageNumber = 1;
+                    break;
+            }
+
+            if (oldPageNumber == PageNumber)
+            {
+                return;
+            }
+
+            ReloadHistoriesAsyncCommand.Execute(null);
         });
 
         public DelegateCommand CloseCommand => new DelegateCommand(() =>
         {
             RequestClose?.Invoke(new DialogResult());
+        });
+
+        private AsyncDelegateCommand ReloadHistoriesAsyncCommand => new (async () =>
+        {
+            var l = await soundFileService.GetPagedListenHistoriesAsync(pageNumber, pageSize);
+            ListenHistories.Clear();
+            ListenHistories.AddRange(l);
         });
 
         public bool CanCloseDialog() => true;

@@ -64,6 +64,37 @@
                 Margin="10"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
+
+                <StackPanel Margin="40,0" Orientation="Horizontal">
+                    <Button
+                        Padding="20,0"
+                        Command="{Binding MovePageCommand}"
+                        CommandParameter="{x:Static models:PagingAction.First}"
+                        Content="← First" />
+                    <Border Width="0" Margin="20,0" />
+
+                    <Button
+                        Padding="15,0"
+                        Command="{Binding MovePageCommand}"
+                        CommandParameter="{x:Static models:PagingAction.Prev}"
+                        Content="← Prev" />
+                    <Border Width="0" Margin="10,0" />
+
+                    <Button
+                        Padding="15,0"
+                        Command="{Binding MovePageCommand}"
+                        CommandParameter="{x:Static models:PagingAction.Next}"
+                        Content="Next →" />
+                    <Border Width="0" Margin="20,0" />
+
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="15"
+                        Foreground="WhiteSmoke"
+                        Text="{Binding PageNumber, StringFormat=Page:{0}}" />
+
+                </StackPanel>
+
                 <Button Padding="15,0" Content="Close" />
 
             </StackPanel>
