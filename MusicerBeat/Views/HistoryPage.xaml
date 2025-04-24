@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MusicerBeat.Models"
     xmlns:viewModels="clr-namespace:MusicerBeat.ViewModels"
     Title="HistoryPage"
     Width="800"
@@ -20,8 +21,39 @@
 
         <ListBox
             Grid.Row="1"
+            AlternationCount="2"
             Background="{StaticResource DarkBgBrush}"
-            ItemsSource="{Binding ListenHistories}" />
+            ItemsSource="{Binding ListenHistories}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:ListenHistory}">
+
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="WhiteSmoke" />
+                            </Style>
+                        </Grid.Resources>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="{Binding SoundFileName}" />
+                        <TextBlock Grid.Column="1" Text="{Binding DateTime, StringFormat={}{0:yyyy/MM/dd HH:mm}}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="{StaticResource MediumBgBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
 
         <Border
             Grid.Row="2"
