@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using MusicerBeat.Models.Databases;
 
 namespace MusicerBeat.Models
@@ -10,5 +11,8 @@ namespace MusicerBeat.Models
         public int SoundFileId { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        [NotMapped]
+        public string SoundFileName { get; set; } = string.Empty;
     }
 }

@@ -61,7 +61,10 @@
             Grid.Column="0"
             Grid.ColumnSpan="3">
             <Menu>
-                <MenuItem Command="{Binding ShowSettingPageCommand}" Header="Setting" />
+                <MenuItem Header="View">
+                    <MenuItem Command="{Binding ShowHistoryPageCommand}" Header="Listen history" />
+                    <MenuItem Command="{Binding ShowSettingPageCommand}" Header="Setting" />
+                </MenuItem>
                 <MenuItem Header="Sort">
                     <MenuItem Command="{Binding SoundListViewModel.ShufflePlayListCommand}" Header="Shuffle Playlist" />
                     <MenuItem Command="{Binding SoundListViewModel.ReversePlayListCommand}" Header="Revers Playlist" />
