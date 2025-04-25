@@ -359,8 +359,14 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    HorizontalAlignment="Stretch"
-                    Background="LightSteelBlue">
+                    HorizontalAlignment="Stretch">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Offset="0.1" Color="LightSteelBlue" />
+                            <GradientStop Offset="1.0" Color="LightSkyBlue" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+
                     <StackPanel>
                         <StackPanel Margin="4" Orientation="Horizontal">
 
