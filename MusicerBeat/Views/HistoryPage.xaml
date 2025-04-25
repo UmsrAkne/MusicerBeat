@@ -37,15 +37,23 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="{Binding SoundFileName}" />
-                        <TextBlock Grid.Column="1" Text="{Binding DateTime, StringFormat={}{0:yyyy/MM/dd HH:mm}}" />
+                        <TextBlock Grid.Column="0" Text="{Binding DirectoryName}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="10,0"
+                            HorizontalAlignment="Left"
+                            Text="{Binding SoundFileName}" />
+                        <TextBlock Grid.Column="2" Text="{Binding DateTime, StringFormat={}{0:yyyy/MM/dd HH:mm}}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="0,1" />
                     <Style.Triggers>
                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                             <Setter Property="Background" Value="{StaticResource MediumBgBrush}" />
