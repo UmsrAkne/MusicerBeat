@@ -112,6 +112,7 @@ namespace MusicerBeat.Models.Databases
                 var file = await soundFileRepository.GetByIdAsync(lh.SoundFileId);
                 var soundFile = new SoundFile(file.FullName);
                 lh.SoundFileName = soundFile.Name;
+                lh.DirectoryName = soundFile.DirectoryName;
             }
 
             return paged;

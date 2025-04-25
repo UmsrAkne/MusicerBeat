@@ -19,6 +19,7 @@ namespace MusicerBeat.Models
         private bool playing;
         private string nameWithoutExtension;
         private int index;
+        private string directoryName = string.Empty;
 
         public SoundFile(string filePath)
         {
@@ -31,6 +32,7 @@ namespace MusicerBeat.Models
             Name = Path.GetFileName(filePath);
             NameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
             Extension = Path.GetExtension(filePath).ToLower();
+            DirectoryName = Path.GetDirectoryName(filePath);
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -52,6 +54,9 @@ namespace MusicerBeat.Models
             get => nameWithoutExtension;
             set => SetProperty(ref nameWithoutExtension, value);
         }
+
+        [NotMapped]
+        public string DirectoryName { get => directoryName; set => SetProperty(ref directoryName, value); }
 
         [NotMapped]
         public string Extension { get; set; }

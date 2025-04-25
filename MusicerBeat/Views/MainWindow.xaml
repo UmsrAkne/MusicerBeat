@@ -261,124 +261,135 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <Grid
+        <Border
             Grid.Row="2"
             Grid.Column="0"
-            Grid.ColumnSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
+            Grid.ColumnSpan="3"
+            BorderBrush="Gray"
+            BorderThickness="0,1,0,0">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-            <StackPanel
-                Grid.Row="0"
-                Grid.Column="0"
-                Orientation="Horizontal">
-                <Button
-                    Width="100"
-                    Margin="10"
-                    Padding="2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Command="{Binding PlaybackControlViewmodel.PlayCommand}">
-                    <iconPacks:PackIconMaterial Height="18" Kind="Play" />
-                </Button>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-                <Button
-                    Width="80"
-                    Margin="10"
-                    Padding="2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Command="{Binding PlaybackControlViewmodel.PlayNextCommand}">
-                    <iconPacks:PackIconMaterial Height="18" Kind="SkipNext" />
-                </Button>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+                    <Button
+                        Width="100"
+                        Margin="10"
+                        Padding="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Command="{Binding PlaybackControlViewmodel.PlayCommand}">
+                        <iconPacks:PackIconMaterial Height="18" Kind="Play" />
+                    </Button>
 
-                <Button
-                    Width="60"
-                    Padding="2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Command="{Binding PlaybackControlViewmodel.StopCommand}">
-                    <iconPacks:PackIconMaterial Height="18" Kind="Stop" />
-                </Button>
-            </StackPanel>
+                    <Button
+                        Width="80"
+                        Margin="10"
+                        Padding="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Command="{Binding PlaybackControlViewmodel.PlayNextCommand}">
+                        <iconPacks:PackIconMaterial Height="18" Kind="SkipNext" />
+                    </Button>
 
-            <StackPanel
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="15"
-                HorizontalAlignment="Right"
-                Orientation="Horizontal">
-                <ToggleButton Margin="15,0" IsChecked="{Binding PlaybackControlViewmodel.PlayListSource.SequentialSelector.IsLoop}">
-                    <ToggleButton.Content>
-                        <TextBlock
-                            Margin="8,0"
-                            Foreground="Black"
-                            Text="Loop" />
-                    </ToggleButton.Content>
-                </ToggleButton>
-
-                <TextBlock VerticalAlignment="Center" Text="Vol :" />
-                <TextBlock
-                    Width="25"
-                    VerticalAlignment="Center"
-                    Text="{Binding PlaybackControlViewmodel.Volume, Converter={StaticResource VolumePercentageConverter}}"
-                    TextAlignment="Center" />
-                <Border Margin="5,0" />
-                <Slider
-                    Width="250"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Maximum="1.0"
-                    Minimum="0"
-                    Ticks="0.01"
-                    Value="{Binding PlaybackControlViewmodel.Volume}">
-                    <Slider.Style>
-                        <Style TargetType="Slider">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding PlaybackControlViewmodel.PlayingStatus}" Value="{x:Static models:PlayingStatus.Fading}">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Slider.Style>
-                </Slider>
-            </StackPanel>
-
-            <Border
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Stretch"
-                Background="LightSteelBlue">
-                <StackPanel>
-                    <StackPanel Margin="4" Orientation="Horizontal">
-
-                        <StackPanel.Resources>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Black" />
-                                <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
-                            </Style>
-                        </StackPanel.Resources>
-
-                        <TextBlock Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
-                        <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
-                    </StackPanel>
-
-                    <controls:MetroProgressBar
-                        Height="3"
-                        Maximum="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundLength}"
-                        Minimum="0"
-                        Value="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
+                    <Button
+                        Width="60"
+                        Padding="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Command="{Binding PlaybackControlViewmodel.StopCommand}">
+                        <iconPacks:PackIconMaterial Height="18" Kind="Stop" />
+                    </Button>
                 </StackPanel>
-            </Border>
-        </Grid>
+
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="15"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <ToggleButton Margin="15,0" IsChecked="{Binding PlaybackControlViewmodel.PlayListSource.SequentialSelector.IsLoop}">
+                        <ToggleButton.Content>
+                            <TextBlock
+                                Margin="8,0"
+                                Foreground="Black"
+                                Text="Loop" />
+                        </ToggleButton.Content>
+                    </ToggleButton>
+
+                    <TextBlock VerticalAlignment="Center" Text="Vol :" />
+                    <TextBlock
+                        Width="25"
+                        VerticalAlignment="Center"
+                        Text="{Binding PlaybackControlViewmodel.Volume, Converter={StaticResource VolumePercentageConverter}}"
+                        TextAlignment="Center" />
+                    <Border Margin="5,0" />
+                    <Slider
+                        Width="250"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Maximum="1.0"
+                        Minimum="0"
+                        Ticks="0.01"
+                        Value="{Binding PlaybackControlViewmodel.Volume}">
+                        <Slider.Style>
+                            <Style TargetType="Slider">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PlaybackControlViewmodel.PlayingStatus}" Value="{x:Static models:PlayingStatus.Fading}">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Slider.Style>
+                    </Slider>
+                </StackPanel>
+
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Stretch">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Offset="0.1" Color="LightSteelBlue" />
+                            <GradientStop Offset="1.0" Color="LightSkyBlue" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <StackPanel>
+                        <StackPanel Margin="4" Orientation="Horizontal">
+
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <TextBlock Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlayingFileName}" />
+                            <TextBlock Margin="4,0" Text="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.PlaybackTimeString}" />
+                        </StackPanel>
+
+                        <controls:MetroProgressBar
+                            Height="3"
+                            Maximum="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundLength}"
+                            Minimum="0"
+                            Value="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
 
     </Grid>
 </controls:MetroWindow>

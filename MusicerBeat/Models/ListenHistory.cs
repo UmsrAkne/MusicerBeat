@@ -14,5 +14,8 @@ namespace MusicerBeat.Models
 
         [NotMapped]
         public string SoundFileName { get; set; } = string.Empty;
+
+        [NotMapped]
+        public string DirectoryName { get; set; } = string.Empty;
     }
 }
