@@ -12,7 +12,7 @@
     xmlns:models="clr-namespace:MusicerBeat.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:MusicerBeat.ViewModels"
-    Title="{Binding Title.Title}"
+    Title="{Binding Title}"
     Width="1024"
     Height="600"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
