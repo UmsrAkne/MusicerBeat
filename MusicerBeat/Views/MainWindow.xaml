@@ -18,6 +18,7 @@
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="{StaticResource DarkBgBrush}"
+    TitleCharacterCasing="Normal"
     mc:Ignorable="d">
 
     <Window.Resources>
