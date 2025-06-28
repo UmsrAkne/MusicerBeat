@@ -11,7 +11,7 @@ namespace MusicerBeat.Models
         private string playingFileName = string.Empty;
         private string playbackTimeString = string.Empty;
         private int currentSoundLength;
-        private int currentSoundPosition;
+        private double currentSoundPosition;
 
         public string PlayingFileName
         {
@@ -37,7 +37,7 @@ namespace MusicerBeat.Models
         /// <summary>
         /// 現在再生中のサウンドの再生位置を秒数で取得します。
         /// </summary>
-        public int CurrentSoundPosition
+        public double CurrentSoundPosition
         {
             get => currentSoundPosition;
             set => SetProperty(ref currentSoundPosition, value);
@@ -58,7 +58,7 @@ namespace MusicerBeat.Models
             if (list.Count >= 1)
             {
                 CurrentSoundLength = (int)list.First().Duration.TotalSeconds;
-                CurrentSoundPosition = (int)list.First().CurrentTime.TotalSeconds;
+                CurrentSoundPosition = list.First().CurrentTime.TotalSeconds;
                 System.Diagnostics.Debug.WriteLine($"{CurrentSoundLength}(PlaybackInformationViewer : 57)");
                 System.Diagnostics.Debug.WriteLine($"{CurrentSoundPosition}(PlaybackInformationViewer : 58)");
             }
