@@ -3,6 +3,7 @@ using System.IO;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Databases;
 using MusicerBeat.Models.Services;
+using MusicerBeat.Utils;
 using MusicerBeat.Views;
 using Prism.Commands;
 using Prism.Ioc;
@@ -16,6 +17,7 @@ namespace MusicerBeat.ViewModels
     {
         private readonly IDialogService dialogService;
         private readonly IContainerProvider containerProvider;
+        private readonly AppVersionInfo appVersionInfo = new AppVersionInfo();
         private DirectoryAreaViewModel directoryAreaViewModel;
         private SoundListViewModel soundListViewModel;
         private PlaybackControlViewmodel playbackControlViewmodel;
@@ -66,7 +68,7 @@ namespace MusicerBeat.ViewModels
             dialogService.ShowDialog(nameof(HistoryPage), param, _ => { });
         });
 
-        public TextWrapper Title { get; set; } = new ();
+        public string Title => appVersionInfo.Title;
 
         public DirectoryAreaViewModel DirectoryAreaViewModel
         {
