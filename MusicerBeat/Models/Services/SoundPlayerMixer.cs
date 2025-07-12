@@ -23,15 +23,15 @@ namespace MusicerBeat.Models.Services
         /// </summary>
         public event EventHandler SoundEnded;
 
-        private List<ISoundPlayer> SoundPlayers { get; }
-
-        private ISoundPlayerFactory SoundPlayerFactory { get; }
-
         public float DefaultVolume { private get; set; } = 1.0f;
 
         public TimeSpan FrontCut { get; set; } = TimeSpan.Zero;
 
         public TimeSpan BackCut { get; set; } = TimeSpan.Zero;
+
+        private List<ISoundPlayer> SoundPlayers { get; }
+
+        private ISoundPlayerFactory SoundPlayerFactory { get; }
 
         public PlayingStatus GetStatus()
         {

@@ -1,13 +1,13 @@
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
 namespace MusicerBeat.Views.Controls
 {
-    public partial class FadeTextBlock : UserControl
+    public partial class FadeTextBlock
     {
-        public readonly static DependencyProperty TextProperty =
+        // ReSharper disable once ArrangeModifiersOrder
+        public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
                 nameof(Text),
                 typeof(string),
