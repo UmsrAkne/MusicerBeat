@@ -9,11 +9,19 @@ namespace MusicerBeat.Behaviors
 {
     public class SmoothProgressBehavior : Behavior<ProgressBar>
     {
-        public readonly static DependencyProperty TargetValueProperty = DependencyProperty.Register(
+        // ReSharper disable once ArrangeModifiersOrder
+        public static readonly DependencyProperty TargetValueProperty = DependencyProperty.Register(
             nameof(TargetValue),
             typeof(double),
             typeof(SmoothProgressBehavior),
             new PropertyMetadata(0.0, OnTargetValueChanged));
+
+        // ReSharper disable once ArrangeModifiersOrder
+        public static readonly DependencyProperty AnimationDurationProperty = DependencyProperty.Register(
+            nameof(AnimationDuration),
+            typeof(Duration),
+            typeof(SmoothProgressBehavior),
+            new PropertyMetadata(new Duration(TimeSpan.FromMilliseconds(200))));
 
         private double lastValue;
 
@@ -25,20 +33,6 @@ namespace MusicerBeat.Behaviors
             get => (double)GetValue(TargetValueProperty);
             set => SetValue(TargetValueProperty, value);
         }
-
-        private static void OnTargetValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is SmoothProgressBehavior { AssociatedObject: not null, } behavior)
-            {
-                behavior.AnimateTo((double)e.NewValue);
-            }
-        }
-
-        public readonly static DependencyProperty AnimationDurationProperty = DependencyProperty.Register(
-            nameof(AnimationDuration),
-            typeof(Duration),
-            typeof(SmoothProgressBehavior),
-            new PropertyMetadata(new Duration(TimeSpan.FromMilliseconds(200))));
 
         /// <summary>
         /// Duration of the easing animation. Default is 200ms
@@ -54,6 +48,14 @@ namespace MusicerBeat.Behaviors
             // Ensure no dangling animations.
             AssociatedObject?.BeginAnimation(RangeBase.ValueProperty, null);
             base.OnDetaching();
+        }
+
+        private static void OnTargetValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SmoothProgressBehavior { AssociatedObject: not null, } behavior)
+            {
+                behavior.AnimateTo((double)e.NewValue);
+            }
         }
 
         private void AnimateTo(double newValue)

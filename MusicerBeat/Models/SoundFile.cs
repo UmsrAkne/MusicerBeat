@@ -43,6 +43,7 @@ namespace MusicerBeat.Models
 
         public int Id { get; set; }
 
+        // ReSharper disable once EntityFramework.ModelValidation.UnlimitedStringLength
         public string FullName { get => fullName; set => SetProperty(ref fullName, value); }
 
         [NotMapped]
