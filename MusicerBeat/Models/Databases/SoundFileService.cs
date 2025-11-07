@@ -36,6 +36,7 @@ namespace MusicerBeat.Models.Databases
             foreach (var s in enumerable)
             {
                 s.LoadDuration();
+                s.FileHash = SoundFile.ComputeHash(s.FullName);
             }
 
             await soundFileRepository.AddRangeAsync(enumerable);

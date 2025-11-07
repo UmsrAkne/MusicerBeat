@@ -41,6 +41,8 @@ namespace MusicerBeat.ViewModels
                 rootDirectoryPath = @"C:\";
             }
 
+            SoundFile.RootDirectoryPath = rootDirectoryPath;
+
             directoryAreaViewModel = new DirectoryAreaViewModel(rootDirectoryPath, containerProvider);
             soundListViewModel = new SoundListViewModel(directoryAreaViewModel, containerProvider);
 
