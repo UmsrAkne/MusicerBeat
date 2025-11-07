@@ -35,6 +35,7 @@ namespace MusicerBeat.Models
             Extension = Path.GetExtension(filePath).ToLower();
             DirectoryName = Path.GetDirectoryName(filePath);
             RelativePath = GetRelativePath(filePath, RootDirectoryPath);
+            MetaKey = ComputeMetaKey(filePath);
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -53,7 +54,7 @@ namespace MusicerBeat.Models
 
         public string RelativePath { get; set; }
 
-        public string FileHash { get; set; }
+        public string MetaKey { get; set; } = string.Empty;
 
         [NotMapped]
         public string Name { get => name; set => SetProperty(ref name, value); }
@@ -83,12 +84,10 @@ namespace MusicerBeat.Models
         [NotMapped]
         public int Index { get => index; set => SetProperty(ref index, value); }
 
-        public static string ComputeHash(string path)
+        public static string ComputeMetaKey(string path)
         {
-            using var stream = File.OpenRead(path);
-            using var sha = SHA256.Create();
-            var hash = sha.ComputeHash(stream);
-            return BitConverter.ToString(hash).Replace("-", string.Empty).ToLowerInvariant();
+            var info = new FileInfo(path);
+            return $"{Path.GetFileName(path)}-{info.Length}-{info.LastWriteTimeUtc.Ticks}";
         }
 
         public static bool IsSoundFile(string filePath)
