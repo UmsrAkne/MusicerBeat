@@ -90,7 +90,6 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
-            CurrentStorage = SelectedItem;
             OpenDirectory(SelectedItem.FullPath);
             await EnqueueRequest(GetSounds());
         });
