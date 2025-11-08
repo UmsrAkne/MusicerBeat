@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using MusicerBeat.Models.Databases;
 using NAudio.Wave;
 using NVorbis;
@@ -33,6 +34,8 @@ namespace MusicerBeat.Models
             NameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
             Extension = Path.GetExtension(filePath).ToLower();
             DirectoryName = Path.GetDirectoryName(filePath);
+            RelativePath = GetRelativePath(filePath, RootDirectoryPath);
+            MetaKey = ComputeMetaKey(filePath);
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -41,10 +44,17 @@ namespace MusicerBeat.Models
         {
         }
 
+        [NotMapped]
+        public static string RootDirectoryPath { get; set; } = string.Empty;
+
         public int Id { get; set; }
 
         // ReSharper disable once EntityFramework.ModelValidation.UnlimitedStringLength
         public string FullName { get => fullName; set => SetProperty(ref fullName, value); }
+
+        public string RelativePath { get; set; }
+
+        public string MetaKey { get; set; } = string.Empty;
 
         [NotMapped]
         public string Name { get => name; set => SetProperty(ref name, value); }
@@ -74,6 +84,12 @@ namespace MusicerBeat.Models
         [NotMapped]
         public int Index { get => index; set => SetProperty(ref index, value); }
 
+        public static string ComputeMetaKey(string path)
+        {
+            var info = new FileInfo(path);
+            return $"{Path.GetFileName(path)}-{info.Length}-{info.LastWriteTimeUtc.Ticks}";
+        }
+
         public static bool IsSoundFile(string filePath)
         {
             var extension = Path.GetExtension(filePath).ToLower();
@@ -92,6 +108,16 @@ namespace MusicerBeat.Models
             using var afr = new AudioFileReader(FullName);
             var time = (int)afr.TotalTime.TotalMilliseconds;
             TotalMilliSeconds = time;
+        }
+
+        private static string GetRelativePath(string fullPath, string basePath)
+        {
+            if (!fullPath.StartsWith(basePath, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("ファイルは指定されたルートパスの外にあります");
+            }
+
+            return Path.GetRelativePath(basePath, fullPath);
         }
     }
 }

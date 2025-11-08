@@ -29,8 +29,8 @@ namespace MusicerBeat.Models.Databases
         public async Task AddSoundFileCollectionAsync(IEnumerable<SoundFile> soundFiles)
         {
             var all = await GetSoundFilesAsync();
-            var dic = all.ToDictionary(s => s.FullName, s => s);
-            var filtered = soundFiles.Where(s => !dic.ContainsKey(s.FullName));
+            var dic = all.ToDictionary(s => s.MetaKey, s => s);
+            var filtered = soundFiles.Where(s => !dic.ContainsKey(s.MetaKey));
 
             var enumerable = filtered as SoundFile[] ?? filtered.ToArray();
             foreach (var s in enumerable)
@@ -57,7 +57,7 @@ namespace MusicerBeat.Models.Databases
             if (soundFile.Id == 0)
             {
                 var all = await soundFileRepository.GetAllAsync();
-                var ss = all.FirstOrDefault(s => s.FullName == soundFile.FullName);
+                var ss = all.FirstOrDefault(s => s.MetaKey == soundFile.MetaKey);
                 record = ss ?? record;
             }
 
@@ -121,11 +121,11 @@ namespace MusicerBeat.Models.Databases
         public async Task LoadSoundInfo(IEnumerable<SoundFile> soundFiles)
         {
             var all = await GetSoundFilesAsync();
-            var dic = all.ToDictionary(s => s.FullName, s => s);
+            var dic = all.ToDictionary(s => s.MetaKey, s => s);
 
             foreach (var soundFile in soundFiles)
             {
-                if (!dic.TryGetValue(soundFile.FullName, out var s))
+                if (!dic.TryGetValue(soundFile.MetaKey, out var s))
                 {
                     continue;
                 }
