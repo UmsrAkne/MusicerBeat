@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Commands;
 using MusicerBeat.Models.Databases;
@@ -90,8 +92,15 @@ namespace MusicerBeat.ViewModels
                 return;
             }
 
+            // UIリストの差し替え
             OpenDirectory(SelectedItem.FullPath);
-            await EnqueueRequest(GetSounds());
+
+            // 差し替えたファイルリストの読み込みを促す
+            await Application.Current.Dispatcher.InvokeAsync(() => { }, DispatcherPriority.Background);
+
+            // 読み込み済みのリストを再取得し、再生時間等の情報を遅延読み込み
+            var sounds = await Task.Run(GetSounds);
+            await EnqueueRequest(sounds);
         });
 
         /// <summary>
