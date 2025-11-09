@@ -107,8 +107,13 @@ namespace MusicerBeat.Models
         {
             var info = new FileInfo(path);
 
+            var directoryFullPath = Path.GetDirectoryName(path);
+            var directoryName = directoryFullPath != null
+                ? new DirectoryInfo(directoryFullPath).Name
+                : string.Empty;
+
             // 一度作ったライブラリの構造が変化することはほとんどないため、ディレクトリ名とファイル名にサイズを結合することでキーとする。
-            return $"{Path.GetDirectoryName(path)}-{Path.GetFileName(path)}-{info.Length}";
+            return $@"{directoryName}\{Path.GetFileName(path)}-{info.Length}";
         }
 
         private static string GetRelativePath(string fullPath, string basePath)
