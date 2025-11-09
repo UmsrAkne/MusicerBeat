@@ -87,7 +87,9 @@ namespace MusicerBeat.Models
         public static string ComputeMetaKey(string path)
         {
             var info = new FileInfo(path);
-            return $"{Path.GetFileName(path)}-{info.Length}-{info.LastWriteTimeUtc.Ticks}";
+
+            // 一度作ったライブラリの構造が変化することはほとんどないため、ディレクトリ名とファイル名にサイズを結合することでキーとする。
+            return $"{Path.GetDirectoryName(path)}-{Path.GetFileName(path)}-{info.Length}";
         }
 
         public static bool IsSoundFile(string filePath)
