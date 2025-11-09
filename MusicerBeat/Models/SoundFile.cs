@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using MusicerBeat.Models.Databases;
 using NAudio.Wave;
 using NVorbis;
@@ -84,14 +83,6 @@ namespace MusicerBeat.Models
         [NotMapped]
         public int Index { get => index; set => SetProperty(ref index, value); }
 
-        public static string ComputeMetaKey(string path)
-        {
-            var info = new FileInfo(path);
-
-            // 一度作ったライブラリの構造が変化することはほとんどないため、ディレクトリ名とファイル名にサイズを結合することでキーとする。
-            return $"{Path.GetDirectoryName(path)}-{Path.GetFileName(path)}-{info.Length}";
-        }
-
         public static bool IsSoundFile(string filePath)
         {
             var extension = Path.GetExtension(filePath).ToLower();
@@ -110,6 +101,14 @@ namespace MusicerBeat.Models
             using var afr = new AudioFileReader(FullName);
             var time = (int)afr.TotalTime.TotalMilliseconds;
             TotalMilliSeconds = time;
+        }
+
+        private static string ComputeMetaKey(string path)
+        {
+            var info = new FileInfo(path);
+
+            // 一度作ったライブラリの構造が変化することはほとんどないため、ディレクトリ名とファイル名にサイズを結合することでキーとする。
+            return $"{Path.GetDirectoryName(path)}-{Path.GetFileName(path)}-{info.Length}";
         }
 
         private static string GetRelativePath(string fullPath, string basePath)
