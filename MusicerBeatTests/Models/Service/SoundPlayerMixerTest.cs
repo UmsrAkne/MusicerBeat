@@ -8,6 +8,13 @@ namespace MusicerBeatTests.Models.Service
     [TestFixture]
     public class SoundPlayerMixerTest
     {
+        [TestCaseSource(nameof(GetStatusTestCases))]
+        public void GetStatusTest(List<ISoundPlayer> players, PlayingStatus expectedStatus)
+        {
+            var mixer = new SoundPlayerMixer(players, new DummySoundPlayerFactory());
+            Assert.That(mixer.GetStatus(), Is.EqualTo(expectedStatus));
+        }
+
         private static IEnumerable<TestCaseData> GetStatusTestCases()
         {
             yield return new TestCaseData(
@@ -31,13 +38,6 @@ namespace MusicerBeatTests.Models.Service
                 },
                 PlayingStatus.Fading)
                 .SetName("曲のフェード中");
-        }
-
-        [TestCaseSource(nameof(GetStatusTestCases))]
-        public void GetStatusTest(List<ISoundPlayer> players, PlayingStatus expectedStatus)
-        {
-            var mixer = new SoundPlayerMixer(players, new DummySoundPlayerFactory());
-            Assert.That(mixer.GetStatus(), Is.EqualTo(expectedStatus));
         }
     }
 }

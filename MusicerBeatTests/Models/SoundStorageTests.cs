@@ -5,6 +5,15 @@ namespace MusicerBeatTests.Models
     [TestFixture]
     public class SoundStorageTests
     {
+        [TestCaseSource(nameof(ParseM3U_TestCases))]
+        public void ParseM3u_Test(string m3UData, string[] expected)
+        {
+            var storage = new SoundStorage();
+            var results = storage.ParseM3U(m3UData).Select(s => s.FullName);
+
+            CollectionAssert.AreEqual(expected, results);
+        }
+
         private static IEnumerable<TestCaseData> ParseM3U_TestCases()
         {
             yield return new TestCaseData(
@@ -30,15 +39,6 @@ namespace MusicerBeatTests.Models
             yield return new TestCaseData(
                 string.Empty, Array.Empty<string>())
                 .SetName("空のM3U");
-        }
-
-        [TestCaseSource(nameof(ParseM3U_TestCases))]
-        public void ParseM3u_Test(string m3UData, string[] expected)
-        {
-            var storage = new SoundStorage();
-            var results = storage.ParseM3U(m3UData).Select(s => s.FullName);
-
-            CollectionAssert.AreEqual(expected, results);
         }
     }
 }
