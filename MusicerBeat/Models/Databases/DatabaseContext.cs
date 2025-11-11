@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +15,19 @@ namespace MusicerBeat.Models.Databases
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             const string dbFileName = "database.sqlite";
-            if (!File.Exists(dbFileName))
+
+            // データベースファイルを、実行方法に関係なく実行ファイルと同じディレクトリに作成する。
+            var baseDir = AppContext.BaseDirectory;
+            var dbPath = Path.Combine(baseDir, dbFileName);
+
+            if (!File.Exists(dbPath))
             {
-                using var connection = new SqliteConnection($"Data Source={dbFileName}");
+                using var connection = new SqliteConnection($"Data Source={dbPath}");
                 connection.Open();
                 connection.Close();
             }
 
-            var connectionString = new SqliteConnectionStringBuilder { DataSource = dbFileName, }.ToString();
+            var connectionString = new SqliteConnectionStringBuilder { DataSource = dbPath, }.ToString();
             optionsBuilder.UseSqlite(new SqliteConnection(connectionString));
         }
     }
