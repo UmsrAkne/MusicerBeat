@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using MusicerBeat.Models;
 using MusicerBeat.Models.Databases;
 using MusicerBeat.Models.Services;
@@ -68,6 +69,12 @@ namespace MusicerBeat.ViewModels
             };
 
             dialogService.ShowDialog(nameof(HistoryPage), param, _ => { });
+        });
+
+        public DelegateCommand ShowDatabasePathCommand => new DelegateCommand(() =>
+        {
+            var text = AppDiagnosticsService.GetDatabasePathDisplayText();
+            MessageBox.Show(text, "Database Path", MessageBoxButton.OK, MessageBoxImage.Information);
         });
 
         public string Title => appVersionInfo.Title;

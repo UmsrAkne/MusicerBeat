@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using MusicerBeat.Models.Services;
 
 namespace MusicerBeat.Models.Databases
 {
@@ -19,6 +20,9 @@ namespace MusicerBeat.Models.Databases
             // データベースファイルを、実行方法に関係なく実行ファイルと同じディレクトリに作成する。
             var baseDir = AppContext.BaseDirectory;
             var dbPath = Path.Combine(baseDir, dbFileName);
+
+            // 診断用にフルパスを記録
+            AppDiagnosticsService.DatabaseFullPath = Path.GetFullPath(dbPath);
 
             if (!File.Exists(dbPath))
             {
