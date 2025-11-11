@@ -399,7 +399,8 @@
                             Maximum="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundLength}"
                             Minimum="0">
                             <i:Interaction.Behaviors>
-                                <behaviors:SmoothProgressBehavior AnimationDuration="0:0:0.2" TargetValue="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
+                                <!-- 更新間隔(約200ms)と同時にアニメが完了するとカクつくため、やや長めに設定して連続した動きに見せている -->
+                                <behaviors:SmoothProgressBehavior AnimationDuration="0:0:3" TargetValue="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
                             </i:Interaction.Behaviors>
                         </controls:MetroProgressBar>
                     </StackPanel>
