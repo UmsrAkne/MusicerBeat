@@ -74,6 +74,9 @@
                     <MenuItem Command="{Binding SoundListViewModel.SortPlayListByPlayCountCommand}" Header="Sort by play count (Asc)" />
                     <MenuItem Command="{Binding SoundListViewModel.SortPlayListByFileNameCommand}" Header="Sort by file name (Asc)" />
                 </MenuItem>
+                <MenuItem Header="Maintenance">
+                    <MenuItem Command="{Binding ShowDatabasePathCommand}" Header="Show database full path" />
+                </MenuItem>
             </Menu>
             <TextBox
                 Background="Transparent"
@@ -83,7 +86,7 @@
 
         </StackPanel>
 
-        <!--  ディレクトリエリア  -->
+        <!-- ディレクトリエリア -->
         <TreeView
             Grid.Row="1"
             Grid.Column="0"
@@ -202,8 +205,15 @@
                             <ColumnDefinition Width="60" />
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <Border Width="5" CornerRadius="3">
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="0,0,6,0"
+                            Orientation="Horizontal">
+                            <Border
+                                Width="5"
+                                Height="12"
+                                VerticalAlignment="Center"
+                                CornerRadius="3">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
