@@ -207,25 +207,11 @@
 
                         <StackPanel
                             Grid.Column="0"
-                            Margin="0,0,6,0"
+                            Margin="0,0,8,0"
                             Orientation="Horizontal">
-                            <Border
-                                Width="5"
-                                Height="12"
-                                VerticalAlignment="Center"
-                                CornerRadius="3">
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Playing}" Value="True">
-                                                <Setter Property="Background" Value="MediumSeaGreen" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
+                            <controls1:PlaybackIndicator IsPlaying="{Binding Playing}" />
 
-                            <Border Margin="4,0" BorderThickness="0,0,1,0">
+                            <Border Margin="8,0" BorderThickness="0,0,1,0">
                                 <TextBlock Text="{Binding Index, StringFormat={}{0:D3}}" />
                             </Border>
 
@@ -399,7 +385,8 @@
                             Maximum="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundLength}"
                             Minimum="0">
                             <i:Interaction.Behaviors>
-                                <behaviors:SmoothProgressBehavior AnimationDuration="0:0:0.2" TargetValue="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
+                                <!-- 更新間隔(約200ms)と同時にアニメが完了するとカクつくため、やや長めに設定して連続した動きに見せている -->
+                                <behaviors:SmoothProgressBehavior AnimationDuration="0:0:3" TargetValue="{Binding PlaybackControlViewmodel.PlaybackInformationViewer.CurrentSoundPosition}" />
                             </i:Interaction.Behaviors>
                         </controls:MetroProgressBar>
                     </StackPanel>

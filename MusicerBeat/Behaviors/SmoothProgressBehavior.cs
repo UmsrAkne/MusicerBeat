@@ -60,19 +60,19 @@ namespace MusicerBeat.Behaviors
 
         private void AnimateTo(double newValue)
         {
-            // Cancel any in‑flight animation so we always start from the current visual value.
+            // 現在の見た目の値を保持してからアニメを解除
+            var currentValue = AssociatedObject.Value;
             AssociatedObject.BeginAnimation(RangeBase.ValueProperty, null);
 
             var animation = new DoubleAnimation
             {
-                From = lastValue,
+                From = currentValue,
                 To = newValue,
                 Duration = AnimationDuration,
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut, },
                 FillBehavior = FillBehavior.HoldEnd,
             };
 
-            lastValue = TargetValue;
+            lastValue = newValue;
             AssociatedObject.BeginAnimation(RangeBase.ValueProperty, animation);
         }
     }
