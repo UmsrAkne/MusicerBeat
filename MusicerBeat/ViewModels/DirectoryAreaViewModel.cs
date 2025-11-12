@@ -149,6 +149,26 @@ namespace MusicerBeat.ViewModels
         }
 
         /// <summary>
+        /// ルートディレクトリを再読み込みし、ツリーとカレントストレージを新しいルートに合わせて更新します。
+        /// </summary>
+        /// <param name="path">新しいルートディレクトリのフルパス</param>
+        public void ReloadRoot(string path)
+        {
+            // カレントを差し替え。setter 内で SoundsSourceUpdated が発火します。
+            CurrentStorage = new SoundStorage() { FullPath = path, };
+
+            // ツリーのトップレベルを作り直す
+            originalSoundStorages.Clear();
+            foreach (var child in CurrentStorage.GetChildren())
+            {
+                originalSoundStorages.Add(child);
+            }
+
+            // 選択状態はクリア
+            SelectedItem = null;
+        }
+
+        /// <summary>
         /// 引数で指定されたディレクトリをカレントディレクトリに設定し、originalSoundStorages の中身をアップデートします。
         /// </summary>
         /// <param name="path">移動先のストレージのフルパスを入力します。</param>

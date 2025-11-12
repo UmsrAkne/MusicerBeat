@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using MusicerBeat.Models;
@@ -56,9 +57,18 @@ namespace MusicerBeat.ViewModels
 
         public DelegateCommand ShowSettingPageCommand => new (() =>
         {
+            var previousRoot = SoundFile.RootDirectoryPath;
             dialogService.ShowDialog(nameof(SettingPage), new DialogParameters(), _ => { });
+
             ApplicationSetting = ApplicationSetting.LoadFromXml(ApplicationSetting.SettingFileName);
             PlaybackControlViewmodel.ApplySetting(ApplicationSetting);
+
+            var newRoot = ApplicationSetting.RootDirectoryPath;
+            if (!string.IsNullOrWhiteSpace(newRoot) && Directory.Exists(newRoot) && !string.Equals(previousRoot, newRoot, StringComparison.OrdinalIgnoreCase))
+            {
+                SoundFile.RootDirectoryPath = newRoot;
+                DirectoryAreaViewModel.ReloadRoot(newRoot);
+            }
         });
 
         public DelegateCommand ShowHistoryPageCommand => new DelegateCommand(() =>
