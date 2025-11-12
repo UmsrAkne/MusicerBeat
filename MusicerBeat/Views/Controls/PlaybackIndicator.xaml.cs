@@ -7,10 +7,18 @@ namespace MusicerBeat.Views.Controls
 {
     public partial class PlaybackIndicator
     {
+        private bool isLoaded; // 初回描画判定用
+
         public PlaybackIndicator()
         {
             InitializeComponent();
-            Loaded += (_, _) => UpdateVisualState(IsPlaying);
+            Loaded += (_, _) =>
+            {
+                isLoaded = true;
+
+                // 初期描画はアニメーションなしで反映
+                UpdateVisualState(IsPlaying, false);
+            };
         }
 
         public static readonly DependencyProperty IsPlayingProperty =
@@ -23,30 +31,55 @@ namespace MusicerBeat.Views.Controls
         {
             if (d is PlaybackIndicator indicator)
             {
-                indicator.UpdateVisualState((bool)e.NewValue);
+                var newValue = (bool)e.NewValue;
+                indicator.UpdateVisualState(newValue, indicator.isLoaded);
             }
         }
 
-        private void UpdateVisualState(bool isPlaying)
+        private void UpdateVisualState(bool isPlaying, bool useAnimation)
         {
             var backgroundBrush = IndicatorBorder.Background as SolidColorBrush;
             var borderBrush = IndicatorBorder.BorderBrush as SolidColorBrush;
 
+            if (backgroundBrush == null || backgroundBrush.IsFrozen)
+            {
+                backgroundBrush = new SolidColorBrush(Colors.Transparent);
+                IndicatorBorder.Background = backgroundBrush;
+            }
+
+            if (borderBrush == null || borderBrush.IsFrozen)
+            {
+                borderBrush = new SolidColorBrush(Colors.DimGray);
+                IndicatorBorder.BorderBrush = borderBrush;
+            }
+
+            if (!useAnimation)
+            {
+                var animation = (Storyboard)FindResource("PlayAnimation");
+
+                // アニメーションなしで即時適用
+                backgroundBrush.BeginAnimation(SolidColorBrush.ColorProperty, null);
+                borderBrush.BeginAnimation(SolidColorBrush.ColorProperty, null);
+
+                if (isPlaying)
+                {
+                    backgroundBrush.Color = Colors.LightGreen;
+                    borderBrush.Color = Colors.MediumSpringGreen;
+                    Storyboard.SetTarget(animation, IndicatorBorder);
+                    animation.Begin();
+                }
+                else
+                {
+                    animation.Stop();
+                    backgroundBrush.Color = Colors.Transparent;
+                    borderBrush.Color = Colors.DimGray;
+                }
+
+                return;
+            }
+
             if (isPlaying)
             {
-                // SolidColorBrush の初期化（null や IsFrozen に備える）
-                if (backgroundBrush == null || backgroundBrush.IsFrozen)
-                {
-                    backgroundBrush = new SolidColorBrush(Colors.Transparent);
-                    IndicatorBorder.Background = backgroundBrush;
-                }
-
-                if (borderBrush == null || borderBrush.IsFrozen)
-                {
-                    borderBrush = new SolidColorBrush(Colors.DimGray);
-                    IndicatorBorder.BorderBrush = borderBrush;
-                }
-
                 // フェードイン（背景）
                 var fadeInBackground = new ColorAnimation
                 {
@@ -78,18 +111,6 @@ namespace MusicerBeat.Views.Controls
             {
                 var animation = (Storyboard)FindResource("PlayAnimation");
                 animation.Stop();
-
-                if (backgroundBrush == null || backgroundBrush.IsFrozen)
-                {
-                    backgroundBrush = new SolidColorBrush(Colors.LightGreen);
-                    IndicatorBorder.Background = backgroundBrush;
-                }
-
-                if (borderBrush == null || borderBrush.IsFrozen)
-                {
-                    borderBrush = new SolidColorBrush(Colors.MediumSpringGreen);
-                    IndicatorBorder.BorderBrush = borderBrush;
-                }
 
                 // フェードアウト（背景）
                 var fadeOutBackground = new ColorAnimation
