@@ -31,6 +31,7 @@
                         <Grid.Resources>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Foreground" Value="WhiteSmoke" />
+                                <Setter Property="FontSize" Value="{StaticResource BasicFontSize}" />
                             </Style>
                         </Grid.Resources>
 
@@ -77,33 +78,58 @@
                     <Button
                         Padding="20,0"
                         Command="{Binding MovePageCommand}"
-                        CommandParameter="{x:Static models:PagingAction.First}"
-                        Content="← First" />
+                        CommandParameter="{x:Static models:PagingAction.First}">
+                        <Button.Content>
+                            <TextBlock
+                                FontSize="{StaticResource BasicFontSize}"
+                                Foreground="Black"
+                                Text="← First" />
+                        </Button.Content>
+                    </Button>
                     <Border Width="0" Margin="20,0" />
 
                     <Button
                         Padding="15,0"
                         Command="{Binding MovePageCommand}"
-                        CommandParameter="{x:Static models:PagingAction.Prev}"
-                        Content="← Prev" />
+                        CommandParameter="{x:Static models:PagingAction.Prev}">
+                        <Button.Content>
+                            <TextBlock
+                                FontSize="{StaticResource BasicFontSize}"
+                                Foreground="Black"
+                                Text="← Prev" />
+                        </Button.Content>
+                    </Button>
                     <Border Width="0" Margin="10,0" />
 
                     <Button
                         Padding="15,0"
                         Command="{Binding MovePageCommand}"
-                        CommandParameter="{x:Static models:PagingAction.Next}"
-                        Content="Next →" />
+                        CommandParameter="{x:Static models:PagingAction.Next}">
+                        <Button.Content>
+                            <TextBlock
+                                FontSize="{StaticResource BasicFontSize}"
+                                Foreground="Black"
+                                Text="Next →" />
+                        </Button.Content>
+                    </Button>
                     <Border Width="0" Margin="20,0" />
 
                     <TextBlock
                         VerticalAlignment="Center"
-                        FontSize="15"
+                        FontSize="{StaticResource BasicFontSize}"
                         Foreground="WhiteSmoke"
                         Text="{Binding PageNumber, StringFormat=Page:{0}}" />
 
                 </StackPanel>
 
-                <Button Padding="15,0" Content="Close" />
+                <Button Padding="15,0">
+                    <Button.Content>
+                        <TextBlock
+                            FontSize="{StaticResource BasicFontSize}"
+                            Foreground="Black"
+                            Text="Close" />
+                    </Button.Content>
+                </Button>
 
             </StackPanel>
         </Border>

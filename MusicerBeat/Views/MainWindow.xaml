@@ -202,7 +202,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition />
-                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="80" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel
@@ -329,7 +329,7 @@
 
                     <TextBlock VerticalAlignment="Center" Text="Vol :" />
                     <TextBlock
-                        Width="25"
+                        Width="35"
                         VerticalAlignment="Center"
                         Text="{Binding PlaybackControlViewmodel.Volume, Converter={StaticResource VolumePercentageConverter}}"
                         TextAlignment="Center" />
