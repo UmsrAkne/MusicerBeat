@@ -16,7 +16,7 @@ namespace MusicerBeat.Models.Interfaces
 
         public SoundFile PlayingSound { get; }
 
-        void PlaySound(SoundFile soundFile, TimeSpan startPosition = default);
+        void PlaySound(SoundFile soundFile, TimeSpan startPosition = default, float initialVolume = 1.0f);
 
         void Stop();
     }

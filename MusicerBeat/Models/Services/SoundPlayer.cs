@@ -51,7 +51,7 @@ namespace MusicerBeat.Models.Services
 
         public SoundFile PlayingSound { get; set; }
 
-        public void PlaySound(SoundFile soundFile, TimeSpan startPosition = default)
+        public void PlaySound(SoundFile soundFile, TimeSpan startPosition = default, float initialVolume = 1.0f)
         {
             if (waveOutEvent != null)
             {
@@ -63,12 +63,12 @@ namespace MusicerBeat.Models.Services
                 if (soundFile.Extension == ".ogg")
                 {
                     vorbisReader = new VorbisWaveReader(soundFile.FullName);
-                    volumeSampleProvider = new VolumeSampleProvider(vorbisReader) { Volume = 1.0f, };
+                    volumeSampleProvider = new VolumeSampleProvider(vorbisReader) { Volume = initialVolume, };
                 }
                 else
                 {
                     audioReader = new AudioFileReader(soundFile.FullName);
-                    volumeSampleProvider = new VolumeSampleProvider(audioReader) { Volume = 1.0f, };
+                    volumeSampleProvider = new VolumeSampleProvider(audioReader) { Volume = initialVolume, };
                 }
             }
 

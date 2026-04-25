@@ -72,7 +72,7 @@ namespace MusicerBeat.Models.Services
             var newPlayer = SoundPlayerFactory.CreateSoundPlayer();
             newPlayer.SoundEnded += RemovePlayer;
             SoundPlayers.Add(newPlayer);
-            newPlayer.PlaySound(soundFile);
+            newPlayer.PlaySound(soundFile, TimeSpan.Zero, 0);
 
             if (GetStatus() == PlayingStatus.Fading)
             {
