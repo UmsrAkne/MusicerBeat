@@ -54,7 +54,7 @@ namespace MusicerBeatTests.ViewModels
 
         public string Name { get; set; } = string.Empty;
 
-        public void PlaySound(SoundFile soundFile, TimeSpan startPosition = default)
+        public void PlaySound(SoundFile soundFile, TimeSpan startPosition = default, float initialVolume = 1.0f)
         {
             if (soundFile.TotalMilliSeconds > 0)
             {
