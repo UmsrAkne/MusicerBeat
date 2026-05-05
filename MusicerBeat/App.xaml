@@ -28,6 +28,7 @@
 
             <SolidColorBrush x:Key="DarkBgBrush" Color="#333340" />
             <SolidColorBrush x:Key="MediumBgBrush" Color="#444460" />
+            <SolidColorBrush x:Key="HoverBgBrush" Color="#444480" />
             <SolidColorBrush x:Key="ForegroundBrush" Color="LightGray" />
             <system:Double x:Key="BasicFontSize">18.0</system:Double>
             <models:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
